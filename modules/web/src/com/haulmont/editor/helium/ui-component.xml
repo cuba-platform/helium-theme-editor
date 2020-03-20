@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<components xmlns="http://schemas.haulmont.com/cuba/components.xsd">
+    <component>
+        <name>themeVariableField</name>
+        <componentLoader>com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableFieldLoader</componentLoader>
+        <class>com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField</class>
+    </component>
+</components>
+

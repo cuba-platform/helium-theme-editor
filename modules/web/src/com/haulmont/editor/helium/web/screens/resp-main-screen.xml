@@ -1,0 +1,71 @@
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="mainMsg://application.caption">
+    <layout expand="horizontalWrap"
+            stylename="c-sidemenu-responsive"
+            responsive="true">
+        <hbox id="horizontalWrap"
+              expand="workArea"
+              stylename="c-sidemenu-layout"
+              width="100%">
+            <cssLayout id="sideMenuPanel"
+                       stylename="c-sidemenu-panel">
+                <button id="mobileMenuButton"
+                        caption="mainMsg://app.menu"
+                        icon="icons/mobile-menu.png"
+                        stylename="primary c-sidemenu-toggle"/>
+                <cssLayout id="appTitleBox"
+                           stylename="c-sidemenu-title"
+                           width="100%">
+                    <label id="appTitleLabel"
+                           stylename="c-app-title"
+                           value="mainMsg://application.logoLabel"/>
+                </cssLayout>
+                <vbox id="sideMenuWrap"
+                      stylename="c-sidemenu-wrap"
+                      expand="settingsBox">
+                    <hbox width="100%" stylename="theme-setting-buttons">
+                        <button id="resetBtn" caption="msg://resetBtn.caption" icon="ROTATE_LEFT" height="100%" width="100%"
+                                stylename="reset-btn secondary"/>
+                        <button id="downloadBtn" caption="msg://downloadBtn.caption" icon="DOWNLOAD" height="100%"
+                                stylename="primary download-btn"
+                                width="100%"/>
+                    </hbox>
+                    <scrollBox id="settingsBox" stylename="settings-box" spacing="true" margin="true">
+                        <groupBox spacing="true" caption="msg://screenDefaultsBox.caption" width="100%" collapsed="false"
+                                  stylename="padding-less" collapsable="true">
+                            <vbox>
+                                <label id="colorPresetLabel"
+                                       align="MIDDLE_LEFT"
+                                       stylename="bold"
+                                       value="Color Preset" width="100%"/>
+                                <lookupField id="colorPresetField" width="100%" nullOptionVisible="false"/>
+                            </vbox>
+                            <vbox>
+                                <label id="sizeLabel"
+                                       align="MIDDLE_LEFT"
+                                       stylename="bold"
+                                       value="Size" width="100%"/>
+                                <lookupField id="sizeField" width="100%" nullOptionVisible="false"/>
+                            </vbox>
+                        </groupBox>
+                        <hbox spacing="true" width="100%" expand="advancedModeValue">
+                            <label id="advancedModeLabel" value="Advanced Mode" stylename="bold"/>
+                            <checkBox id="advancedModeValue" align="MIDDLE_LEFT"/>
+                        </hbox>
+                    </scrollBox>
+                </vbox>
+            </cssLayout>
+            <workArea id="workArea"
+                      height="100%">
+                <initialLayout margin="true"
+                               spacing="true">
+                    <label id="welcomeLabel"
+                           align="MIDDLE_CENTER"
+                           width="100%"
+                           stylename="c-welcome-text"
+                           value="mainMsg://application.welcomeText"/>
+                </initialLayout>
+            </workArea>
+        </hbox>
+    </layout>
+</window>

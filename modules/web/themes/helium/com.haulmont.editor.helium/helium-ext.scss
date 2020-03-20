@@ -1,0 +1,70 @@
+/* Define your theme modifications inside next mixin */
+@mixin com_haulmont_editor_helium-helium-ext {
+
+  $helium-sidemenu-width: 400px;
+
+  .c-sidemenu-responsive {
+    @include width-range($min: $cuba-responsive-sidemenu-togglebutton-appeared-max-width-range + 1px, $max: $cuba-responsive-sidemenu-small-style-max-width-range) {
+      .c-sidemenu-panel {
+        & .c-sidemenu-title,
+        & .c-sidemenu-wrap > * {
+          min-width: $helium-sidemenu-width;
+          max-width: $helium-sidemenu-width;
+        }
+      }
+    }
+
+    @include width-range($max: $cuba-responsive-sidemenu-togglebutton-appeared-max-width-range) {
+      .c-sidemenu-panel .c-sidemenu-wrap {
+        min-width: $helium-sidemenu-width;
+        max-width: $helium-sidemenu-width;
+      }
+    }
+
+    .c-sidemenu-panel {
+      overflow-y: hidden;
+      padding-bottom: 0;
+      width: $helium-sidemenu-width;
+
+      display: flex;
+      flex-direction: column;
+
+      .c-sidemenu-wrap {
+        overflow-y: auto;
+      }
+
+      .reset-btn,
+      .download-btn,
+      .c-sidemenu-toggle {
+        border-radius: 0;
+      }
+    }
+
+    .padding-less .c-groupbox-content-padding-less {
+      padding-left: round($v-unit-size * 1.4 / 3);
+    }
+
+    .theme-variable-field {
+      & .c-fglayout-slot {
+        &:nth-of-type(2),
+        &:nth-of-type(4) {
+          padding-left: 0 !important;
+        }
+
+        &:nth-of-type(4) {
+          width: 100% !important;
+        }
+
+        & .v-textfield {
+          padding-right: $v-unit-size;
+        }
+
+        & .c-color-picker > .v-colorpicker {
+          background: none;
+          border: none;
+          width: $v-unit-size;
+        }
+      }
+    }
+  }
+}

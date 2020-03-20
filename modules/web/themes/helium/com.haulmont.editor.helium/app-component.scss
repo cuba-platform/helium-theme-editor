@@ -1,0 +1,5 @@
+@import "helium-ext";
+
+@mixin com_haulmont_editor_helium {
+  @include com_haulmont_editor_helium-helium-ext;
+}

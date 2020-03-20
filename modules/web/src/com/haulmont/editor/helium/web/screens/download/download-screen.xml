@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://caption"
+        messagesPack="com.haulmont.editor.helium.web.screens.download">
+    <layout expand="textArea" spacing="true" margin="true">
+        <textArea id="textArea" width="100%" editable="false"/>
+    </layout>
+</window>
