@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        caption="msg://caption"
-        messagesPack="com.haulmont.editor.helium.web.screens.editor">
+<fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd"
+        messagesPack="com.haulmont.editor.helium.web.screens.sandbox">
     <data>
         <collection id="usersDc"
                     class="com.haulmont.cuba.security.entity.User"
@@ -849,4 +848,4 @@
             </tab>
         </tabSheet>
     </layout>
-</window>
+</fragment>

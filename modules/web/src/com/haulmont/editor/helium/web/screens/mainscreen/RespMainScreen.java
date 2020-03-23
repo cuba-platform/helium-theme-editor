@@ -1,4 +1,4 @@
-package com.haulmont.editor.helium.web.screens;
+package com.haulmont.editor.helium.web.screens.mainscreen;
 
 import com.google.common.collect.ImmutableMap;
 import com.haulmont.addon.helium.web.theme.HeliumThemeVariantsManager;

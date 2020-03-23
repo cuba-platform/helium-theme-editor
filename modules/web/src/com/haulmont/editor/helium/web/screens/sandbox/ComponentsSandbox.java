@@ -1,6 +1,5 @@
-package com.haulmont.editor.helium.web.screens.editor;
+package com.haulmont.editor.helium.web.screens.sandbox;
 
-import com.haulmont.addon.helium.web.theme.HeliumThemeVariantsManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
@@ -13,7 +12,7 @@ import com.haulmont.cuba.gui.components.validation.NotEmptyValidator;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.DataComponents;
 import com.haulmont.cuba.gui.screen.Install;
-import com.haulmont.cuba.gui.screen.Screen;
+import com.haulmont.cuba.gui.screen.ScreenFragment;
 import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
@@ -27,18 +26,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@UiController("helium_HeliumEditor")
-@UiDescriptor("helium-editor.xml")
-public class HeliumEditor extends Screen {
+@UiController("helium_ComponentsSandbox")
+@UiDescriptor("components-sandbox.xml")
+public class ComponentsSandbox extends ScreenFragment {
 
     protected static final int SAMPLE_DATA_SIZE = 10;
-
-/*    @Inject
-    protected RadioButtonGroup<String> themeField;*/
-   // @Inject
-    //protected RadioButtonGroup<String> modeField;
-/*    @Inject
-    protected LookupField<String> sizeField;*/
 
     @Inject
     protected TabSheet previewTabSheet;
@@ -57,9 +49,6 @@ public class HeliumEditor extends Screen {
     private CheckBoxGroup<String> checkBoxGroup;
 
     @Inject
-    protected HeliumThemeVariantsManager variantsManager;
-
-    @Inject
     private Metadata metadata;
     @Inject
     private DataComponents dataComponents;
@@ -71,10 +60,6 @@ public class HeliumEditor extends Screen {
     @Subscribe
     public void onInit(InitEvent event) {
         appWindowTheme = userSettingsTools.loadAppWindowTheme();
-
-        //initModeField();
-        //initThemeField();
-        //initSizeField();
         initTableSample();
         initOptions();
     }
@@ -113,51 +98,6 @@ public class HeliumEditor extends Screen {
     protected List<String> generateSampleOptions() {
         return Arrays.asList("Option 1", "Options 2", "Option 3");
     }
-
-/*    protected void initModeField() {
-        modeField.setOptionsList(Arrays.asList("Mode 1", "Mode 2"));
-        modeField.setValue("Mode 1");
-    }*/
-
-/*    protected void initThemeField() {
-        //themeField.setOptionsList(variantsManager.getAppThemeModeList());
-        //themeField.setValue(variantsManager.loadUserAppThemeModeSetting());
-        themeField.setOptionsList(Arrays.asList("light", "dark", "blue"));
-        themeField.setValue("light");
-    }
-
-    protected void initSizeField() {
-        sizeField.setOptionsList(variantsManager.getAppThemeSizeList());
-        sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
-    }*/
-
-/*    @Subscribe("applyBtn")
-    public void onApplyBtnClick(Button.ClickEvent event) {
-        applyThemeMode();
-        applyThemeSize();
-
-        Page.getCurrent().reload();
-    }*/
-
-/*    protected void applyThemeMode() {
-        String mode = themeField.getValue();
-        variantsManager.setUserAppThemeMode(mode);
-    }
-
-    protected void applyThemeSize() {
-        String size = sizeField.getValue();
-        variantsManager.setUserAppThemeSize(size);
-    }
-
-    @Subscribe("themeField")
-    public void onThemeFieldValueChange(HasValue.ValueChangeEvent<String> event) {
-        previewTabSheet.setStyleName(appWindowTheme + " " + themeField.getValue());
-    }
-
-    @Subscribe("sizeField")
-    public void onSizeFieldValueChange(HasValue.ValueChangeEvent<String> event) {
-        innerPreviewBox.setStyleName(sizeField.getValue());
-    }*/
 
     @Inject
     private TextField<String> textFieldRO;
@@ -233,11 +173,9 @@ public class HeliumEditor extends Screen {
     private Notifications notifications;
     @Inject
     private UiComponents uiComponents;
-    @Inject
-    private HeliumThemeVariantsManager themeVariantsManager;
 
     @Subscribe
-    public void onAfterShow(AfterShowEvent event) {
+    public void onAfterInit(AfterInitEvent event) {
         textFieldRO.setValue("Value");
         textFieldD.setValue("Value");
 

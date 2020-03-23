@@ -16,22 +16,21 @@
                 <cssLayout id="appTitleBox"
                            stylename="c-sidemenu-title"
                            width="100%">
-                    <label id="appTitleLabel"
-                           stylename="c-app-title"
-                           value="mainMsg://application.logoLabel"/>
                 </cssLayout>
                 <vbox id="sideMenuWrap"
                       stylename="c-sidemenu-wrap"
                       expand="settingsBox">
                     <hbox width="100%" stylename="theme-setting-buttons">
-                        <button id="resetBtn" caption="msg://resetBtn.caption" icon="ROTATE_LEFT" height="100%" width="100%"
+                        <button id="resetBtn" caption="msg://resetBtn.caption" icon="ROTATE_LEFT" height="100%"
+                                width="100%"
                                 stylename="reset-btn secondary"/>
                         <button id="downloadBtn" caption="msg://downloadBtn.caption" icon="DOWNLOAD" height="100%"
                                 stylename="primary download-btn"
                                 width="100%"/>
                     </hbox>
                     <scrollBox id="settingsBox" stylename="settings-box" spacing="true" margin="true">
-                        <groupBox spacing="true" caption="msg://screenDefaultsBox.caption" width="100%" collapsed="false"
+                        <groupBox spacing="true" caption="msg://screenDefaultsBox.caption" width="100%"
+                                  collapsed="false"
                                   stylename="padding-less" collapsable="true">
                             <vbox>
                                 <label id="colorPresetLabel"
@@ -48,9 +47,9 @@
                                 <lookupField id="sizeField" width="100%" nullOptionVisible="false"/>
                             </vbox>
                         </groupBox>
-                        <hbox spacing="true" width="100%" expand="advancedModeValue">
-                            <label id="advancedModeLabel" value="Advanced Mode" stylename="bold"/>
-                            <checkBox id="advancedModeValue" align="MIDDLE_LEFT"/>
+                        <hbox spacing="true" width="100%">
+                            <checkBox id="advancedModeValue" align="MIDDLE_LEFT" captionAsHtml="true"
+                                      caption="msg://advancedModeLabel.value"/>
                         </hbox>
                     </scrollBox>
                 </vbox>
@@ -58,12 +57,9 @@
             <workArea id="workArea"
                       height="100%">
                 <initialLayout margin="true"
-                               spacing="true">
-                    <label id="welcomeLabel"
-                           align="MIDDLE_CENTER"
-                           width="100%"
-                           stylename="c-welcome-text"
-                           value="mainMsg://application.welcomeText"/>
+                               spacing="true"
+                               expand="componentsSandbox">
+                    <fragment id="componentsSandbox" screen="helium_ComponentsSandbox"/>
                 </initialLayout>
             </workArea>
         </hbox>

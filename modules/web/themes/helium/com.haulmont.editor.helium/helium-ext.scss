@@ -1,15 +1,18 @@
 /* Define your theme modifications inside next mixin */
+
+/**
+ * The sidemenu width.
+ */
+$helium-sidemenu-width: 400px;
+
 @mixin com_haulmont_editor_helium-helium-ext {
-
-  $helium-sidemenu-width: 400px;
-
   .c-sidemenu-responsive {
     @include width-range($min: $cuba-responsive-sidemenu-togglebutton-appeared-max-width-range + 1px, $max: $cuba-responsive-sidemenu-small-style-max-width-range) {
       .c-sidemenu-panel {
         & .c-sidemenu-title,
         & .c-sidemenu-wrap > * {
-          min-width: $helium-sidemenu-width;
-          max-width: $helium-sidemenu-width;
+          min-width: inherit;
+          max-width: inherit;
         }
       }
     }
@@ -18,6 +21,7 @@
       .c-sidemenu-panel .c-sidemenu-wrap {
         min-width: $helium-sidemenu-width;
         max-width: $helium-sidemenu-width;
+        padding: 0;
       }
     }
 
@@ -37,6 +41,10 @@
       .download-btn,
       .c-sidemenu-toggle {
         border-radius: 0;
+      }
+
+      .c-sidemenu-title {
+        padding: 0;
       }
     }
 
