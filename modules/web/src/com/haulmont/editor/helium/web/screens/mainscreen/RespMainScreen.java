@@ -20,6 +20,7 @@ import com.haulmont.editor.helium.web.screens.download.DownloadScreen;
 import com.haulmont.editor.helium.web.tools.ColorPreset;
 import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
+import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
 import com.haulmont.editor.helium.web.tools.ThemeVariablesManager;
 import com.vaadin.ui.JavaScript;
 
@@ -29,6 +30,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField.RGB_POSTFIX;
 
 @UiController("respMainScreen")
 @UiDescriptor("resp-main-screen.xml")
@@ -133,6 +136,11 @@ public class RespMainScreen extends MainScreen {
 
         themeVariableField.addColorValueChangeListener(valueChangeEvent -> {
             updateThemeVariable(themeVariable.getName(), valueChangeEvent.getValue());
+
+            if (themeVariable.isRgbUsed()) {
+                updateThemeVariable(themeVariable.getName() + RGB_POSTFIX,
+                        ThemeVariableUtils.hexStringToRGB(valueChangeEvent.getValue()));
+            }
 
             ColorPreset newColorPreset = modifiedThemeVariables.isEmpty()
                     ? colorPreset
@@ -244,8 +252,6 @@ public class RespMainScreen extends MainScreen {
         StringBuilder builder = new StringBuilder();
         builder.append(".helium.")
                 .append(colorPreset.getId())
-                .append(".")
-                .append(sizeField.getValue())
                 .append(" {\n");
 
         for (Map.Entry<String, String> entry : modifiedThemeVariables.entrySet()) {
@@ -312,11 +318,13 @@ public class RespMainScreen extends MainScreen {
                 themeVariableDetails = themeVariable.getThemeVariableDetails();
             }
 
-            ThemeVariable parentThemeVariable = themeVariableDetails.getParentThemeVariable();
-            if (parentThemeVariable != null
-                    && variableName.equals(parentThemeVariable.getName())) {
-                childrenThemeVariables.add(themeVariable);
-                childrenThemeVariables.addAll(getChildrenThemeVariables(themeVariable.getName()));
+            if (themeVariableDetails != null) {
+                ThemeVariable parentThemeVariable = themeVariableDetails.getParentThemeVariable();
+                if (parentThemeVariable != null
+                        && variableName.equals(parentThemeVariable.getName())) {
+                    childrenThemeVariables.add(themeVariable);
+                    childrenThemeVariables.addAll(getChildrenThemeVariables(themeVariable.getName()));
+                }
             }
         }
         return childrenThemeVariables;

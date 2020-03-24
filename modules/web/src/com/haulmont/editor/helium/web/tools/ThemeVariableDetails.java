@@ -14,14 +14,6 @@ public class ThemeVariableDetails {
     public ThemeVariableDetails() {
     }
 
-    public ThemeVariableDetails(String value, String colorModifier, String colorModifierValue, String placeHolder, ThemeVariable parentThemeVariable) {
-        this.value = value;
-        this.colorModifier = colorModifier;
-        this.colorModifierValue = colorModifierValue;
-        this.placeHolder = placeHolder;
-        this.parentThemeVariable = parentThemeVariable;
-    }
-
     public String getValue() {
         return value;
     }

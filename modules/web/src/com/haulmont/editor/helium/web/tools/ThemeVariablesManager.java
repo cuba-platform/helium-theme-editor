@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField.RGB_POSTFIX;
+
 /**
  * Theme variables manager
  */
@@ -34,6 +36,9 @@ public class ThemeVariablesManager {
     protected static final int PARENT_VARIABLE_GROUP = 6;
     protected static final int COLOR_MODIFIER_GROUP = 8;
     protected static final int COLOR_MODIFIER_VALUE_GROUP = 9;
+
+    protected static final Pattern RGB_PATTERN = Pattern.compile("([0-9]*), ([0-9]*), ([0-9]*)");
+    protected static final Pattern HEX_PATTERN = Pattern.compile("(#?([A-Fa-f0-9]){3}([A-Fa-f0-9]){3})");
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(ThemeVariablesManager.class);
 
@@ -77,10 +82,7 @@ public class ThemeVariablesManager {
                                     ? ColorPreset.fromId(preset.toLowerCase())
                                     : ColorPreset.LIGHT;
 
-                            ThemeVariableDetails details = new ThemeVariableDetails();
                             String value = matcher.group(VALUE_GROUP);
-                            details.setPlaceHolder(value);
-
                             int groupCount = matcher.groupCount();
                             ThemeVariable parentThemeVariable = loadParentThemeVariable(matcher.group(VALUE_GROUP));
                             if (parentThemeVariable != null) {
@@ -91,32 +93,46 @@ public class ThemeVariablesManager {
                                     parentThemeVariable = getThemeVariableByName(parentVariableName);
                                 }
                             }
-                            details.setValue(value);
-                            details.setParentThemeVariable(parentThemeVariable);
 
-                            if (groupCount >= COLOR_MODIFIER_GROUP) {
-                                String colorModifier = matcher.group(COLOR_MODIFIER_GROUP);
-                                if (colorModifier != null) {
-                                    details.setColorModifier(colorModifier);
+                            ThemeVariable themeVariable;
+                            if (RGB_PATTERN.matcher(value).find()
+                                    && name != null
+                                    && name.endsWith(RGB_POSTFIX)) {
+                                String mainThemeVariableName = name.substring(0, name.lastIndexOf(RGB_POSTFIX));
+                                themeVariable = getThemeVariableByName(mainThemeVariableName);
+                                if (themeVariable != null) {
+                                    themeVariable.setRgbUsed(true);
                                 }
-                            }
+                            } else if (HEX_PATTERN.matcher(value).find()) {
+                                ThemeVariableDetails details = new ThemeVariableDetails();
+                                details.setPlaceHolder(matcher.group(VALUE_GROUP));
+                                details.setValue(value);
+                                details.setParentThemeVariable(parentThemeVariable);
 
-                            if (groupCount >= COLOR_MODIFIER_VALUE_GROUP) {
-                                String colorModifierValue = matcher.group(COLOR_MODIFIER_VALUE_GROUP);
-                                if (colorModifierValue != null) {
-                                    details.setColorModifierValue(colorModifierValue);
+                                if (groupCount >= COLOR_MODIFIER_GROUP) {
+                                    String colorModifier = matcher.group(COLOR_MODIFIER_GROUP);
+                                    if (colorModifier != null) {
+                                        details.setColorModifier(colorModifier);
+                                    }
                                 }
-                            }
 
-                            ThemeVariable themeVariable = getThemeVariableByName(name);
-                            if (themeVariable != null) {
-                                themeVariable.setThemeVariableDetails(colorPreset, details);
-                            } else {
-                                themeVariable = new ThemeVariable();
-                                themeVariable.setModule(module);
-                                themeVariable.setName(name);
-                                themeVariable.setThemeVariableDetails(colorPreset, details);
-                                themeVariables.add(themeVariable);
+                                if (groupCount >= COLOR_MODIFIER_VALUE_GROUP) {
+                                    String colorModifierValue = matcher.group(COLOR_MODIFIER_VALUE_GROUP);
+                                    if (colorModifierValue != null) {
+                                        details.setColorModifierValue(colorModifierValue);
+                                    }
+                                }
+
+                                themeVariable = getThemeVariableByName(name);
+                                if (themeVariable != null) {
+                                    themeVariable.setThemeVariableDetails(colorPreset, details);
+                                } else {
+                                    themeVariable = new ThemeVariable();
+                                    themeVariable.setModule(module);
+                                    themeVariable.setName(name);
+                                    themeVariable.setThemeVariableDetails(colorPreset, details);
+                                    themeVariables.add(themeVariable);
+                                }
                             }
                         }
                     }

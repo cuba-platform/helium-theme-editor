@@ -10,6 +10,7 @@ public class ThemeVariable {
 
     protected String module;
     protected String name;
+    protected boolean rgbUsed;
     protected Map<ColorPreset, ThemeVariableDetails> detailsMap = new HashMap<>();
 
     public ThemeVariable() {
@@ -29,6 +30,14 @@ public class ThemeVariable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isRgbUsed() {
+        return rgbUsed;
+    }
+
+    public void setRgbUsed(boolean rgbUsed) {
+        this.rgbUsed = rgbUsed;
     }
 
     public Map<ColorPreset, ThemeVariableDetails> getDetailsMap() {

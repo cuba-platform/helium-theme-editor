@@ -3,14 +3,11 @@ package com.haulmont.editor.helium.web.tools;
 import com.vaadin.shared.ui.colorpicker.Color;
 import com.vaadin.ui.components.colorpicker.ColorUtil;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ThemeVariableUtils {
 
     // todo GD javadocs regexp
-    // todo GD matching he_rgba
-    protected static final Pattern RGB_PATTERN = Pattern.compile("([0-9]*), ([0-9]*), ([0-9]*)");
     protected static final Pattern HEX_PATTERN = Pattern.compile("(#?([A-Fa-f0-9]){3}([A-Fa-f0-9]){3})");
 
     public static int[] calculateHslFromColor(Color color) {
@@ -64,7 +61,7 @@ public class ThemeVariableUtils {
         int[] hsl = calculateHslFromColor(color);
         hsl[2] = (int) (hsl[2] * (1 - percent * 0.01));
         int rgb = Color.HSLtoRGB(hsl[0], hsl[1], hsl[2]);
-        return new Color(rgb).getCSS();
+        return new Color(rgb).getCSS().toUpperCase();
     }
 
     public static String lighten(String value, int percent) {
@@ -72,29 +69,39 @@ public class ThemeVariableUtils {
         int[] hsl = calculateHslFromColor(color);
         hsl[2] = (int) (hsl[2] + (1 - hsl[2]) * percent * 0.01);
         int rgb = Color.HSLtoRGB(hsl[0], hsl[1], hsl[2]);
-        return new Color(rgb).getCSS();
+        return new Color(rgb).getCSS().toUpperCase();
     }
 
     public static String getColorString(String value) {
         if (value != null) {
-            Matcher rgbMatcher = RGB_PATTERN.matcher(value);
-            if (rgbMatcher.find()) {
-                Color color = new Color(Integer.parseInt(rgbMatcher.group(1)),
-                        Integer.parseInt(rgbMatcher.group(2)),
-                        Integer.parseInt(rgbMatcher.group(3)));
-                return color.getCSS();
-            }
-
             if (!value.startsWith("#")) {
                 value = "#" + value;
             }
 
-            Matcher hexMatcher = HEX_PATTERN.matcher(value);
-            if (hexMatcher.find()) {
-                return value;
+            if (HEX_PATTERN.matcher(value).find()) {
+                return value.toUpperCase();
             }
+
+            throw new NumberFormatException("Supports only hex format");
+        } else {
+            return null;
+        }
+    }
+
+    public static String hexStringToRGB(String hexValue) {
+        if (hexValue == null) {
+            return null;
         }
 
-        return null;
+        if (HEX_PATTERN.matcher(hexValue).find()) {
+            Color color = ColorUtil.stringToColor(hexValue);
+            return color.getRed()
+                    + ", "
+                    + color.getGreen()
+                    + ", "
+                    + color.getBlue();
+        } else {
+            return null;
+        }
     }
 }
