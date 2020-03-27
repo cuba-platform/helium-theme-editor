@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd"
           messagesPack="com.haulmont.editor.helium.web.screens.sandbox">
-    <data>
-        <collection id="usersDc"
-                    class="com.haulmont.cuba.security.entity.User"
-                    view="user.browse">
-
-            <loader id="usersLoader"
-                    dynamicAttributes="true">
-                <query>
-                    select u from sec$User u order by u.name
-                </query>
-            </loader>
-        </collection>
-
-        <collection id="groupsDc"
-                    class="com.haulmont.cuba.security.entity.Group"
-                    view="group.browse">
-            <loader id="groupsLoader">
-                <query>
-                    select g from sec$Group g order by g.name
-                </query>
-            </loader>
-        </collection>
-    </data>
-
     <layout expand="previewTabSheet" spacing="true">
         <tabSheet id="previewTabSheet" width="100%">
             <tab id="basicFunctionalityBox" caption="msg://basicFunctionalityBox.caption" spacing="true" margin="true">
@@ -283,44 +259,42 @@
                     </groupBox>
 
                     <groupBox caption="PickerField" spacing="true" collapsable="true" collapsed="false">
-                        <pickerField caption="PickerField" metaClass="sec$User"/>
+                        <pickerField id="pickerField" caption="PickerField" metaClass="sec$User"/>
                         <pickerField id="pickerFieldRO" caption="Read-only" editable="false" metaClass="sec$User"/>
                         <pickerField id="pickerFieldD" caption="Disabled" enable="false" metaClass="sec$User"/>
                         <pickerField id="pickerFieldR" caption="Required" required="true" metaClass="sec$User"/>
 
                         <hbox spacing="true">
-                            <pickerField metaClass="sec$User" caption="LARGE" stylename="large"/>
-                            <pickerField metaClass="sec$User" caption="Middle" stylename="middle"/>
-                            <pickerField metaClass="sec$User" caption="small" stylename="small"/>
+                            <pickerField id="pickerFieldLarge" metaClass="sec$User" caption="LARGE" stylename="large"/>
+                            <pickerField id="pickerFieldMiddle" metaClass="sec$User" caption="Middle"
+                                         stylename="middle"/>
+                            <pickerField id="pickerFieldSmall" metaClass="sec$User" caption="small" stylename="small"/>
                         </hbox>
                     </groupBox>
 
                     <groupBox caption="LookupPickerField" spacing="true" collapsable="true" collapsed="false">
-                        <lookupPickerField caption="LookupPickerField" metaClass="sec$User" optionsContainer="usersDc">
+                        <lookupPickerField id="lookupPickerField" caption="LookupPickerField" metaClass="sec$User">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>
                                 <action id="clear" type="picker_clear"/>
                             </actions>
                         </lookupPickerField>
                         <lookupPickerField id="lookupPickerFieldRO" caption="Read-only" editable="false"
-                                           metaClass="sec$User"
-                                           optionsContainer="usersDc">
+                                           metaClass="sec$User">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>
                                 <action id="clear" type="picker_clear"/>
                             </actions>
                         </lookupPickerField>
                         <lookupPickerField id="lookupPickerFieldD" caption="Disabled" enable="false"
-                                           metaClass="sec$User"
-                                           optionsContainer="usersDc">
+                                           metaClass="sec$User">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>
                                 <action id="clear" type="picker_clear"/>
                             </actions>
                         </lookupPickerField>
                         <lookupPickerField id="lookupPickerFieldR" caption="Required" required="true"
-                                           metaClass="sec$User"
-                                           optionsContainer="usersDc">
+                                           metaClass="sec$User">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>
                                 <action id="clear" type="picker_clear"/>
@@ -328,7 +302,7 @@
                         </lookupPickerField>
 
                         <hbox spacing="true">
-                            <lookupPickerField metaClass="sec$User" optionsContainer="usersDc" caption="LARGE"
+                            <lookupPickerField id="lookupPickerFieldLarge" metaClass="sec$User" caption="LARGE"
                                                stylename="large">
                                 <actions>
                                     <action id="lookup" type="picker_lookup"/>
@@ -336,7 +310,7 @@
                                 </actions>
                             </lookupPickerField>
 
-                            <lookupPickerField metaClass="sec$User" optionsContainer="usersDc" caption="Middle"
+                            <lookupPickerField id="lookupPickerFieldMiddle" metaClass="sec$User" caption="Middle"
                                                stylename="middle">
                                 <actions>
                                     <action id="lookup" type="picker_lookup"/>
@@ -344,7 +318,7 @@
                                 </actions>
                             </lookupPickerField>
 
-                            <lookupPickerField metaClass="sec$User" optionsContainer="usersDc" caption="small"
+                            <lookupPickerField id="lookupPickerFieldSmall" metaClass="sec$User" caption="small"
                                                stylename="small">
                                 <actions>
                                     <action id="lookup" type="picker_lookup"/>
@@ -498,10 +472,8 @@
                     </groupBox>
 
                     <groupBox caption="Table" spacing="true" collapsable="true" collapsed="false">
-                        <table id="tableSample"
-                               dataContainer="usersDc" width="100%" height="300px" multiselect="true"
-                               aggregatable="true" editable="true"
-                               aggregationStyle="TOP">
+                        <table id="tableSample" metaClass="sec$User" width="100%" height="300px" multiselect="true"
+                               aggregatable="true" aggregationStyle="TOP">
                             <columns>
                                 <column id="login">
                                     <aggregation type="COUNT"/>
@@ -514,10 +486,10 @@
                                     <aggregation type="COUNT"/>
                                 </column>
                             </columns>
-                            <rows/>
                         </table>
 
-                        <groupTable dataContainer="usersDc"
+                        <groupTable id="groupTableSample"
+                                    metaClass="sec$User"
                                     width="100%"
                                     height="300px"
                                     multiselect="true"
@@ -535,10 +507,10 @@
                                     <aggregation type="COUNT"/>
                                 </column>
                             </columns>
-                            <rows/>
                         </groupTable>
 
-                        <treeTable dataContainer="groupsDc"
+                        <treeTable id="treeTableSample"
+                                   metaClass="sec$Group"
                                    hierarchyProperty="parent"
                                    width="100%"
                                    height="200px">
@@ -546,10 +518,9 @@
                                 <column id="name"/>
                                 <column id="parent"/>
                             </columns>
-                            <rows/>
                         </treeTable>
 
-                        <table dataContainer="usersDc" width="100%" height="300px" multiselect="true"
+                        <table id="largeTableSample" metaClass="sec$User" width="100%" height="300px" multiselect="true"
                                caption="LARGE" stylename="large">
                             <columns>
                                 <column id="login"/>
@@ -557,10 +528,9 @@
                                 <column id="group"/>
                                 <column id="active"/>
                             </columns>
-                            <rows/>
                         </table>
 
-                        <table dataContainer="usersDc" width="100%" height="300px" multiselect="true"
+                        <table id="smallTableSample" metaClass="sec$User" width="100%" height="300px" multiselect="true"
                                caption="small" stylename="small">
                             <columns>
                                 <column id="login"/>
@@ -568,10 +538,10 @@
                                 <column id="group"/>
                                 <column id="active"/>
                             </columns>
-                            <rows/>
                         </table>
 
-                        <table dataContainer="usersDc" width="100%" height="300px" multiselect="true"
+                        <table id="middleTableSample" metaClass="sec$User" width="100%" height="300px"
+                               multiselect="true"
                                caption="Middle" stylename="middle">
                             <columns>
                                 <column id="login"/>
@@ -579,12 +549,11 @@
                                 <column id="group"/>
                                 <column id="active"/>
                             </columns>
-                            <rows/>
                         </table>
                     </groupBox>
 
                     <groupBox caption="DataGrid" spacing="true" collapsable="true" collapsed="false">
-                        <dataGrid id="dataGrid" dataContainer="usersDc" width="100%" height="600px"
+                        <dataGrid id="dataGridSample" metaClass="sec$User" width="100%" height="600px"
                                   selectionMode="MULTI"
                                   editorEnabled="true" editorBuffered="true"
                                   aggregatable="true" aggregationPosition="BOTTOM">
@@ -613,7 +582,8 @@
                             </buttonsPanel>
                         </dataGrid>
 
-                        <treeDataGrid dataContainer="groupsDc" width="100%" height="300px" hierarchyProperty="parent"
+                        <treeDataGrid id="treeDataGridSample" metaClass="sec$Group" width="100%" height="300px"
+                                      hierarchyProperty="parent"
                                       aggregatable="true" aggregationPosition="TOP">
                             <columns>
                                 <column property="name">
@@ -625,8 +595,7 @@
                     </groupBox>
 
                     <groupBox caption="Tree" spacing="true" collapsable="true" collapsed="false">
-                        <tree id="tree" width="100%" height="200px" dataContainer="groupsDc"
-                              hierarchyProperty="parent"/>
+                        <tree id="tree" width="100%" height="200px"/>
                     </groupBox>
 
                     <groupBox caption="TabSheet" spacing="true" collapsable="true" collapsed="false">
@@ -736,38 +705,38 @@
                     </groupBox>
 
                     <groupBox caption="TokenList" spacing="true" collapsable="true" collapsed="false">
-                        <tokenList caption="TokenList">
-                            <lookup optionsContainer="usersDc" lookup="true"/>
+                        <tokenList id="tokenListSample" caption="TokenList">
+                            <lookup lookup="true"/>
                         </tokenList>
 
                         <hbox spacing="true">
-                            <tokenList caption="LARGE" stylename="large">
-                                <lookup optionsContainer="usersDc" lookup="true"/>
+                            <tokenList id="tokenListLarge" caption="LARGE" stylename="large">
+                                <lookup lookup="true"/>
                             </tokenList>
 
-                            <tokenList caption="Middle" stylename="middle">
-                                <lookup optionsContainer="usersDc" lookup="true"/>
+                            <tokenList id="tokenListMiddle" caption="Middle" stylename="middle">
+                                <lookup lookup="true"/>
                             </tokenList>
 
-                            <tokenList caption="small" stylename="small">
-                                <lookup optionsContainer="usersDc" lookup="true"/>
+                            <tokenList id="tokenListSmall" caption="small" stylename="small">
+                                <lookup lookup="true"/>
                             </tokenList>
                         </hbox>
 
-                        <tokenList caption="TokenList | Inline" inline="true">
-                            <lookup optionsContainer="usersDc"/>
+                        <tokenList id="tokenListInline" caption="TokenList | Inline" inline="true">
+                            <lookup/>
                         </tokenList>
 
-                        <tokenList caption="TokenList | Simple" simple="true">
+                        <tokenList id="tokenListSimple" caption="TokenList | Simple" simple="true">
                             <lookup/>
                         </tokenList>
 
                         <tokenList id="tokenListR1" caption="TokenList | Errored">
-                            <lookup optionsContainer="usersDc"/>
+                            <lookup/>
                         </tokenList>
 
                         <tokenList id="tokenListR2" caption="TokenList | Errored">
-                            <lookup optionsContainer="usersDc" lookup="true"/>
+                            <lookup lookup="true"/>
                         </tokenList>
 
                         <tokenList id="tokenListR3" caption="TokenList | Simple | Errored" simple="true">
@@ -775,26 +744,24 @@
                         </tokenList>
 
                         <tokenList id="tokenListRO" caption="TokenList | read-only" editable="false">
-                            <lookup optionsContainer="usersDc"/>
-                        </tokenList>
-
-                        <tokenList caption="TokenList | read-only" editable="false">
-                            <lookup optionsContainer="usersDc" lookup="true"/>
-                        </tokenList>
-
-                        <tokenList caption="TokenList | Simple | read-only" editable="false" simple="true">
                             <lookup/>
                         </tokenList>
 
-                        <tokenList caption="TokenList | disabled" enable="false">
-                            <lookup optionsContainer="usersDc"/>
+                        <tokenList id="tokenListSimpleRO" caption="TokenList | Simple | read-only" editable="false"
+                                   simple="true">
+                            <lookup/>
                         </tokenList>
 
-                        <tokenList caption="TokenList | disabled" enable="false">
-                            <lookup optionsContainer="usersDc" lookup="true"/>
+                        <tokenList id="tokenListDisabled" caption="TokenList | disabled" enable="false">
+                            <lookup/>
                         </tokenList>
 
-                        <tokenList caption="TokenList | Simple | disabled" enable="false" simple="true">
+                        <tokenList id="tokenListDisabledLookup" caption="TokenList | disabled" enable="false">
+                            <lookup lookup="true"/>
+                        </tokenList>
+
+                        <tokenList id="tokenListDisabledSimple" caption="TokenList | Simple | disabled" enable="false"
+                                   simple="true">
                             <lookup/>
                         </tokenList>
                     </groupBox>

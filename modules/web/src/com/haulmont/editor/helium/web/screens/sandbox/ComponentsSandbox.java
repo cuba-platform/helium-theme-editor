@@ -7,7 +7,12 @@ import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.app.core.inputdialog.DialogActions;
 import com.haulmont.cuba.gui.app.core.inputdialog.InputParameter;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.data.datagrid.ContainerDataGridItems;
+import com.haulmont.cuba.gui.components.data.datagrid.ContainerTreeDataGridItems;
+import com.haulmont.cuba.gui.components.data.table.ContainerGroupTableItems;
 import com.haulmont.cuba.gui.components.data.table.ContainerTableItems;
+import com.haulmont.cuba.gui.components.data.table.ContainerTreeTableItems;
+import com.haulmont.cuba.gui.components.data.tree.ContainerTreeItems;
 import com.haulmont.cuba.gui.components.validation.NotEmptyValidator;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.DataComponents;
@@ -57,17 +62,27 @@ public class ComponentsSandbox extends ScreenFragment {
 
     protected String appWindowTheme;
 
+    protected CollectionContainer<User> usersDc;
+    protected CollectionContainer<Group> groupsDc;
+
     @Subscribe
     public void onInit(InitEvent event) {
         appWindowTheme = userSettingsTools.loadAppWindowTheme();
+        initDataContainers();
         initTableSample();
         initOptions();
     }
 
+    protected void initDataContainers() {
+        usersDc = dataComponents.createCollectionContainer(User.class);
+        usersDc.setItems(generateUsersSampleData());
+
+        groupsDc = dataComponents.createCollectionContainer(Group.class);
+        groupsDc.setItems(generateGroupsSampleData());
+    }
+
     protected void initTableSample() {
-        CollectionContainer<User> container = dataComponents.createCollectionContainer(User.class);
-        container.setItems(generateUsersSampleData());
-        table.setItems(new ContainerTableItems<>(container));
+        table.setItems(new ContainerTableItems<>(usersDc));
     }
 
     protected List<User> generateUsersSampleData() {
@@ -78,6 +93,18 @@ public class ComponentsSandbox extends ScreenFragment {
         return users;
     }
 
+    protected List<Group> generateGroupsSampleData() {
+        List<Group> groups = new ArrayList<>(SAMPLE_DATA_SIZE);
+        for (int i = 0; i < SAMPLE_DATA_SIZE; i++) {
+            Group parent = null;
+            if (i > 0) {
+                parent = groups.get(i - 1);
+            }
+            groups.add(createGroup(i, parent));
+        }
+        return groups;
+    }
+
     protected User createUser(int index) {
         User user = metadata.create(User.class);
         user.setLogin("user" + index);
@@ -85,6 +112,15 @@ public class ComponentsSandbox extends ScreenFragment {
         user.setActive(index % 2 == 0);
 
         return user;
+    }
+
+    protected Group createGroup(int index, Group parent) {
+        Group group = metadata.create(Group.class);
+        group.setName("group" + index);
+        if (parent != null) {
+            group.setParent(parent);
+        }
+        return group;
     }
 
     protected void initOptions() {
@@ -113,11 +149,29 @@ public class ComponentsSandbox extends ScreenFragment {
     private PickerField<User> pickerFieldRO;
     @Inject
     private PickerField<User> pickerFieldD;
+    @Inject
+    private PickerField<User> pickerFieldSmall;
+    @Inject
+    private PickerField<User> pickerFieldMiddle;
+    @Inject
+    private PickerField<User> pickerFieldLarge;
+    @Inject
+    private PickerField<User> pickerField;
 
+    @Inject
+    private LookupPickerField<User> lookupPickerFieldR;
+    @Inject
+    private LookupPickerField<User> lookupPickerField;
     @Inject
     private LookupPickerField<User> lookupPickerFieldRO;
     @Inject
     private LookupPickerField<User> lookupPickerFieldD;
+    @Inject
+    private LookupPickerField<User> lookupPickerFieldMiddle;
+    @Inject
+    private LookupPickerField<User> lookupPickerFieldSmall;
+    @Inject
+    private LookupPickerField<User> lookupPickerFieldLarge;
 
     @Inject
     private CheckBox checkBoxRO2;
@@ -137,12 +191,44 @@ public class ComponentsSandbox extends ScreenFragment {
     private TokenList<User> tokenListR2;
     @Inject
     private TokenList<User> tokenListR3;
+    @Inject
+    private TokenList<User> tokenListSmall;
+    @Inject
+    private TokenList<User> tokenListSimpleRO;
+    @Inject
+    private TokenList<User> tokenListSimple;
+    @Inject
+    private TokenList<User> tokenListSample;
+    @Inject
+    private TokenList<User> tokenListMiddle;
+    @Inject
+    private TokenList<User> tokenListLarge;
+    @Inject
+    private TokenList<User> tokenListInline;
+    @Inject
+    private TokenList<User> tokenListDisabledSimple;
+    @Inject
+    private TokenList<User> tokenListDisabledLookup;
+    @Inject
+    private TokenList<User> tokenListDisabled;
 
     @Inject
     private Table<User> tableSample;
+    @Inject
+    private GroupTable<User> groupTableSample;
+    @Inject
+    private Table<User> largeTableSample;
+    @Inject
+    private Table<User> middleTableSample;
+    @Inject
+    private Table<User> smallTableSample;
+    @Inject
+    private TreeTable<Group> treeTableSample;
 
     @Inject
-    private DataGrid<User> dataGrid;
+    private DataGrid<User> dataGridSample;
+    @Inject
+    private TreeDataGrid<Group> treeDataGridSample;
 
     @Inject
     private TabSheet tabSheet;
@@ -166,8 +252,6 @@ public class ComponentsSandbox extends ScreenFragment {
     private CheckBox showGutterCheck;
 
     @Inject
-    private CollectionContainer<User> usersDc;
-    @Inject
     private Dialogs dialogs;
     @Inject
     private Notifications notifications;
@@ -185,18 +269,47 @@ public class ComponentsSandbox extends ScreenFragment {
         checkBoxRO2.setValue(true);
         checkBoxD2.setValue(true);
 
-        User user = metadata.create(User.class);
+        pickerField.setValue(usersDc.getItems().get(0));
+        pickerFieldRO.setValue(usersDc.getItems().get(0));
+        pickerFieldD.setValue(usersDc.getItems().get(0));
+        pickerFieldLarge.setValue(usersDc.getItems().get(0));
+        pickerFieldMiddle.setValue(usersDc.getItems().get(0));
+        pickerFieldSmall.setValue(usersDc.getItems().get(0));
 
-        pickerFieldRO.setValue(user);
-        pickerFieldD.setValue(user);
+        lookupPickerField.setOptionsList(usersDc.getItems());
+        lookupPickerFieldR.setOptionsList(usersDc.getItems());
+        lookupPickerFieldRO.setOptionsList(usersDc.getItems());
+        lookupPickerFieldD.setOptionsList(usersDc.getItems());
+        lookupPickerFieldLarge.setOptionsList(usersDc.getItems());
+        lookupPickerFieldMiddle.setOptionsList(usersDc.getItems());
+        lookupPickerFieldSmall.setOptionsList(usersDc.getItems());
 
-        lookupPickerFieldRO.setValue(user);
-        lookupPickerFieldD.setValue(user);
+        lookupPickerField.setValue(usersDc.getItems().get(0));
+        lookupPickerFieldR.setValue(usersDc.getItems().get(0));
+        lookupPickerFieldRO.setValue(usersDc.getItems().get(0));
+        lookupPickerFieldD.setValue(usersDc.getItems().get(0));
+        lookupPickerFieldLarge.setValue(usersDc.getItems().get(0));
+        lookupPickerFieldMiddle.setValue(usersDc.getItems().get(0));
+        lookupPickerFieldSmall.setValue(usersDc.getItems().get(0));
 
         radioButtonGroupRO.setValue(RoleType.DENYING);
         radioButtonGroupD.setValue(RoleType.DENYING);
 
         tokenListRO.setValue(usersDc.getItems());
+        tokenListR1.setValue(usersDc.getItems());
+        tokenListR2.setValue(usersDc.getItems());
+        tokenListR3.setValue(usersDc.getItems());
+        tokenListSmall.setValue(usersDc.getItems());
+        tokenListSimpleRO.setValue(usersDc.getItems());
+        tokenListSimple.setValue(usersDc.getItems());
+        tokenListSample.setValue(usersDc.getItems());
+        tokenListMiddle.setValue(usersDc.getItems());
+        tokenListLarge.setValue(usersDc.getItems());
+        tokenListInline.setValue(usersDc.getItems());
+        tokenListDisabledSimple.setValue(usersDc.getItems());
+        tokenListDisabledLookup.setValue(usersDc.getItems());
+        tokenListDisabled.setValue(usersDc.getItems());
+
         tokenListR1.addValidator(getBeanLocator().get(NotEmptyValidator.NAME));
         tokenListR2.addValidator(getBeanLocator().get(NotEmptyValidator.NAME));
         tokenListR3.addValidator(getBeanLocator().get(NotEmptyValidator.NAME));
@@ -228,6 +341,17 @@ public class ComponentsSandbox extends ScreenFragment {
 
         codeEditorRO.setValue("highlightActiveLineCheck.setValue(codeEditor.isHighlightActiveLine());");
         codeEditorD.setValue("highlightActiveLineCheck.setValue(codeEditor.isHighlightActiveLine());");
+
+        tableSample.setItems(new ContainerTableItems<>(usersDc));
+        groupTableSample.setItems(new ContainerGroupTableItems<>(usersDc));
+        smallTableSample.setItems(new ContainerTableItems<>(usersDc));
+        middleTableSample.setItems(new ContainerTableItems<>(usersDc));
+        largeTableSample.setItems(new ContainerTableItems<>(usersDc));
+        dataGridSample.setItems(new ContainerDataGridItems<>(usersDc));
+
+        treeDataGridSample.setItems(new ContainerTreeDataGridItems<>(groupsDc, "parent"));
+        treeTableSample.setItems(new ContainerTreeTableItems<>(groupsDc, "parent"));
+        tree.setItems(new ContainerTreeItems<>(groupsDc, "parent"));
     }
 
     private void changeTableStyle(HasValue.ValueChangeEvent<Boolean> e) {
@@ -255,7 +379,7 @@ public class ComponentsSandbox extends ScreenFragment {
         return sb.toString();
     }
 
-    @Install(to = "dataGrid", subject = "detailsGenerator")
+    @Install(to = "dataGridSample", subject = "detailsGenerator")
     protected Component dataGridDetailsGenerator(User user) {
         VBoxLayout mainLayout = uiComponents.create(VBoxLayout.class);
         mainLayout.setWidth("100%");
@@ -266,17 +390,17 @@ public class ComponentsSandbox extends ScreenFragment {
 
     @Subscribe("showDetailsBtn")
     public void onShowDetailsBtnClick(Button.ClickEvent event) {
-        User singleSelected = dataGrid.getSingleSelected();
+        User singleSelected = dataGridSample.getSingleSelected();
         if (singleSelected != null) {
-            dataGrid.setDetailsVisible(singleSelected, true);
+            dataGridSample.setDetailsVisible(singleSelected, true);
         }
     }
 
     @Subscribe("closeDetailsBtn")
     public void onCloseDetailsBtnClick(Button.ClickEvent event) {
-        User singleSelected = dataGrid.getSingleSelected();
+        User singleSelected = dataGridSample.getSingleSelected();
         if (singleSelected != null) {
-            dataGrid.setDetailsVisible(singleSelected, false);
+            dataGridSample.setDetailsVisible(singleSelected, false);
         }
     }
 

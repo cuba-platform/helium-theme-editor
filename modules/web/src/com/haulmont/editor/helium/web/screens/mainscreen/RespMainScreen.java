@@ -64,14 +64,12 @@ public class RespMainScreen extends MainScreen {
     protected HBoxLayout horizontalWrap;
 
     protected String appWindowTheme;
-    protected JavaScript javaScript;
     protected Map<String, String> modifiedThemeVariables = new HashMap<>();
     protected ColorPreset colorPreset = ColorPreset.LIGHT;
 
     @Subscribe
     public void onInit(InitEvent event) {
         appWindowTheme = userSettingsTools.loadAppWindowTheme();
-        javaScript = AppUI.getCurrent().getPage().getJavaScript();
 
         initColorPresetField();
         initSizeField();
