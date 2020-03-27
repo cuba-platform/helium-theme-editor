@@ -1,7 +1,13 @@
 package com.haulmont.editor.helium.web.components.themevariablefield;
 
 import com.haulmont.bali.events.Subscription;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.ColorPicker;
+import com.haulmont.cuba.gui.components.Field;
+import com.haulmont.cuba.gui.components.Form;
+import com.haulmont.cuba.gui.components.HasInputPrompt;
+import com.haulmont.cuba.gui.components.Label;
+import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.components.ValidationException;
 import com.haulmont.cuba.gui.components.data.ValueSource;
 import com.haulmont.cuba.web.gui.components.CompositeComponent;
 import com.haulmont.cuba.web.gui.components.CompositeDescriptor;
@@ -15,6 +21,7 @@ import com.vaadin.ui.JavaScript;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @CompositeDescriptor("theme-variable-field.xml")
@@ -120,23 +127,32 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
         ThemeVariableDetails details = themeVariable.getThemeVariableDetails(colorPreset);
         if (details == null) {
+            details = themeVariable.getThemeVariableDetails();
+        }
+
+        if (details == null) {
+            setVisible(false);
             return;
+        } else if (!isVisible()) {
+            setVisible(true);
         }
 
-        currentColorPreset = colorPreset;
+        if (!Objects.equals(details.getValue(), ThemeVariableUtils.getColorString(colorValueField.getValue()))) {
+            currentColorPreset = colorPreset;
 
-        if (getInputPrompt() != null &&
-                !getInputPrompt().equals(details.getPlaceHolder())) {
-            removeThemeVariable();
+            if (getInputPrompt() != null &&
+                    !getInputPrompt().equals(details.getPlaceHolder())) {
+                removeThemeVariable();
+            }
+
+            String name = themeVariable.getName();
+            setCaption(name);
+            setDescription(name);
+            setInputPrompt(details.getPlaceHolder());
+
+            valueField.setValue(null);
+            colorValueField.setValue(ThemeVariableUtils.getColorString(details.getValue()));
         }
-
-        String name = themeVariable.getName();
-        setCaption(name);
-        setDescription(name);
-        setInputPrompt(details.getPlaceHolder());
-
-        valueField.setValue(null);
-        colorValueField.setValue(ThemeVariableUtils.getColorString(details.getValue()));
     }
 
     public void setColorValueByParent(String parentValue) {

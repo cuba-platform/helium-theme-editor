@@ -52,6 +52,10 @@ $helium-sidemenu-width: 400px;
       padding-left: round($v-unit-size * 1.4 / 3);
     }
 
+    .helium {
+      background: var(--app-background-color);
+    }
+
     .theme-variable-field {
       & .c-fglayout-slot {
         &:nth-of-type(2),

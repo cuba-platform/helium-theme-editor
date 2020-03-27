@@ -170,7 +170,7 @@
   --button-default-text-color: var(--text-medium-color);
   --button-default-hover-color: #CECECE;
   --button-default-active-color: #A7A7A7;
-  --button-default-disabled-color: transparent;  // todo GD unknown color
+  --button-default-disabled-color: transparent;
   --button-default-disabled-text-color: var(--text-disabled-color);
   --button-default-focused-border-color: #E7E7E7;
 
@@ -618,7 +618,7 @@
     --button-secondary-text-color: var(--text-medium-color);
     --button-secondary-hover-color: #CECECE;
     --button-secondary-active-color: #A7A7A7;
-    --button-secondary-disabled-color: transparent; // todo GD unknown color
+    --button-secondary-disabled-color: transparent;
     --button-secondary-disabled-text-color: var(--text-disabled-color);
     --button-secondary-focused-border-color: #E7E7E7;
 
@@ -728,7 +728,7 @@
     --button-secondary-text-color: #4F5C78;
     --button-secondary-hover-color: #CECECE;
     --button-secondary-active-color: #A7A7A7;
-    --button-secondary-disabled-color: transparent; // todo GD unknown color
+    --button-secondary-disabled-color: transparent;
     --button-secondary-disabled-text-color: #A0AAC0;
     --button-secondary-focused-border-color: #E7E7E7;
     // end Button.Dark

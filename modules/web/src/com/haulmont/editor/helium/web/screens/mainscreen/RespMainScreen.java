@@ -11,7 +11,6 @@ import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
-import com.haulmont.cuba.web.AppUI;
 import com.haulmont.cuba.web.app.UserSettingsTools;
 import com.haulmont.cuba.web.app.main.MainScreen;
 import com.haulmont.cuba.web.theme.HaloTheme;
@@ -22,7 +21,6 @@ import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
 import com.haulmont.editor.helium.web.tools.ThemeVariablesManager;
-import com.vaadin.ui.JavaScript;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -164,7 +162,7 @@ public class RespMainScreen extends MainScreen {
                                     .withHandler(actionPerformedEvent -> colorPresetField.setValue(event.getPrevValue()))
                     )
                     .show();
-        } else {
+        } else if (!ColorPreset.CUSTOM.equals(event.getValue())) {
             updateColorPreset(event.getValue());
         }
     }
