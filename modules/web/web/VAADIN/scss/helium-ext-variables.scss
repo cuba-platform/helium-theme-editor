@@ -112,13 +112,6 @@
   @include he-generic-filter;*/
 
   // begin Basic
-  --background-color: #FFFFFF;
-  --app-background-color: #FFFFFF;
-
-  // TODO: gg, rename to second and switch
-  --text-color: #0A2044;                            // Text - Main
-  --text-medium-color: #4F5C78;                     // Text - Medium
-
   --primary-color: #6F5CC3;                         // Primary
 
   --secondary-color: #637497;                       // Gray - Light
@@ -132,11 +125,18 @@
   --border-color: #637497;                          // Gray - Light
 
   --read-only-color: #F2F2F2;                       // Gray - Hover
+
+  --text-medium-color: #4F5C78;                     // Text - Medium
+
+  --background-color: #FFFFFF;
+
+  --app-background-color: #FFFFFF;
   // end Basic
 
   // begin Common
   --background-color_rgb: 255, 255, 255;
 
+  --text-color: #0A2044;                            // Text - Main
   --text-disabled-color: #A0AAC0;                   // Gray - Disabled
   --text-contrast-color: #FFFFFF;
 
@@ -605,69 +605,6 @@
    ************/
 
   // TODO: gg, test only
-  &.inverse-buttons {
-    --button-default-color: #637497;
-    --button-default-text-color: var(--text-contrast-color);
-    --button-default-hover-color: #4F5C78;
-    --button-default-active-color: #3B4459;
-    --button-default-disabled-color: var(--text-disabled-color);
-    --button-default-disabled-text-color: var(--button-default-text-color);
-    --button-default-focused-border-color: var(--button-default-disabled-color);
-
-    --secondary-color: #F2F2F2;
-    --button-secondary-text-color: var(--text-medium-color);
-    --button-secondary-hover-color: #CECECE;
-    --button-secondary-active-color: #A7A7A7;
-    --button-secondary-disabled-color: transparent;
-    --button-secondary-disabled-text-color: var(--text-disabled-color);
-    --button-secondary-focused-border-color: #E7E7E7;
-
-    --tabsheet-framed-tabitemcell-caption-background-color: var(--secondary-color);
-    --tabsheet-framed-tabitemcell-caption-hover-background-color: var(--button-secondary-hover-color);
-    --tabsheet-framed-tabitemcell-caption-hover-text-color: var(--button-secondary-text-color);
-    --tabsheet-framed-tabitemcell-caption-disabled-text-color: var(--button-secondary-disabled-text-color);
-
-    --sidemenu-action-button-color: var(--button-secondary-text-color);
-    --sidemenu-action-button-hover-background-color: var(--button-secondary-hover-color);
-    --sidemenu-action-button-active-background-color: var(--button-secondary-active-color);
-
-    --datefield-button-color: var(--secondary-color);
-    --datefield-button-text-color: var(--button-secondary-text-color);
-    --datefield-button-hover-color: var(--button-secondary-hover-color);
-    --datefield-button-active-color: var(--button-secondary-active-color);
-    --datefield-button-disabled-color: var(--button-secondary-disabled-color);
-    --datefield-button-disabled-text-color: var(--button-secondary-disabled-text-color);
-
-    --datefield-calendarpanel-weekdays-color: var(--button-default-color);
-    --datefield-calendarpanel-month-color: var(--button-default-color);
-  }
-
-  // TODO: gg, test only
-  &.inverse-checkbox {
-    --checkbox-focused-background-color: var(--checkbox-background-color);
-    --checkbox-focused-border-color: var(--primary-color);
-
-    --checkbox-checked-background-color: var(--primary-color);
-    --checkbox-checked-border-color: var(--primary-color);
-    --checkbox-checked-color: var(--primary-text-color);
-
-    --checkbox-checked-focused-background-color: var(--primary-color);
-    --checkbox-checked-focused-border-color: var(--button-primary-focused-border-color);
-    --checkbox-checked-focused-color: var(--primary-text-color);
-
-    --checkbox-read-only-checked-background-color: var(--read-only-border-color);
-    --checkbox-read-only-checked-border-color: var(--read-only-border-color);
-    --checkbox-read-only-checked-color: var(--text-contrast-color);
-
-    --checkbox-read-only-checked-focused-background-color: var(--read-only-border-color);
-    --checkbox-read-only-checked-focused-border-color: var(--border-color);
-    --checkbox-read-only-checked-focused-color: var(--text-contrast-color);
-
-    --radio-checked-color: var(--primary-text-color);
-    --radio-read-only-checked-color: var(--text-contrast-color);
-  }
-
-  // TODO: gg, test only
   &.blue {
     // begin Basic.Blue
     --primary-color: #0055A6;
@@ -690,7 +627,6 @@
     --background-color: #4F4F4F;
     --app-background-color: #333333;
 
-    --text-color: #FFFFFF;
     --text-medium-color: #F2F2F2;
 
     --read-only-color: #646464;
@@ -698,6 +634,10 @@
     --border-color: var(--background-color);
     --secondary-color: #F2F2F2;
     // end Basic.Dark
+
+    // begin Common.Dark
+    --text-color: #FFFFFF;
+    // end Common.Dark
 
     // begin Panel.Dark
     --panel-background-color: #333333;
