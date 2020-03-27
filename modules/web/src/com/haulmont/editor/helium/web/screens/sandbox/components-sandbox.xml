@@ -38,8 +38,10 @@
                                              required="true"/>
                             </vbox>
                         </vbox>
-                        <vbox id="radioButtonGroupBox" margin="true" stylename="card" width="250px" height="300px">
-                            <radioButtonGroup id="radioButtonGroup" align="MIDDLE_CENTER"/>
+                        <vbox id="tokenListBox" margin="true" stylename="card" width="350px" height="300px">
+                            <tokenList id="tokenListMain" width="100%" height="100%" enable="false" inline="true">
+                                <lookup/>
+                            </tokenList>
                         </vbox>
                         <vbox id="tabSheetsBox" margin="true" stylename="card" width="300px" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER">
@@ -80,13 +82,25 @@
                                        width="100%"/>
                             </vbox>
                         </vbox>
-                        <vbox id="notificationsBox" margin="true" stylename="card">
-                            <flowBox spacing="true" stylename="notifications-box">
-                                <htmlBox height="100%" width="350px" template="notifications/humanized-notification"/>
-                                <htmlBox height="100%" width="350px" template="notifications/system-notification"/>
-                                <htmlBox height="100%" width="350px" template="notifications/warning-notification"/>
-                                <htmlBox height="100%" width="350px" template="notifications/error-notification"/>
+                        <vbox id="notificationsBox1" margin="true" stylename="card" width="450px" height="200px">
+                            <flowBox spacing="true" stylename="notifications-box" width="100%">
+                                <htmlBox height="100%" template="notifications/humanized-notification"/>
+                                <htmlBox height="100%" template="notifications/system-notification"/>
                             </flowBox>
+                        </vbox>
+                        <vbox id="notificationsBox2" margin="true" stylename="card" width="450px" height="200px">
+                            <flowBox spacing="true" stylename="notifications-box" width="100%">
+                                <htmlBox height="100%" template="notifications/warning-notification"/>
+                                <htmlBox height="100%" template="notifications/error-notification"/>
+                            </flowBox>
+                        </vbox>
+                        <vbox id="radioButtonGroupBox" margin="true" stylename="card" width="250px" height="200px">
+                            <radioButtonGroup id="radioButtonGroup" align="MIDDLE_CENTER"/>
+                        </vbox>
+                        <vbox id="sideMenuBox" margin="true" stylename="card" width="250px" height="200px">
+                            <vbox stylename="c-sidemenu-panel">
+                                <sideMenu id="sideMenuSample" width="100%"/>
+                            </vbox>
                         </vbox>
                     </flowBox>
                 </scrollBox>
