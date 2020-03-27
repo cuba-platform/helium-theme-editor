@@ -2,7 +2,18 @@
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://caption"
         messagesPack="com.haulmont.editor.helium.web.screens.download">
+    <facets>
+        <clipboardTrigger id="clipboardTrigger" button="clipboardBtn" input="textArea"/>
+    </facets>
     <layout expand="textArea" spacing="true" margin="true">
+        <label id="descriptionLabel" value="msg://description" width="100%" htmlEnabled="true"/>
+        <label id="firstStepLabel" width="100%" htmlEnabled="true"/>
+        <label id="secondStepLabel" value="msg://secondStep" width="100%" htmlEnabled="true"/>
         <textArea id="textArea" width="100%" editable="false"/>
+        <hbox id="buttonsBox" align="MIDDLE_RIGHT" spacing="true">
+            <button id="clipboardBtn" caption="msg://clipboardBtn" icon="CLIPBOARD" stylename="primary"/>
+            <button id="downloadBtn" caption="msg://downloadBtn" icon="DOWNLOAD" stylename="secondary"/>
+            <button id="closeBtn" caption="msg://closeBtn"/>
+        </hbox>
     </layout>
 </window>

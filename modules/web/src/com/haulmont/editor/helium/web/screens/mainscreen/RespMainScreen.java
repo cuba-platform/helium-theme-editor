@@ -237,6 +237,8 @@ public class RespMainScreen extends MainScreen {
                 .withScreenClass(DownloadScreen.class)
                 .withOptions(new MapScreenOptions(
                         ImmutableMap.of(
+                                DownloadScreen.COLOR_PRESET_PARAM,
+                                colorPreset.getId(),
                                 DownloadScreen.TEXT_PARAM,
                                 generateDownloadText()
                         )
