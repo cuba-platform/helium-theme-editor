@@ -1,5 +1,5 @@
 rootProject.name = 'helium-theme-editor'
-def modulePrefix = 'app'
+def modulePrefix = 'helium-editor'
 include(":${modulePrefix}-global", ":${modulePrefix}-core", ":${modulePrefix}-web")
 project(":${modulePrefix}-global").projectDir = new File(settingsDir, 'modules/global')
 project(":${modulePrefix}-core").projectDir = new File(settingsDir, 'modules/core')
