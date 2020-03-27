@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd"
-        messagesPack="com.haulmont.editor.helium.web.screens.sandbox">
+          messagesPack="com.haulmont.editor.helium.web.screens.sandbox">
     <data>
         <collection id="usersDc"
                     class="com.haulmont.cuba.security.entity.User"
@@ -29,7 +29,7 @@
         <tabSheet id="previewTabSheet" width="100%">
             <tab id="basicFunctionalityBox" caption="msg://basicFunctionalityBox.caption" spacing="true" margin="true">
                 <scrollBox id="innerPreviewBox" height="100%" width="100%" spacing="true">
-                    <flowBox spacing="true">
+                    <flowBox spacing="true" width="100%">
                         <vbox id="buttonsBox" margin="true" stylename="card" width="450px" height="250px">
                             <vbox spacing="true" align="MIDDLE_CENTER" width="AUTO">
                                 <hbox spacing="true">
@@ -62,7 +62,7 @@
                                              required="true"/>
                             </vbox>
                         </vbox>
-                        <vbox id="radioButtonGroupBox" margin="true" stylename="card" width="250px" height="250px">
+                        <vbox id="radioButtonGroupBox" margin="true" stylename="card" width="250px" height="300px">
                             <radioButtonGroup id="radioButtonGroup" align="MIDDLE_CENTER"/>
                         </vbox>
                         <vbox id="tabSheetsBox" margin="true" stylename="card" width="300px" height="300px">
@@ -94,7 +94,7 @@
                                 </columns>
                             </table>
                         </vbox>
-                        <vbox id="labelsBox" margin="true" stylename="card" width="300px" height="350px">
+                        <vbox id="labelsBox" margin="true" stylename="card" width="300px" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER">
                                 <label value="Header 1" stylename="h1"/>
                                 <label value="Header 2" stylename="h2"/>
@@ -104,10 +104,19 @@
                                        width="100%"/>
                             </vbox>
                         </vbox>
+                        <vbox id="notificationsBox" margin="true" stylename="card">
+                            <flowBox spacing="true" stylename="notifications-box">
+                                <htmlBox height="100%" width="350px" template="notifications/humanized-notification"/>
+                                <htmlBox height="100%" width="350px" template="notifications/system-notification"/>
+                                <htmlBox height="100%" width="350px" template="notifications/warning-notification"/>
+                                <htmlBox height="100%" width="350px" template="notifications/error-notification"/>
+                            </flowBox>
+                        </vbox>
                     </flowBox>
                 </scrollBox>
             </tab>
-            <tab id="allComponentsBox" caption="msg://allComponentsBox.caption" spacing="true" margin="true" expand="scrollBox">
+            <tab id="allComponentsBox" caption="msg://allComponentsBox.caption" spacing="true" margin="true"
+                 expand="scrollBox">
                 <scrollBox id="scrollBox" spacing="true" width="100%">
                     <groupBox caption="TextField" spacing="true" collapsable="true" collapsed="false">
                         <textField id="textField" caption="TextField" icon="APPLE" inputPrompt="Placeholder"/>
