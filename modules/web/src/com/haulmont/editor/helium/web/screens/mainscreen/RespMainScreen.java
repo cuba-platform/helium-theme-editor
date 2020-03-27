@@ -11,8 +11,10 @@ import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
+import com.haulmont.cuba.web.AppUI;
 import com.haulmont.cuba.web.app.UserSettingsTools;
 import com.haulmont.cuba.web.app.main.MainScreen;
+import com.haulmont.cuba.web.events.UIRefreshEvent;
 import com.haulmont.cuba.web.theme.HaloTheme;
 import com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField;
 import com.haulmont.editor.helium.web.screens.download.DownloadScreen;
@@ -21,6 +23,7 @@ import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
 import com.haulmont.editor.helium.web.tools.ThemeVariablesManager;
+import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -147,6 +150,12 @@ public class RespMainScreen extends MainScreen {
         return themeVariableField;
     }
 
+    @EventListener
+    public void onUIRefresh(UIRefreshEvent event) {
+        colorPresetField.setValue(colorPreset);
+        modifiedThemeVariables.clear();
+    }
+
     @Subscribe("colorPresetField")
     public void onColorPresetFieldValueChange(HasValue.ValueChangeEvent<ColorPreset> event) {
         if (ColorPreset.CUSTOM.equals(event.getPrevValue())
@@ -227,6 +236,7 @@ public class RespMainScreen extends MainScreen {
 
     protected void resetValues() {
         colorPresetField.setValue(ColorPreset.LIGHT);
+        modifiedThemeVariables.clear();
         sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
         updateMainScreenStyleName();
     }

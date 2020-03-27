@@ -68,13 +68,19 @@ $helium-sidemenu-width: 400px;
         }
 
         & .v-textfield {
-          padding-right: $v-unit-size;
+          padding-right: 2 * $v-unit-size;
         }
 
         & .c-color-picker > .v-colorpicker {
           background: none;
           border: none;
           width: $v-unit-size;
+        }
+
+        & .reset-btn {
+          margin-left: (-1) * $v-layout-margin-left;
+          padding-left: $v-layout-margin-left;
+          padding-right: $v-unit-size - $v-layout-margin-left;
         }
       }
     }

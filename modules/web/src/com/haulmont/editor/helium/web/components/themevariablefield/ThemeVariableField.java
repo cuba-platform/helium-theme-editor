@@ -1,6 +1,7 @@
 package com.haulmont.editor.helium.web.components.themevariablefield;
 
 import com.haulmont.bali.events.Subscription;
+import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.ColorPicker;
 import com.haulmont.cuba.gui.components.Field;
 import com.haulmont.cuba.gui.components.Form;
@@ -38,6 +39,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
     protected TextField<String> valueField;
     protected ColorPicker colorValueField;
     protected JavaScriptComponent jsComponent;
+    protected Button resetBtn;
 
     protected JavaScript javaScript;
 
@@ -53,10 +55,12 @@ public class ThemeVariableField extends CompositeComponent<Form>
         valueField = getInnerComponent("valueField");
         colorValueField = getInnerComponent("colorValueField");
         jsComponent = getInnerComponent("jsComponent");
+        resetBtn = getInnerComponent("resetBtn");
 
         initColorValueField();
         initValueField();
         initJavaScript();
+        initResetBtn();
     }
 
     protected void initColorValueField() {
@@ -78,7 +82,9 @@ public class ThemeVariableField extends CompositeComponent<Form>
                 colorValueField.setValue(value);
             }
 
-            if (valueChangeEvent.getValue() == null) {
+            boolean valueIsNull = valueChangeEvent.getValue() == null;
+            resetBtn.setEnabled(!valueIsNull);
+            if (valueIsNull) {
                 removeThemeVariable();
             } else {
                 setThemeVariable(value);
@@ -89,6 +95,18 @@ public class ThemeVariableField extends CompositeComponent<Form>
     protected void initJavaScript() {
         javaScript = JavaScript.getCurrent();
         javaScript.execute(jsComponent.getInitFunctionName() + "()");
+    }
+
+    protected void initResetBtn() {
+        resetBtn.addClickListener(clickEvent -> {
+            ThemeVariableDetails details = themeVariable.getThemeVariableDetails(currentColorPreset);
+            if (details == null) {
+                details = themeVariable.getThemeVariableDetails();
+            }
+
+            reset(details);
+            fireValueChangeEvent(null);
+        });
     }
 
     protected void setThemeVariable(String value) {
@@ -139,20 +157,23 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
         if (!Objects.equals(details.getValue(), ThemeVariableUtils.getColorString(colorValueField.getValue()))) {
             currentColorPreset = colorPreset;
-
-            if (getInputPrompt() != null &&
-                    !getInputPrompt().equals(details.getPlaceHolder())) {
-                removeThemeVariable();
-            }
-
-            String name = themeVariable.getName();
-            setCaption(name);
-            setDescription(name);
-            setInputPrompt(details.getPlaceHolder());
-
-            valueField.setValue(null);
-            colorValueField.setValue(ThemeVariableUtils.getColorString(details.getValue()));
+            reset(details);
         }
+    }
+
+    protected void reset(ThemeVariableDetails details) {
+        if (getInputPrompt() != null &&
+                !getInputPrompt().equals(details.getPlaceHolder())) {
+            removeThemeVariable();
+        }
+
+        String name = themeVariable.getName();
+        setCaption(name);
+        setDescription(name);
+        setInputPrompt(details.getPlaceHolder());
+
+        valueField.setValue(null);
+        colorValueField.setValue(ThemeVariableUtils.getColorString(details.getValue()));
     }
 
     public void setColorValueByParent(String parentValue) {
@@ -199,10 +220,13 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
     protected void onChange(ValueChangeEvent<String> event) {
         if (event.isUserOriginated()) {
-            ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(event.getComponent(),
-                    event.getPrevValue(), ThemeVariableUtils.getColorString(event.getValue()), true);
-            publish(ValueChangeEvent.class, valueChangeEvent);
+            fireValueChangeEvent(ThemeVariableUtils.getColorString(event.getValue()));
         }
+    }
+
+    protected void fireValueChangeEvent(String value) {
+        ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value);
+        publish(ValueChangeEvent.class, valueChangeEvent);
     }
 
     @Override

@@ -1,8 +1,11 @@
 <composite xmlns="http://schemas.haulmont.com/cuba/screen/composite.xsd">
     <form width="100%" stylename="theme-variable-field">
         <column flex="1">
-            <label id="captionField" stylename="bold" width="100%"/>
+            <label id="captionField" stylename="bold" width="100%" colspan="2"/>
             <textField id="valueField"/>
+        </column>
+        <column>
+            <button id="resetBtn" icon="ROTATE_LEFT" stylename="borderless reset-btn" width="100%" enable="false"/>
         </column>
         <column>
             <jsComponent id="jsComponent"
