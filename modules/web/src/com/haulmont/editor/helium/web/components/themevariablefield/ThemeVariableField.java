@@ -45,6 +45,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
     protected ThemeVariable themeVariable;
     protected ColorPreset currentColorPreset = ColorPreset.LIGHT;
+    protected String parentValue;
 
     public ThemeVariableField() {
         addCreateListener(this::onCreate);
@@ -73,18 +74,21 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
     protected void initValueField() {
         valueField.addValueChangeListener(valueChangeEvent -> {
-            String value = valueChangeEvent.getValue();
+            String value = valueChangeEvent.getValue() != null
+                    ? valueChangeEvent.getValue()
+                    : parentValue != null
+                    ? parentValue
+                    : themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
+            value = ThemeVariableUtils.getColorString(value);
+
             if (valueChangeEvent.isUserOriginated()) {
-                if (value == null) {
-                    value = themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
-                }
-                value = ThemeVariableUtils.getColorString(value);
                 colorValueField.setValue(value);
             }
 
             boolean valueIsNull = valueChangeEvent.getValue() == null;
             resetBtn.setEnabled(!valueIsNull);
-            if (valueIsNull) {
+
+            if (valueIsNull && parentValue == null) {
                 removeThemeVariable();
             } else {
                 setThemeVariable(value);
@@ -157,6 +161,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
         if (!Objects.equals(details.getValue(), ThemeVariableUtils.getColorString(colorValueField.getValue()))) {
             currentColorPreset = colorPreset;
+            parentValue = null;
             reset(details);
         }
     }
@@ -170,10 +175,17 @@ public class ThemeVariableField extends CompositeComponent<Form>
         String name = themeVariable.getName();
         setCaption(name);
         setDescription(name);
-        setInputPrompt(details.getPlaceHolder());
 
         valueField.setValue(null);
-        colorValueField.setValue(ThemeVariableUtils.getColorString(details.getValue()));
+
+        String value = parentValue != null
+                ? parentValue
+                : ThemeVariableUtils.getColorString(details.getValue());
+        colorValueField.setValue(value);
+
+        if (parentValue == null) {
+            setInputPrompt(details.getPlaceHolder());
+        }
     }
 
     public void setColorValueByParent(String parentValue) {
@@ -199,6 +211,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
         valueField.setValue(null);
         colorValueField.setValue(parentValue);
+        this.parentValue = parentValue;
 
         String placeHolder = valueField.getInputPrompt();
         if (!placeHolder.startsWith("var(")) {
