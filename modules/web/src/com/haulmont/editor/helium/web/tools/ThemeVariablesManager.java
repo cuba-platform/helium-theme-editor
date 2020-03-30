@@ -1,13 +1,12 @@
 package com.haulmont.editor.helium.web.tools;
 
-import com.haulmont.cuba.core.sys.AppContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,6 +21,8 @@ import static com.haulmont.editor.helium.web.components.themevariablefield.Theme
 public class ThemeVariablesManager {
 
     public static final String NAME = "helium_ThemeVariablesManager";
+
+    protected static final String THEME_VARIABLES_FILE_NAME = "helium-ext-variables.scss";
 
     // todo GD javadocs and tests for regexp
     protected static final Pattern THEME_VARIABLE_GROUP_BEGIN_PATTERN = Pattern.compile("(?<=\\/\\/\\sbegin\\h)(\\w*)(\\.(\\w*)|$)");
@@ -54,8 +55,8 @@ public class ThemeVariablesManager {
 
     protected void initThemeVariables() {
         try {
-            File themeFile = new File(AppContext.getProperty("helium.theme-variables-path"));
-            BufferedReader reader = new BufferedReader(new FileReader(themeFile));
+            InputStream fileStream = getClass().getClassLoader().getResourceAsStream(THEME_VARIABLES_FILE_NAME);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
             String line;
             String module = null;
             String preset = null;
