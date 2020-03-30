@@ -90,6 +90,7 @@ configure(coreModule) {
 
     dependencies {
         compile(globalModule)
+        compile('org.apache.commons:commons-dbcp2:2.5.0')
         compileOnly(servletApi)
         jdbc(hsql)
         testRuntime(hsql)
