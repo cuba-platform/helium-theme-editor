@@ -195,5 +195,6 @@ task buildUberJar(type: CubaUberJarBuilding) {
                      'cuba.dataSource.host'            : 'localhost',
                      'cuba.dataSource.port'            : '9010',
                      'cuba.dataSource.connectionParams': '',
-                     'cuba.dataSourceProvider'         : 'application']
+                     'cuba.dataSourceProvider'         : 'application',
+                     'helium.theme-variables-path'     : '/app/helium-ext-variables.scss']
 }
