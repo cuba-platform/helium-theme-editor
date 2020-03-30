@@ -2,6 +2,7 @@ package com.haulmont.editor.helium.web.screens.mainscreen;
 
 import com.google.common.collect.ImmutableMap;
 import com.haulmont.addon.helium.web.theme.HeliumThemeVariantsManager;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
@@ -11,7 +12,6 @@ import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
-import com.haulmont.cuba.web.AppUI;
 import com.haulmont.cuba.web.app.UserSettingsTools;
 import com.haulmont.cuba.web.app.main.MainScreen;
 import com.haulmont.cuba.web.events.UIRefreshEvent;
@@ -38,6 +38,11 @@ import static com.haulmont.editor.helium.web.components.themevariablefield.Theme
 @UiDescriptor("resp-main-screen.xml")
 public class RespMainScreen extends MainScreen {
 
+    protected static final String BASIC_MODULE_NAME = "Basic";
+    protected static final String GROUPBOX_PADDING_LESS_STYLENAME = "padding-less";
+    protected static final String GROUPBOX_POSTFIX = "-box";
+    protected static final String THEME_VARIABLE_FIELD_POSTFIX = "-field";
+
     @Inject
     protected HeliumThemeVariantsManager variantsManager;
     @Inject
@@ -50,6 +55,8 @@ public class RespMainScreen extends MainScreen {
     protected ScreenBuilders screenBuilders;
     @Inject
     protected Dialogs dialogs;
+    @Inject
+    protected Messages messages;
 
     @Inject
     protected ScrollBoxLayout settingsBox;
@@ -80,6 +87,92 @@ public class RespMainScreen extends MainScreen {
         updateMainScreenStyleName();
     }
 
+    @EventListener
+    public void onUIRefresh(UIRefreshEvent event) {
+        colorPresetField.setValue(colorPreset);
+        modifiedThemeVariables.clear();
+    }
+
+    @Subscribe("colorPresetField")
+    public void onColorPresetFieldValueChange(HasValue.ValueChangeEvent<ColorPreset> event) {
+        if (ColorPreset.CUSTOM.equals(event.getPrevValue())
+                && event.isUserOriginated()) {
+            dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
+                    .withCaption(messages.getMessage(RespMainScreen.class, "warningNotification.caption"))
+                    .withContentMode(ContentMode.HTML)
+                    .withMessage(messages.getMessage(RespMainScreen.class, "warningNotification.message"))
+                    .withActions(
+                            new DialogAction(DialogAction.Type.OK)
+                                    .withHandler(actionPerformedEvent -> updateColorPreset(event.getValue())),
+                            new DialogAction(DialogAction.Type.CANCEL)
+                                    .withHandler(actionPerformedEvent -> colorPresetField.setValue(event.getPrevValue()))
+                    )
+                    .show();
+        } else if (!ColorPreset.CUSTOM.equals(event.getValue())) {
+            updateColorPreset(event.getValue());
+        }
+    }
+
+    @Subscribe("sizeField")
+    public void onSizeFieldValueChange(HasValue.ValueChangeEvent<String> event) {
+        updateMainScreenStyleName();
+    }
+
+
+    @Subscribe("mobileMenuButton")
+    public void onMobileMenuButtonClick(Button.ClickEvent event) {
+        String stylename = sideMenuPanel.getStyleName();
+        if (stylename != null
+                && !stylename.isEmpty()
+                && stylename.contains(HaloTheme.SIDEMENU_PANEL_OPEN)) {
+            sideMenuPanel.removeStyleName(HaloTheme.SIDEMENU_PANEL_OPEN);
+        } else {
+            sideMenuPanel.addStyleName(HaloTheme.SIDEMENU_PANEL_OPEN);
+        }
+    }
+
+    @Subscribe("resetBtn")
+    public void onResetBtnClick(Button.ClickEvent event) {
+        if (ColorPreset.CUSTOM.equals(colorPresetField.getValue())) {
+            dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
+                    .withCaption(messages.getMessage(RespMainScreen.class, "warningNotification.caption"))
+                    .withContentMode(ContentMode.HTML)
+                    .withMessage(messages.getMessage(RespMainScreen.class, "warningNotification.message"))
+                    .withActions(
+                            new DialogAction(DialogAction.Type.OK)
+                                    .withHandler(actionPerformedEvent -> {
+                                        updateFieldsByColorPreset(ColorPreset.LIGHT);
+                                        modifiedThemeVariables = new HashMap<>();
+                                        resetValues();
+                                    }),
+                            new DialogAction(DialogAction.Type.CANCEL)
+                    )
+                    .show();
+        } else {
+            resetValues();
+        }
+    }
+
+    @Subscribe("downloadBtn")
+    public void onDownloadBtnClick(Button.ClickEvent event) {
+        screenBuilders.screen(this)
+                .withScreenClass(DownloadScreen.class)
+                .withOptions(new MapScreenOptions(
+                        ImmutableMap.of(
+                                DownloadScreen.COLOR_PRESET_PARAM,
+                                colorPreset.getId(),
+                                DownloadScreen.TEXT_PARAM,
+                                generateDownloadText()
+                        )
+                ))
+                .show();
+    }
+
+    @Subscribe("advancedModeValue")
+    public void onAdvancedModeValueValueChange(HasValue.ValueChangeEvent<Boolean> event) {
+        updateAdvancedBoxesVisible(event.getValue() != null ? event.getValue() : false);
+    }
+
     protected void initColorPresetField() {
         List<ColorPreset> colorPresetList = Arrays.asList(ColorPreset.LIGHT, ColorPreset.DARK, ColorPreset.BLUE);
         colorPresetField.setOptionsList(colorPresetList);
@@ -95,11 +188,11 @@ public class RespMainScreen extends MainScreen {
         for (ThemeVariable themeVariable : getDefaultThemeVariables()) {
             String module = themeVariable.getModule();
 
-            Component groupBoxLayout = settingsBox.getComponent(module.toLowerCase() + "-box");
+            Component groupBoxLayout = settingsBox.getComponent(module.toLowerCase() + GROUPBOX_POSTFIX);
             if (groupBoxLayout == null) {
                 groupBoxLayout = createGroupBoxLayout(module);
 
-                if (module.equals("Basic")) {
+                if (module.equals(BASIC_MODULE_NAME)) {
                     ((GroupBoxLayout) groupBoxLayout).setExpanded(true);
                     settingsBox.add(groupBoxLayout, 1);
                 } else {
@@ -119,26 +212,26 @@ public class RespMainScreen extends MainScreen {
     protected GroupBoxLayout createGroupBoxLayout(String id) {
         GroupBoxLayout groupBoxLayout = uiComponents.create(GroupBoxLayout.class);
         groupBoxLayout.setSpacing(true);
-        groupBoxLayout.setId(id.toLowerCase() + "-box");
+        groupBoxLayout.setId(id.toLowerCase() + GROUPBOX_POSTFIX);
         groupBoxLayout.setCaption(id);
         groupBoxLayout.setCollapsable(true);
         groupBoxLayout.setExpanded(false);
         groupBoxLayout.setWidth("100%");
-        groupBoxLayout.setStyleName("padding-less");
+        groupBoxLayout.setStyleName(GROUPBOX_PADDING_LESS_STYLENAME);
         return groupBoxLayout;
     }
 
     protected ThemeVariableField createThemeVariableField(ThemeVariable themeVariable) {
         ThemeVariableField themeVariableField = uiComponents.create(ThemeVariableField.NAME);
         themeVariableField.setValue(themeVariable);
-        themeVariableField.setId(themeVariable.getName() + "-field");
+        themeVariableField.setId(themeVariable.getName() + THEME_VARIABLE_FIELD_POSTFIX);
 
         themeVariableField.addColorValueChangeListener(valueChangeEvent -> {
             updateThemeVariable(themeVariable.getName(), valueChangeEvent.getValue());
 
             if (themeVariable.isRgbUsed()) {
                 updateThemeVariable(themeVariable.getName() + RGB_POSTFIX,
-                        ThemeVariableUtils.hexStringToRGB(valueChangeEvent.getValue()));
+                        ThemeVariableUtils.convertHexToRGB(valueChangeEvent.getValue()));
             }
 
             ColorPreset newColorPreset = modifiedThemeVariables.isEmpty()
@@ -148,32 +241,6 @@ public class RespMainScreen extends MainScreen {
         });
 
         return themeVariableField;
-    }
-
-    @EventListener
-    public void onUIRefresh(UIRefreshEvent event) {
-        colorPresetField.setValue(colorPreset);
-        modifiedThemeVariables.clear();
-    }
-
-    @Subscribe("colorPresetField")
-    public void onColorPresetFieldValueChange(HasValue.ValueChangeEvent<ColorPreset> event) {
-        if (ColorPreset.CUSTOM.equals(event.getPrevValue())
-                && event.isUserOriginated()) {
-            dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
-                    .withCaption("Warning")
-                    .withContentMode(ContentMode.HTML)
-                    .withMessage("Pay attention your changes will be discarded.<br/>Click <b>OK</b> to continue")
-                    .withActions(
-                            new DialogAction(DialogAction.Type.OK)
-                                    .withHandler(actionPerformedEvent -> updateColorPreset(event.getValue())),
-                            new DialogAction(DialogAction.Type.CANCEL)
-                                    .withHandler(actionPerformedEvent -> colorPresetField.setValue(event.getPrevValue()))
-                    )
-                    .show();
-        } else if (!ColorPreset.CUSTOM.equals(event.getValue())) {
-            updateColorPreset(event.getValue());
-        }
     }
 
     protected void updateColorPreset(ColorPreset newColorPreset) {
@@ -186,11 +253,6 @@ public class RespMainScreen extends MainScreen {
         updateFieldsByColorPreset(newColorPreset);
     }
 
-    @Subscribe("sizeField")
-    public void onSizeFieldValueChange(HasValue.ValueChangeEvent<String> event) {
-        updateMainScreenStyleName();
-    }
-
     protected void updateMainScreenStyleName() {
         String colorPresetValue = colorPreset == null
                 ? ""
@@ -200,40 +262,6 @@ public class RespMainScreen extends MainScreen {
         horizontalWrap.setStyleName(appWindowTheme + " " + colorPresetValue);
     }
 
-    @Subscribe("mobileMenuButton")
-    public void onMobileMenuButtonClick(Button.ClickEvent event) {
-        String stylename = sideMenuPanel.getStyleName();
-        if (stylename != null
-                && !stylename.isEmpty()
-                && stylename.contains(HaloTheme.SIDEMENU_PANEL_OPEN)) {
-            sideMenuPanel.removeStyleName(HaloTheme.SIDEMENU_PANEL_OPEN);
-        } else {
-            sideMenuPanel.addStyleName(HaloTheme.SIDEMENU_PANEL_OPEN);
-        }
-    }
-
-    @Subscribe("resetBtn")
-    public void onResetBtnClick(Button.ClickEvent event) {
-        if (ColorPreset.CUSTOM.equals(colorPresetField.getValue())) {
-            dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
-                    .withCaption("Warning")
-                    .withContentMode(ContentMode.HTML)
-                    .withMessage("Pay attention your changes will be discarded.<br/>Click <b>OK</b> to continue")
-                    .withActions(
-                            new DialogAction(DialogAction.Type.OK)
-                                    .withHandler(actionPerformedEvent -> {
-                                        updateFieldsByColorPreset(ColorPreset.LIGHT);
-                                        modifiedThemeVariables = new HashMap<>();
-                                        resetValues();
-                                    }),
-                            new DialogAction(DialogAction.Type.CANCEL)
-                    )
-                    .show();
-        } else {
-            resetValues();
-        }
-    }
-
     protected void resetValues() {
         colorPresetField.setValue(ColorPreset.LIGHT);
         modifiedThemeVariables.clear();
@@ -241,47 +269,9 @@ public class RespMainScreen extends MainScreen {
         updateMainScreenStyleName();
     }
 
-    @Subscribe("downloadBtn")
-    public void onDownloadBtnClick(Button.ClickEvent event) {
-        screenBuilders.screen(this)
-                .withScreenClass(DownloadScreen.class)
-                .withOptions(new MapScreenOptions(
-                        ImmutableMap.of(
-                                DownloadScreen.COLOR_PRESET_PARAM,
-                                colorPreset.getId(),
-                                DownloadScreen.TEXT_PARAM,
-                                generateDownloadText()
-                        )
-                ))
-                .show();
-    }
-
-    protected String generateDownloadText() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(".helium.")
-                .append(colorPreset.getId())
-                .append(" {\n");
-
-        for (Map.Entry<String, String> entry : modifiedThemeVariables.entrySet()) {
-            builder.append("  ")
-                    .append(entry.getKey())
-                    .append(": ")
-                    .append(entry.getValue())
-                    .append(";\n");
-        }
-
-        builder.append("}");
-        return builder.toString();
-    }
-
-    @Subscribe("advancedModeValue")
-    public void onAdvancedModeValueValueChange(HasValue.ValueChangeEvent<Boolean> event) {
-        updateAdvancedBoxesVisible(event.getValue() != null ? event.getValue() : false);
-    }
-
     protected void updateAdvancedBoxesVisible(boolean value) {
         settingsBox.getOwnComponentsStream()
-                .skip(3)
+                .skip(3) // skip Screen defaults and Basic groupboxes
                 .forEach(component -> component.setVisible(value));
     }
 
@@ -313,8 +303,11 @@ public class RespMainScreen extends MainScreen {
         List<ThemeVariable> childrenThemeVariables = getChildrenThemeVariables(variableName);
 
         childrenThemeVariables.forEach(themeVariable -> {
-            ThemeVariableField themeVariableField = (ThemeVariableField) settingsBox.getComponent(themeVariable.getName() + "-field");
-            themeVariableField.setColorValueByParent(value);
+            ThemeVariableField themeVariableField =
+                    (ThemeVariableField) settingsBox.getComponent(themeVariable.getName() + THEME_VARIABLE_FIELD_POSTFIX);
+            if (themeVariableField != null) {
+                themeVariableField.setColorValueByParent(value);
+            }
         });
     }
 
@@ -336,5 +329,23 @@ public class RespMainScreen extends MainScreen {
             }
         }
         return childrenThemeVariables;
+    }
+
+    protected String generateDownloadText() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(".helium.")
+                .append(colorPreset.getId())
+                .append(" {\n");
+
+        for (Map.Entry<String, String> entry : modifiedThemeVariables.entrySet()) {
+            builder.append("  ")
+                    .append(entry.getKey())
+                    .append(": ")
+                    .append(entry.getValue())
+                    .append(";\n");
+        }
+
+        builder.append("}");
+        return builder.toString();
     }
 }

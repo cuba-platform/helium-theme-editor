@@ -35,6 +35,10 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
     public static final String RGB_POSTFIX = "_rgb";
 
+    protected static final String SET_THEME_VARIABLE_VOID = "setThemeVariable('%s', '%s')";
+    protected static final String REMOVE_THEME_VARIABLE_VOID = "removeThemeVariable('%s')";
+
+    // Inner components
     protected Label<String> captionField;
     protected TextField<String> valueField;
     protected ColorPicker colorValueField;
@@ -64,72 +68,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
         initResetBtn();
     }
 
-    protected void initColorValueField() {
-        colorValueField.addValueChangeListener(valueChangeEvent -> {
-            if (valueChangeEvent.isUserOriginated()) {
-                valueField.setValue(ThemeVariableUtils.getColorString(valueChangeEvent.getValue()));
-            }
-        });
-    }
-
-    protected void initValueField() {
-        valueField.addValueChangeListener(valueChangeEvent -> {
-            String value = valueChangeEvent.getValue() != null
-                    ? valueChangeEvent.getValue()
-                    : parentValue != null
-                    ? parentValue
-                    : themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
-            value = ThemeVariableUtils.getColorString(value);
-
-            if (valueChangeEvent.isUserOriginated()) {
-                colorValueField.setValue(value);
-            }
-
-            boolean valueIsNull = valueChangeEvent.getValue() == null;
-            resetBtn.setEnabled(!valueIsNull);
-
-            if (valueIsNull && parentValue == null) {
-                removeThemeVariable();
-            } else {
-                setThemeVariable(value);
-            }
-        });
-    }
-
-    protected void initJavaScript() {
-        javaScript = JavaScript.getCurrent();
-        javaScript.execute(jsComponent.getInitFunctionName() + "()");
-    }
-
-    protected void initResetBtn() {
-        resetBtn.addClickListener(clickEvent -> {
-            ThemeVariableDetails details = themeVariable.getThemeVariableDetails(currentColorPreset);
-            if (details == null) {
-                details = themeVariable.getThemeVariableDetails();
-            }
-
-            reset(details);
-            fireValueChangeEvent(null);
-        });
-    }
-
-    protected void setThemeVariable(String value) {
-        javaScript.execute(String.format("setThemeVariable('%s', '%s')", themeVariable.getName(), value));
-
-        if (themeVariable.isRgbUsed()) {
-            javaScript.execute(String.format("setThemeVariable('%s', '%s')", themeVariable.getName() + RGB_POSTFIX,
-                    ThemeVariableUtils.hexStringToRGB(value)));
-        }
-    }
-
-    protected void removeThemeVariable() {
-        javaScript.execute(String.format("removeThemeVariable('%s')", themeVariable.getName()));
-
-        if (themeVariable.isRgbUsed()) {
-            javaScript.execute(String.format("removeThemeVariable('%s')", themeVariable.getName() + RGB_POSTFIX));
-        }
-    }
-
     @Nullable
     @Override
     public ThemeVariable getValue() {
@@ -142,104 +80,10 @@ public class ThemeVariableField extends CompositeComponent<Form>
         setValueByPreset(ColorPreset.LIGHT);
     }
 
-    public void setValueByPreset(ColorPreset colorPreset) {
-        if (themeVariable == null) {
-            return;
-        }
-
-        ThemeVariableDetails details = themeVariable.getThemeVariableDetails(colorPreset);
-        if (details == null) {
-            details = themeVariable.getThemeVariableDetails();
-        }
-
-        if (details == null) {
-            setVisible(false);
-            return;
-        } else if (!isVisible()) {
-            setVisible(true);
-        }
-
-        if (!Objects.equals(details.getValue(), ThemeVariableUtils.getColorString(colorValueField.getValue()))) {
-            currentColorPreset = colorPreset;
-            parentValue = null;
-            reset(details);
-        }
-    }
-
-    protected void reset(ThemeVariableDetails details) {
-        if (getInputPrompt() != null &&
-                !getInputPrompt().equals(details.getPlaceHolder())) {
-            removeThemeVariable();
-        }
-
-        String name = themeVariable.getName();
-        setCaption(name);
-        setDescription(name);
-
-        valueField.setValue(null);
-
-        String value = parentValue != null
-                ? parentValue
-                : ThemeVariableUtils.getColorString(details.getValue());
-        colorValueField.setValue(value);
-
-        if (parentValue == null) {
-            setInputPrompt(details.getPlaceHolder());
-        }
-    }
-
-    public void setColorValueByParent(String parentValue) {
-        ThemeVariableDetails details = themeVariable.getThemeVariableDetails(currentColorPreset);
-
-        if (parentValue == null) {
-            parentValue = details.getValue();
-            removeThemeVariable();
-        } else {
-            String colorModifier = details.getColorModifier();
-            if (colorModifier != null) {
-                String colorModifierValue = details.getColorModifierValue();
-                if (colorModifierValue != null) {
-                    int percent = Integer.parseInt(colorModifierValue.substring(0, colorModifierValue.length() - 1));
-                    parentValue = colorModifier.equals("d")
-                            ? ThemeVariableUtils.darken(parentValue, percent)
-                            : ThemeVariableUtils.lighten(parentValue, percent);
-
-                    setThemeVariable(parentValue);
-                }
-            }
-        }
-
-        valueField.setValue(null);
-        colorValueField.setValue(parentValue);
-        this.parentValue = parentValue;
-
-        String placeHolder = valueField.getInputPrompt();
-        if (!placeHolder.startsWith("var(")) {
-            valueField.setInputPrompt(parentValue);
-        }
-    }
-
     @Override
     public Subscription addValueChangeListener(Consumer<ValueChangeEvent<ThemeVariable>> listener) {
         // do nothing
         return null;
-    }
-
-    public Subscription addColorValueChangeListener(Consumer<ValueChangeEvent<String>> listener) {
-        colorValueField.addValueChangeListener(this::onChange);
-        valueField.addValueChangeListener(this::onChange);
-        return getEventHub().subscribe(ValueChangeEvent.class, (Consumer) listener);
-    }
-
-    protected void onChange(ValueChangeEvent<String> event) {
-        if (event.isUserOriginated()) {
-            fireValueChangeEvent(ThemeVariableUtils.getColorString(event.getValue()));
-        }
-    }
-
-    protected void fireValueChangeEvent(String value) {
-        ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value);
-        publish(ValueChangeEvent.class, valueChangeEvent);
     }
 
     @Override
@@ -413,5 +257,165 @@ public class ThemeVariableField extends CompositeComponent<Form>
     public ValueSource<ThemeVariable> getValueSource() {
         // do nothing
         return null;
+    }
+
+    public void setValueByPreset(ColorPreset colorPreset) {
+        if (themeVariable == null) {
+            return;
+        }
+
+        ThemeVariableDetails details = getThemeVariableDetailsByPreset(colorPreset);
+        setVisible(details != null);
+
+        if (details == null) {
+            return;
+        }
+
+        if (!Objects.equals(details.getValue(), ThemeVariableUtils.getColorString(colorValueField.getValue()))) {
+            currentColorPreset = colorPreset;
+            parentValue = null;
+            reset(details);
+        }
+    }
+
+    public void setColorValueByParent(String parentColorValue) {
+        ThemeVariableDetails details = themeVariable.getThemeVariableDetails(currentColorPreset);
+
+        if (parentColorValue == null) {
+            parentColorValue = details.getValue();
+            removeThemeVariable();
+        } else {
+            String colorModifier = details.getColorModifier();
+            if (colorModifier != null) {
+                String colorModifierValue = details.getColorModifierValue();
+                if (colorModifierValue != null) {
+                    int percent = Integer.parseInt(colorModifierValue.substring(0, colorModifierValue.length() - 1));
+                    parentColorValue = colorModifier.equals("d")
+                            ? ThemeVariableUtils.darken(parentColorValue, percent)
+                            : ThemeVariableUtils.lighten(parentColorValue, percent);
+
+                    setThemeVariable(parentColorValue);
+                }
+            }
+        }
+
+        valueField.setValue(null);
+        colorValueField.setValue(parentColorValue);
+        this.parentValue = parentColorValue;
+
+        String placeHolder = valueField.getInputPrompt();
+        if (!placeHolder.startsWith("var(")) {
+            setInputPrompt(parentColorValue);
+        }
+    }
+
+    public Subscription addColorValueChangeListener(Consumer<ValueChangeEvent<String>> listener) {
+        colorValueField.addValueChangeListener(this::onChange);
+        valueField.addValueChangeListener(this::onChange);
+        return getEventHub().subscribe(ValueChangeEvent.class, (Consumer) listener);
+    }
+
+    protected void initColorValueField() {
+        colorValueField.addValueChangeListener(valueChangeEvent -> {
+            if (valueChangeEvent.isUserOriginated()) {
+                valueField.setValue(ThemeVariableUtils.getColorString(valueChangeEvent.getValue()));
+            }
+        });
+    }
+
+    protected void initValueField() {
+        valueField.addValueChangeListener(valueChangeEvent -> {
+            String value = valueChangeEvent.getValue() != null
+                    ? valueChangeEvent.getValue()
+                    : parentValue != null
+                    ? parentValue
+                    : themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
+            value = ThemeVariableUtils.getColorString(value);
+
+            if (valueChangeEvent.isUserOriginated()) {
+                colorValueField.setValue(value);
+            }
+
+            boolean valueIsNull = valueChangeEvent.getValue() == null;
+            resetBtn.setEnabled(!valueIsNull);
+
+            if (valueIsNull && parentValue == null) {
+                removeThemeVariable();
+            } else {
+                setThemeVariable(value);
+            }
+        });
+    }
+
+    protected void initJavaScript() {
+        javaScript = JavaScript.getCurrent();
+        javaScript.execute(jsComponent.getInitFunctionName() + "()");
+    }
+
+    protected void initResetBtn() {
+        resetBtn.addClickListener(clickEvent -> {
+            ThemeVariableDetails details = getThemeVariableDetailsByPreset(currentColorPreset);
+            reset(details);
+            fireValueChangeEvent(null);
+        });
+    }
+
+    protected ThemeVariableDetails getThemeVariableDetailsByPreset(ColorPreset colorPreset) {
+        ThemeVariableDetails details = themeVariable.getThemeVariableDetails(colorPreset);
+        if (details == null) {
+            details = themeVariable.getThemeVariableDetails();
+        }
+
+        return details;
+    }
+
+    protected void reset(ThemeVariableDetails details) {
+        if (getInputPrompt() != null &&
+                !getInputPrompt().equals(details.getPlaceHolder())) {
+            removeThemeVariable();
+        }
+
+        String name = themeVariable.getName();
+        setCaption(name);
+        setDescription(name);
+
+        valueField.setValue(null);
+
+        String value = parentValue != null
+                ? parentValue
+                : ThemeVariableUtils.getColorString(details.getValue());
+        colorValueField.setValue(value);
+
+        if (parentValue == null) {
+            setInputPrompt(details.getPlaceHolder());
+        }
+    }
+
+    protected void setThemeVariable(String value) {
+        javaScript.execute(String.format(SET_THEME_VARIABLE_VOID, themeVariable.getName(), value));
+
+        if (themeVariable.isRgbUsed()) {
+            javaScript.execute(String.format(SET_THEME_VARIABLE_VOID, themeVariable.getName() + RGB_POSTFIX,
+                    ThemeVariableUtils.convertHexToRGB(value)));
+        }
+    }
+
+    protected void removeThemeVariable() {
+        javaScript.execute(String.format(REMOVE_THEME_VARIABLE_VOID, themeVariable.getName()));
+
+        if (themeVariable.isRgbUsed()) {
+            javaScript.execute(String.format(REMOVE_THEME_VARIABLE_VOID, themeVariable.getName() + RGB_POSTFIX));
+        }
+    }
+
+    protected void onChange(ValueChangeEvent<String> event) {
+        if (event.isUserOriginated()) {
+            fireValueChangeEvent(ThemeVariableUtils.getColorString(event.getValue()));
+        }
+    }
+
+    protected void fireValueChangeEvent(String value) {
+        ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value);
+        publish(ValueChangeEvent.class, valueChangeEvent);
     }
 }

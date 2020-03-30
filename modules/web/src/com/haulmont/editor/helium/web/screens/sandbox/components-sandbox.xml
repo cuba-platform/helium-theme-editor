@@ -26,20 +26,20 @@
                             </vbox>
                         </vbox>
                         <vbox id="checkBoxGroupBox" margin="true" stylename="card" width="250px" height="250px">
-                            <checkBoxGroup id="checkBoxGroup" align="MIDDLE_CENTER"/>
+                            <checkBoxGroup id="basicCheckBoxGroup" align="MIDDLE_CENTER"/>
                         </vbox>
                         <vbox id="lookupFieldsBox" margin="true" stylename="card" width="350px" height="250px">
                             <vbox spacing="true" align="MIDDLE_CENTER" width="AUTO">
-                                <lookupField id="lookupField"
+                                <lookupField id="basicLookupField"
                                              caption="LookupField"
                                              inputPrompt="Placeholder"/>
-                                <lookupField id="requiredLookupField"
+                                <lookupField id="basicRequiredLookupField"
                                              caption="LookupField | Required"
                                              required="true"/>
                             </vbox>
                         </vbox>
                         <vbox id="tokenListBox" margin="true" stylename="card" width="350px" height="300px">
-                            <tokenList id="tokenListMain" width="100%" height="100%" enable="false" inline="true">
+                            <tokenList id="basicTokenList" width="100%" height="100%" enable="false" inline="true">
                                 <lookup/>
                             </tokenList>
                         </vbox>
@@ -64,7 +64,7 @@
                             </vbox>
                         </vbox>
                         <vbox id="tableBox" margin="true" stylename="card" width="450px" height="300px">
-                            <table id="table" metaClass="sec$User" height="100%" width="100%">
+                            <table id="basicTable" metaClass="sec$User" height="100%" width="100%">
                                 <columns>
                                     <column id="login"/>
                                     <column id="name"/>
@@ -95,7 +95,7 @@
                             </flowBox>
                         </vbox>
                         <vbox id="radioButtonGroupBox" margin="true" stylename="card" width="250px" height="200px">
-                            <radioButtonGroup id="radioButtonGroup" align="MIDDLE_CENTER"/>
+                            <radioButtonGroup id="basicRadioButtonGroup" align="MIDDLE_CENTER"/>
                         </vbox>
                         <vbox id="sideMenuBox" margin="true" stylename="card" width="250px" height="200px">
                             <vbox stylename="c-sidemenu-panel">

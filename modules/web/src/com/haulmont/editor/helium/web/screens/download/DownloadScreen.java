@@ -35,14 +35,14 @@ public class DownloadScreen extends Screen {
     @Inject
     protected TextArea<String> textArea;
     @Inject
-    private Label<String> firstStepLabel;
+    protected Label<String> firstStepLabel;
 
     @Inject
-    private Messages messages;
+    protected Messages messages;
     @Inject
-    private Notifications notifications;
+    protected Notifications notifications;
     @Inject
-    private ExportDisplay exportDisplay;
+    protected ExportDisplay exportDisplay;
 
     @Subscribe
     public void onInit(InitEvent event) {

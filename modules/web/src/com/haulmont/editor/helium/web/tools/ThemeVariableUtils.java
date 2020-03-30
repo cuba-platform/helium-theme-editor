@@ -1,15 +1,37 @@
 package com.haulmont.editor.helium.web.tools;
 
+import com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField;
 import com.vaadin.shared.ui.colorpicker.Color;
 import com.vaadin.ui.components.colorpicker.ColorUtil;
 
 import java.util.regex.Pattern;
 
+/**
+ * Utility class for calculate color values for {@link ThemeVariableField}
+ */
 public class ThemeVariableUtils {
 
-    // todo GD javadocs regexp
+    /**
+     * HEX color regexp. Intended to match the HEX color value.
+     * <p>
+     * Regexp explanation:
+     * <ul>
+     *     <li>{@code (#?([A-Fa-f0-9]){3}([A-Fa-f0-9]){3})} - matches a hex color value</li>
+     * </ul>
+     * <p>
+     * Example:
+     * <pre>{@code
+     *      #2A8463
+     * }</pre>
+     */
     protected static final Pattern HEX_PATTERN = Pattern.compile("(#?([A-Fa-f0-9]){3}([A-Fa-f0-9]){3})");
 
+    /**
+     * Calculates the hsl color value from {@link Color}.
+     *
+     * @param color a color
+     * @return the hsl color value
+     */
     public static int[] calculateHslFromColor(Color color) {
         int[] hsl = new int[3];
 
@@ -21,7 +43,7 @@ public class ThemeVariableUtils {
         float min = Math.min(Math.min(r, g), b);
         float d = max - min;
 
-        float h = 0f, s = 0f, l = 0f;
+        float h = 0f, s, l;
 
         if (max == min) {
             h = 0;
@@ -56,22 +78,42 @@ public class ThemeVariableUtils {
         return hsl;
     }
 
-    public static String darken(String value, int percent) {
-        Color color = ColorUtil.stringToColor(value);
+    /**
+     * Returns the color value in hex format darker than given color value by given percentage.
+     *
+     * @param colorValue a color value
+     * @param percent    percentage
+     * @return a computed value
+     */
+    public static String darken(String colorValue, int percent) {
+        Color color = ColorUtil.stringToColor(colorValue);
         int[] hsl = calculateHslFromColor(color);
         hsl[2] = (int) (hsl[2] * (1 - percent * 0.01));
         int rgb = Color.HSLtoRGB(hsl[0], hsl[1], hsl[2]);
         return new Color(rgb).getCSS().toUpperCase();
     }
 
-    public static String lighten(String value, int percent) {
-        Color color = ColorUtil.stringToColor(value);
+    /**
+     * Returns the color value in hex format lighter than given color value by given percentage.
+     *
+     * @param colorValue a color value
+     * @param percent    percentage
+     * @return a computed value
+     */
+    public static String lighten(String colorValue, int percent) {
+        Color color = ColorUtil.stringToColor(colorValue);
         int[] hsl = calculateHslFromColor(color);
         hsl[2] = (int) (hsl[2] + (1 - hsl[2]) * percent * 0.01);
         int rgb = Color.HSLtoRGB(hsl[0], hsl[1], hsl[2]);
         return new Color(rgb).getCSS().toUpperCase();
     }
 
+    /**
+     * Adds "#" character if necessary and then checks that the value is in the hex format.
+     *
+     * @param value color value
+     * @return computed hex color value
+     */
     public static String getColorString(String value) {
         if (value != null) {
             if (!value.startsWith("#")) {
@@ -88,7 +130,13 @@ public class ThemeVariableUtils {
         }
     }
 
-    public static String hexStringToRGB(String hexValue) {
+    /**
+     * Converts hex string value to RGB string value.
+     *
+     * @param hexValue a hex string value
+     * @return converted string
+     */
+    public static String convertHexToRGB(String hexValue) {
         if (hexValue == null) {
             return null;
         }
