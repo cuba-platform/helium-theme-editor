@@ -88,8 +88,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
     @Override
     public void removeValueChangeListener(Consumer<ValueChangeEvent<ThemeVariable>> listener) {
-        colorValueField.removeValueChangeListener(this::onChange);
-        valueField.removeValueChangeListener(this::onChange);
         getEventHub().unsubscribe(ValueChangeEvent.class, (Consumer) listener);
     }
 
@@ -310,8 +308,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
     }
 
     public Subscription addColorValueChangeListener(Consumer<ValueChangeEvent<String>> listener) {
-        colorValueField.addValueChangeListener(this::onChange);
-        valueField.addValueChangeListener(this::onChange);
         return getEventHub().subscribe(ValueChangeEvent.class, (Consumer) listener);
     }
 
@@ -356,7 +352,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
         resetBtn.addClickListener(clickEvent -> {
             ThemeVariableDetails details = getThemeVariableDetailsByPreset(currentColorPreset);
             reset(details);
-            fireValueChangeEvent(null);
         });
     }
 
@@ -398,6 +393,8 @@ public class ThemeVariableField extends CompositeComponent<Form>
             javaScript.execute(String.format(SET_THEME_VARIABLE_VOID, themeVariable.getName() + RGB_POSTFIX,
                     ThemeVariableUtils.convertHexToRGB(value)));
         }
+
+        fireValueChangeEvent(value);
     }
 
     protected void removeThemeVariable() {
@@ -406,15 +403,11 @@ public class ThemeVariableField extends CompositeComponent<Form>
         if (themeVariable.isRgbUsed()) {
             javaScript.execute(String.format(REMOVE_THEME_VARIABLE_VOID, themeVariable.getName() + RGB_POSTFIX));
         }
+
+        fireValueChangeEvent(null);
     }
 
-    protected void onChange(ValueChangeEvent<String> event) {
-        if (event.isUserOriginated()) {
-            fireValueChangeEvent(ThemeVariableUtils.getColorString(event.getValue()));
-        }
-    }
-
-    protected void fireValueChangeEvent(String value) {
+    protected void fireValueChangeEvent(@Nullable String value) {
         ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value);
         publish(ValueChangeEvent.class, valueChangeEvent);
     }
