@@ -25,8 +25,7 @@ $helium-sidemenu-width: 400px;
       }
     }
 
-    .c-sidemenu-panel:first-child {
-      overflow-y: hidden;
+    .c-sidemenu-panel {
       padding-bottom: 0;
       width: $helium-sidemenu-width;
 
@@ -88,11 +87,12 @@ $helium-sidemenu-width: 400px;
 
   .notifications-box {
     & > * {
-      margin-bottom: $v-layout-margin-bottom !important;
-      margin-right: $v-layout-margin-right !important;
+      margin-left: $v-unit-size !important;
+      margin-top: $v-unit-size !important;
+      margin-bottom: $v-unit-size !important;
 
       &:last-child {
-        margin-right: 0 !important;
+        margin-right: $v-unit-size !important;
       }
     }
 

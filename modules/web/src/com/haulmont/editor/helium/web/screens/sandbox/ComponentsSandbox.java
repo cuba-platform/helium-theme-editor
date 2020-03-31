@@ -13,9 +13,7 @@ import com.haulmont.cuba.gui.components.data.table.ContainerGroupTableItems;
 import com.haulmont.cuba.gui.components.data.table.ContainerTableItems;
 import com.haulmont.cuba.gui.components.data.table.ContainerTreeTableItems;
 import com.haulmont.cuba.gui.components.data.tree.ContainerTreeItems;
-import com.haulmont.cuba.gui.components.mainwindow.SideMenu;
 import com.haulmont.cuba.gui.components.validation.NotEmptyValidator;
-import com.haulmont.cuba.gui.icons.CubaIcon;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.DataComponents;
 import com.haulmont.cuba.gui.screen.Install;
@@ -33,6 +31,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @UiController("helium_ComponentsSandbox")
 @UiDescriptor("components-sandbox.xml")
@@ -59,8 +58,6 @@ public class ComponentsSandbox extends ScreenFragment {
     protected RadioButtonGroup<String> basicRadioButtonGroup;
     @Inject
     protected CheckBoxGroup<String> basicCheckBoxGroup;
-    @Inject
-    protected SideMenu sideMenuSample;
 
     @Inject
     protected Metadata metadata;
@@ -80,7 +77,6 @@ public class ComponentsSandbox extends ScreenFragment {
         initDataContainers();
         initContainerSamples();
         initOptions();
-        initSideMenuSample();
     }
 
     protected void initDataContainers() {
@@ -93,14 +89,23 @@ public class ComponentsSandbox extends ScreenFragment {
 
     protected void initContainerSamples() {
         basicTable.setItems(new ContainerTableItems<>(usersDc));
-        basicTokenList.setValue(usersDc.getItems());
+
+        basicTokenList.setOptionsList(usersDc.getItems());
+        basicTokenList.setValue(basicTokenList.getOptions()
+                .getOptions()
+                .skip(2)
+                .collect(Collectors.toList()));
     }
 
     protected List<User> generateUsersSampleData() {
         List<User> users = new ArrayList<>(SAMPLE_DATA_SIZE);
-        for (int i = 0; i < SAMPLE_DATA_SIZE; i++) {
-            users.add(createUser(i));
-        }
+        users.add(createUser("Romeo Montague", "romeo", true));
+        users.add(createUser("Juliet Capulet", "juliet", true));
+        users.add(createUser("Dave Paris", "daveParis", false));
+        users.add(createUser("Ted Montague", "tedMontague", false));
+        users.add(createUser("Caroline Montague", "carolinMontague", true));
+        users.add(createUser("Fulgencio Capulet", "fulgencio", true));
+        users.add(createUser("Gloria Capulet", "gloriaCapulet", false));
         return users;
     }
 
@@ -116,12 +121,11 @@ public class ComponentsSandbox extends ScreenFragment {
         return groups;
     }
 
-    protected User createUser(int index) {
+    protected User createUser(String name, String login, boolean active) {
         User user = metadata.create(User.class);
-        user.setLogin("user" + index);
-        user.setName("User " + index);
-        user.setActive(index % 2 == 0);
-
+        user.setName(name);
+        user.setLogin(login);
+        user.setActive(active);
         return user;
     }
 
@@ -144,20 +148,6 @@ public class ComponentsSandbox extends ScreenFragment {
 
     protected List<String> generateSampleOptions() {
         return Arrays.asList("Option 1", "Options 2", "Option 3");
-    }
-
-    protected void initSideMenuSample() {
-        sideMenuSample.addMenuItem(createMenuItem("menu-item-1", "Customers", CubaIcon.USER.source()));
-        sideMenuSample.addMenuItem(createMenuItem("menu-item-2", "Cars", CubaIcon.CAR.source()));
-        sideMenuSample.addMenuItem(createMenuItem("menu-item-3", "Products", CubaIcon.SHOPPING_CART.source()));
-        sideMenuSample.addMenuItem(createMenuItem("menu-item-4", "Orders", CubaIcon.DRIVERS_LICENSE.source()));
-        sideMenuSample.addMenuItem(createMenuItem("menu-item-5", "Books", CubaIcon.BOOK.source()));
-    }
-
-    protected SideMenu.MenuItem createMenuItem(String id, String caption, String icon) {
-        SideMenu.MenuItem item = sideMenuSample.createMenuItem(id, caption);
-        item.setIcon(icon);
-        return item;
     }
 
     // All components
