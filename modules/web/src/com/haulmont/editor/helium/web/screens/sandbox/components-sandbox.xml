@@ -345,29 +345,29 @@
                     <groupBox caption="TextArea" spacing="true" collapsable="true" collapsed="false"
                               orientation="horizontal">
                         <vbox spacing="true">
-                            <textArea id="textArea" caption="TextArea" inputPrompt="Placeholder"/>
-                            <textArea id="textAreaRO" caption="Read-only" editable="false"/>
-                            <textArea id="textAreaD" caption="Disabled" enable="false"/>
-                            <textArea id="textAreaR" caption="Required" required="true"/>
+                            <textArea id="textArea" caption="TextArea" inputPrompt="Placeholder" width="100%"/>
+                            <textArea id="textAreaRO" caption="Read-only" editable="false" width="100%"/>
+                            <textArea id="textAreaD" caption="Disabled" enable="false" width="100%"/>
+                            <textArea id="textAreaR" caption="Required" required="true" width="100%"/>
                         </vbox>
                         <vbox spacing="true">
                             <resizableTextArea id="resizableTextArea" caption="Resizable TextArea"
-                                               inputPrompt="Placeholder"/>
-                            <resizableTextArea id="resizableTextAreaRO" caption="Read-only" editable="false"/>
-                            <resizableTextArea id="resizableTextAreaD" caption="Disabled" enable="false"/>
-                            <resizableTextArea id="resizableTextAreaR" caption="Required" required="true"/>
+                                               inputPrompt="Placeholder" width="100%"/>
+                            <resizableTextArea id="resizableTextAreaRO" caption="Read-only" editable="false" width="100%"/>
+                            <resizableTextArea id="resizableTextAreaD" caption="Disabled" enable="false" width="100%"/>
+                            <resizableTextArea id="resizableTextAreaR" caption="Required" required="true" width="100%"/>
                         </vbox>
 
                         <vbox spacing="true">
-                            <textArea caption="LARGE" inputPrompt="Placeholder" stylename="large"/>
-                            <textArea caption="Middle" inputPrompt="Placeholder" stylename="middle"/>
-                            <textArea caption="small" inputPrompt="Placeholder" stylename="small"/>
+                            <textArea caption="LARGE" inputPrompt="Placeholder" stylename="large" width="100%"/>
+                            <textArea caption="Middle" inputPrompt="Placeholder" stylename="middle" width="100%"/>
+                            <textArea caption="small" inputPrompt="Placeholder" stylename="small" width="100%"/>
                         </vbox>
 
                         <vbox spacing="true">
-                            <resizableTextArea caption="LARGE" inputPrompt="Placeholder" stylename="large"/>
-                            <resizableTextArea caption="Middle" inputPrompt="Placeholder" stylename="middle"/>
-                            <resizableTextArea caption="small" inputPrompt="Placeholder" stylename="small"/>
+                            <resizableTextArea caption="LARGE" inputPrompt="Placeholder" stylename="large" width="100%"/>
+                            <resizableTextArea caption="Middle" inputPrompt="Placeholder" stylename="middle" width="100%"/>
+                            <resizableTextArea caption="small" inputPrompt="Placeholder" stylename="small" width="100%"/>
                         </vbox>
                     </groupBox>
 
