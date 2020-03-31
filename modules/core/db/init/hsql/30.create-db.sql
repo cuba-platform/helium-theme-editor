@@ -7,8 +7,13 @@ insert into SEC_USER_ROLE
 values ('2f7f101a-6c92-13eb-c900-36fead92f60b', 1, current_timestamp, 'a405db59-e674-4f63-8afe-269dda788fe8', null, 'demo');
 
 ------------------------------------------------------------------------------------------------------------
--- Changing administrator password
+-- DELETE Administrator User
 ------------------------------------------------------------------------------------------------------------
-update SEC_USER
-set PASSWORD='$2a$10$BXl/gTmIhSQFMRCzCMXTSuvYV60tfw1Ngzrd2IMlG.5Q3okUkeLem', PASSWORD_ENCRYPTION='bcrypt'
+delete from SEC_USER_ROLE
+where ID='6736effb-9dfc-4430-973a-69868606b09c';
+
+delete from SEC_FILTER
+where USER_ID='60885987-1b61-4247-94c7-dff348347f93';
+
+delete from SEC_USER
 where ID='60885987-1b61-4247-94c7-dff348347f93';
