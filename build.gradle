@@ -188,12 +188,16 @@ restart.finalizedBy start
 task buildUberJar(type: CubaUberJarBuilding) {
     logbackConfigurationFile = 'etc/uber-jar-logback.xml'
     singleJar = true
-    appProperties = ['cuba.automaticDatabaseUpdate'    : true,
-                     'cuba.dataSource.username'        : 'sa',
-                     'cuba.dataSource.password'        : '',
-                     'cuba.dataSource.dbName'          : 'helium-editor',
-                     'cuba.dataSource.host'            : 'localhost',
-                     'cuba.dataSource.port'            : '9010',
-                     'cuba.dataSource.connectionParams': '',
-                     'cuba.dataSourceProvider'         : 'application']
+    appProperties = ['cuba.automaticDatabaseUpdate'       : true,
+                     'cuba.dataSource.username'           : 'sa',
+                     'cuba.dataSource.password'           : '',
+                     'cuba.dataSource.dbName'             : 'helium-editor',
+                     'cuba.dataSource.host'               : 'localhost',
+                     'cuba.dataSource.port'               : '9010',
+                     'cuba.dataSource.connectionParams'   : '',
+                     'cuba.dataSourceProvider'            : 'application',
+                     'cuba.web.productionMode'            : true,
+                     'cuba.web.loginDialogDefaultUser'    : '<disabled>',
+                     'cuba.web.loginDialogDefaultPassword': '<disabled>',
+    ]
 }
