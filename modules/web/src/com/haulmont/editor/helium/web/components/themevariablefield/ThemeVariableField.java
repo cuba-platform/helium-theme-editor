@@ -321,11 +321,16 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
     protected void initValueField() {
         valueField.addValueChangeListener(valueChangeEvent -> {
-            String value = valueChangeEvent.getValue() != null
-                    ? valueChangeEvent.getValue()
-                    : parentValue != null
-                    ? parentValue
-                    : themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
+            String value = valueChangeEvent.getValue();
+            if (value == null) {
+                if (parentValue != null) {
+                    value = parentValue;
+                } else if (themeVariable.getThemeVariableDetails(currentColorPreset) != null) {
+                    value = themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
+                } else if (themeVariable.getThemeVariableDetails() != null) {
+                    value = themeVariable.getThemeVariableDetails().getValue();
+                }
+            }
             value = ThemeVariableUtils.getColorString(value);
 
             if (valueChangeEvent.isUserOriginated()) {
