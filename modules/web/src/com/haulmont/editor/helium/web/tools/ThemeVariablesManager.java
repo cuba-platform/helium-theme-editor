@@ -25,56 +25,44 @@ public class ThemeVariablesManager {
     protected static final String THEME_VARIABLES_FILE_NAME = "helium-ext-variables.scss";
 
     /**
-     * Regexp of the beginning of the theme variable module. Intended to match the beginning of the theme variable module.
+     * Theme variable module regexp. Intended to match the theme variable module.
      * <p>
      * Regexp explanation:
      * <ul>
-     *     <li>{@code (?<=\/\/\sbegin\h)} - matches a the beginning tag</li>
-     *     <li>{@code (\w*)} - matches a module name</li>
-     *     <li>{@code (\.(\w*)|$)} - matches a preset name or nothing</li>
+     *     <li>{@code (?<=/\*\s)} - matches the beginning of theme variable module</li>
+     *     <li>{@code .*} - matches a module name</li>
+     *     <li>{@code (?=\s\*\/)} - matches the ending of theme variable module</li>
      * </ul>
      * <p>
      * Example:
      * <pre>{@code
-     *      //begin Common.Dark
+     *      /* Common *\/
      * }</pre>
      * <ul>
      *     <li>{@code Common} - a module name</li>
-     *     <li>{@code Dark} - a preset name</li>
      * </ul>
      */
-    protected static final Pattern MODULE_BEGIN_PATTERN = Pattern.compile("(?<=//\\sbegin\\h)(\\w*)(\\.(\\w*)|$)");
+    protected static final Pattern MODULE_PATTERN = Pattern.compile("(?<=/\\*\\s).*(?=\\s\\*/)");
 
     /**
-     * Regexp of the ending of the theme variable module. Intended to match the ending of the theme variable module.
+     * Color preset regexp. Intended to match the color preset.
      * <p>
      * Regexp explanation:
      * <ul>
-     *     <li>{@code (?<=\/\/\send\h)} - matches an ending tag</li>
-     *     <li>{@code (\w*)} - matches a module name</li>
-     *     <li>{@code (\.(\w*)|$)} - matches a preset name or nothing</li>
+     *     <li>{@code (?<=&\.)} - matches the beginning of color preset</li>
+     *     <li>{@code \w*} - matches a color preset</li>
+     *     <li>{@code (?=\s\{)} - matches the ending of color preset</li>
      * </ul>
      * <p>
      * Example:
      * <pre>{@code
-     *      //end Common.Dark
+     *      &.dark {
      * }</pre>
      * <ul>
-     *     <li>{@code Common} - a module name</li>
-     *     <li>{@code Dark} - a preset name</li>
+     *     <li>{@code dark} - a color preset</li>
      * </ul>
      */
-    protected static final Pattern MODULE_END_PATTERN = Pattern.compile("(?<=//\\send\\h)(\\w*)(\\.(\\w*)|$)");
-
-    /**
-     * The index of a theme variable module group in {@code MODULE_BEGIN_PATTERN} or {@code MODULE_END_PATTERN} patterns.
-     */
-    protected static final int MODULE_GROUP = 1;
-
-    /**
-     * The index of a preset group in {@code MODULE_BEGIN_PATTERN} or {@code MODULE_END_PATTERN} patterns.
-     */
-    protected static final int PRESET_GROUP = 3;
+    protected static final Pattern COLOR_PRESET_PATTERN = Pattern.compile("(?<=&\\.)\\w*(?=\\s\\{)");
 
     /**
      * Theme variable regexp. Intended to match the theme variable.
@@ -82,7 +70,7 @@ public class ThemeVariablesManager {
      * Regexp explanation:
      * <ul>
      *     <li>{@code ^\\h+} - matches any horizontal whitespace character</li>
-     *     <li>{@code (-(-\w+)*(-color|-color_rgb))} - matches a theme variable name ending in "color" or "color_rgb"</li>
+     *     <li>{@code (-(-\w+)*(-color|-color_rgb)*)} - matches a theme variable name containing "-color" or "-color_rgb"</li>
      *     <li>{@code :} - matches a separator between name and value</li>
      *     <li>{@code \\h+} - matches any horizontal whitespace character</li>
      *     <li>{@code ([^;!]+)?;} - matches a theme variable value ending in ";"</li>
@@ -107,7 +95,7 @@ public class ThemeVariablesManager {
      * </ul>
      */
     protected static final Pattern THEME_VARIABLE_PATTERN =
-            Pattern.compile("^\\h+(-(-\\w+)*(-color|-color_rgb)):\\h+([^;!]+)?;(\\h+//\\h+\\((.*(?=\\)\\h\\())(\\)\\h\\((?i)(d|l)([0-9]+?%))|)");
+            Pattern.compile("^\\h+(-(-\\w+)*(-color|-color_rgb)*):\\h+([^;!]+)?;(\\h+//\\h+\\((.*(?=\\)\\h\\())(\\)\\h\\((?i)(d|l)([0-9]+?%))|)");
 
     /**
      * The index of a theme variable name in {@code THEME_VARIABLE_PATTERN} pattern.
@@ -176,7 +164,13 @@ public class ThemeVariablesManager {
      */
     protected List<ThemeVariable> themeVariables = new ArrayList<>();
 
+    /**
+     * The list of color presets.
+     */
+    protected List<String> colorPresets = new ArrayList<>();
+
     public ThemeVariablesManager() {
+        initColorPresets();
         initThemeVariables();
     }
 
@@ -188,6 +182,20 @@ public class ThemeVariablesManager {
     }
 
     /**
+     * @return the list of color presets
+     */
+    public List<String> getColorPresets() {
+        return colorPresets;
+    }
+
+    /**
+     * Init color presets list.
+     */
+    protected void initColorPresets() {
+        colorPresets.add(ColorPresets.LIGHT);
+    }
+
+    /**
      * Theme variables file parsing.
      */
     protected void initThemeVariables() {
@@ -196,81 +204,76 @@ public class ThemeVariablesManager {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
             String line;
             String module = null;
-            String preset = null;
+            String colorPreset = ColorPresets.LIGHT;
             Matcher matcher;
 
             while ((line = reader.readLine()) != null) {
-                if (module == null) {
-                    matcher = MODULE_BEGIN_PATTERN.matcher(line);
-                    if (matcher.find()) {
-                        module = matcher.group(MODULE_GROUP);
-                        if (matcher.groupCount() >= PRESET_GROUP) {
-                            preset = matcher.group(PRESET_GROUP);
-                        }
-                    }
-                } else {
-                    matcher = MODULE_END_PATTERN.matcher(line);
-                    if (matcher.find()) {
-                        module = null;
-                    } else {
-                        matcher = THEME_VARIABLE_PATTERN.matcher(line);
-                        if (matcher.find()) {
-                            String name = matcher.group(NAME_GROUP);
-                            ColorPreset colorPreset = preset != null
-                                    ? ColorPreset.fromId(preset.toLowerCase())
-                                    : ColorPreset.LIGHT;
+                matcher = MODULE_PATTERN.matcher(line);
+                if (matcher.find()) {
+                    module = matcher.group();
+                }
 
-                            String value = matcher.group(VALUE_GROUP);
-                            int groupCount = matcher.groupCount();
-                            ThemeVariable parentThemeVariable = loadParentThemeVariable(matcher.group(VALUE_GROUP));
-                            if (parentThemeVariable != null) {
-                                value = parentThemeVariable.getThemeVariableDetails(colorPreset).getValue();
-                            } else if (groupCount >= PARENT_VARIABLE_GROUP) {
-                                String parentVariableName = matcher.group(PARENT_VARIABLE_GROUP);
-                                if (parentVariableName != null) {
-                                    parentThemeVariable = getThemeVariableByName(parentVariableName);
+                if (module != null) {
+                    matcher = COLOR_PRESET_PATTERN.matcher(line);
+                    if (matcher.find()) {
+                        colorPreset = matcher.group();
+                        colorPresets.add(colorPreset);
+                    }
+
+                    matcher = THEME_VARIABLE_PATTERN.matcher(line);
+                    if (matcher.find()) {
+                        String name = matcher.group(NAME_GROUP);
+                        String value = matcher.group(VALUE_GROUP);
+
+                        int groupCount = matcher.groupCount();
+                        ThemeVariable parentThemeVariable = loadParentThemeVariable(matcher.group(VALUE_GROUP));
+                        if (parentThemeVariable != null) {
+                            value = parentThemeVariable.getThemeVariableDetails(colorPreset).getValue();
+                        } else if (groupCount >= PARENT_VARIABLE_GROUP) {
+                            String parentVariableName = matcher.group(PARENT_VARIABLE_GROUP);
+                            if (parentVariableName != null) {
+                                parentThemeVariable = getThemeVariableByName(parentVariableName);
+                            }
+                        }
+
+                        ThemeVariable themeVariable;
+                        if (RGB_PATTERN.matcher(value).find()
+                                && name != null
+                                && name.endsWith(RGB_POSTFIX)) {
+                            String mainThemeVariableName = name.substring(0, name.lastIndexOf(RGB_POSTFIX));
+                            themeVariable = getThemeVariableByName(mainThemeVariableName);
+                            if (themeVariable != null) {
+                                themeVariable.setRgbUsed(true);
+                            }
+                        } else if (HEX_PATTERN.matcher(value).find()) {
+                            ThemeVariableDetails details = new ThemeVariableDetails();
+                            details.setPlaceHolder(matcher.group(VALUE_GROUP));
+                            details.setValue(value);
+                            details.setParentThemeVariable(parentThemeVariable);
+
+                            if (groupCount >= COLOR_MODIFIER_GROUP) {
+                                String colorModifier = matcher.group(COLOR_MODIFIER_GROUP);
+                                if (colorModifier != null) {
+                                    details.setColorModifier(colorModifier);
                                 }
                             }
 
-                            ThemeVariable themeVariable;
-                            if (RGB_PATTERN.matcher(value).find()
-                                    && name != null
-                                    && name.endsWith(RGB_POSTFIX)) {
-                                String mainThemeVariableName = name.substring(0, name.lastIndexOf(RGB_POSTFIX));
-                                themeVariable = getThemeVariableByName(mainThemeVariableName);
-                                if (themeVariable != null) {
-                                    themeVariable.setRgbUsed(true);
+                            if (groupCount >= COLOR_MODIFIER_VALUE_GROUP) {
+                                String colorModifierValue = matcher.group(COLOR_MODIFIER_VALUE_GROUP);
+                                if (colorModifierValue != null) {
+                                    details.setColorModifierValue(colorModifierValue);
                                 }
-                            } else if (HEX_PATTERN.matcher(value).find()) {
-                                ThemeVariableDetails details = new ThemeVariableDetails();
-                                details.setPlaceHolder(matcher.group(VALUE_GROUP));
-                                details.setValue(value);
-                                details.setParentThemeVariable(parentThemeVariable);
+                            }
 
-                                if (groupCount >= COLOR_MODIFIER_GROUP) {
-                                    String colorModifier = matcher.group(COLOR_MODIFIER_GROUP);
-                                    if (colorModifier != null) {
-                                        details.setColorModifier(colorModifier);
-                                    }
-                                }
-
-                                if (groupCount >= COLOR_MODIFIER_VALUE_GROUP) {
-                                    String colorModifierValue = matcher.group(COLOR_MODIFIER_VALUE_GROUP);
-                                    if (colorModifierValue != null) {
-                                        details.setColorModifierValue(colorModifierValue);
-                                    }
-                                }
-
-                                themeVariable = getThemeVariableByName(name);
-                                if (themeVariable != null) {
-                                    themeVariable.setThemeVariableDetails(colorPreset, details);
-                                } else {
-                                    themeVariable = new ThemeVariable();
-                                    themeVariable.setModule(module);
-                                    themeVariable.setName(name);
-                                    themeVariable.setThemeVariableDetails(colorPreset, details);
-                                    themeVariables.add(themeVariable);
-                                }
+                            themeVariable = getThemeVariableByName(name);
+                            if (themeVariable != null) {
+                                themeVariable.setThemeVariableDetails(colorPreset, details);
+                            } else {
+                                themeVariable = new ThemeVariable();
+                                themeVariable.setModule(module);
+                                themeVariable.setName(name);
+                                themeVariable.setThemeVariableDetails(colorPreset, details);
+                                themeVariables.add(themeVariable);
                             }
                         }
                     }

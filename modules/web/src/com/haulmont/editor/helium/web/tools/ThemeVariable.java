@@ -11,7 +11,7 @@ public class ThemeVariable {
     protected String module;
     protected String name;
     protected boolean rgbUsed;
-    protected Map<ColorPreset, ThemeVariableDetails> detailsMap = new HashMap<>();
+    protected Map<String, ThemeVariableDetails> detailsMap = new HashMap<>();
 
     public ThemeVariable() {
     }
@@ -40,20 +40,15 @@ public class ThemeVariable {
         this.rgbUsed = rgbUsed;
     }
 
-    public Map<ColorPreset, ThemeVariableDetails> getDetailsMap() {
+    public Map<String, ThemeVariableDetails> getDetailsMap() {
         return detailsMap;
     }
 
-    public void setDetailsMap(Map<ColorPreset, ThemeVariableDetails> detailsMap) {
+    public void setDetailsMap(Map<String, ThemeVariableDetails> detailsMap) {
         this.detailsMap = detailsMap;
     }
 
-    public void setThemeVariableDetails(String preset, ThemeVariableDetails details) {
-        ColorPreset colorPreset = ColorPreset.fromId(preset);
-        setThemeVariableDetails(colorPreset, details);
-    }
-
-    public void setThemeVariableDetails(ColorPreset colorPreset, ThemeVariableDetails details) {
+    public void setThemeVariableDetails(String colorPreset, ThemeVariableDetails details) {
         if (colorPreset != null) {
             if (detailsMap.containsKey(colorPreset)) {
                 detailsMap.replace(colorPreset, details);
@@ -64,15 +59,10 @@ public class ThemeVariable {
     }
 
     public ThemeVariableDetails getThemeVariableDetails() {
-        return detailsMap.get(ColorPreset.LIGHT);
+        return detailsMap.get(ColorPresets.LIGHT);
     }
 
-    public ThemeVariableDetails getThemeVariableDetails(String preset) {
-        ColorPreset colorPreset = ColorPreset.fromId(preset);
-        return getThemeVariableDetails(colorPreset);
-    }
-
-    public ThemeVariableDetails getThemeVariableDetails(ColorPreset colorPreset) {
+    public ThemeVariableDetails getThemeVariableDetails(String colorPreset) {
         return detailsMap.get(colorPreset);
     }
 }

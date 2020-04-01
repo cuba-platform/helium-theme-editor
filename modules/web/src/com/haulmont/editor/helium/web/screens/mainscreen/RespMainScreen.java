@@ -18,7 +18,7 @@ import com.haulmont.cuba.web.events.UIRefreshEvent;
 import com.haulmont.cuba.web.theme.HaloTheme;
 import com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField;
 import com.haulmont.editor.helium.web.screens.download.DownloadScreen;
-import com.haulmont.editor.helium.web.tools.ColorPreset;
+import com.haulmont.editor.helium.web.tools.ColorPresets;
 import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
@@ -27,7 +27,6 @@ import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class RespMainScreen extends MainScreen {
     @Inject
     protected ScrollBoxLayout settingsBox;
     @Inject
-    protected LookupField<ColorPreset> colorPresetField;
+    protected LookupField<String> colorPresetField;
     @Inject
     protected LookupField<String> sizeField;
     @Inject
@@ -73,7 +72,7 @@ public class RespMainScreen extends MainScreen {
 
     protected String appWindowTheme;
     protected Map<String, String> modifiedThemeVariables = new HashMap<>();
-    protected ColorPreset colorPreset = ColorPreset.LIGHT;
+    protected String colorPreset = ColorPresets.LIGHT;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -94,8 +93,8 @@ public class RespMainScreen extends MainScreen {
     }
 
     @Subscribe("colorPresetField")
-    public void onColorPresetFieldValueChange(HasValue.ValueChangeEvent<ColorPreset> event) {
-        if (ColorPreset.CUSTOM.equals(event.getPrevValue())
+    public void onColorPresetFieldValueChange(HasValue.ValueChangeEvent<String> event) {
+        if (ColorPresets.CUSTOM.equals(event.getPrevValue())
                 && event.isUserOriginated()) {
             dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
                     .withCaption(messages.getMessage(RespMainScreen.class, "warningNotification.caption"))
@@ -108,7 +107,7 @@ public class RespMainScreen extends MainScreen {
                                     .withHandler(actionPerformedEvent -> colorPresetField.setValue(event.getPrevValue()))
                     )
                     .show();
-        } else if (!ColorPreset.CUSTOM.equals(event.getValue())) {
+        } else if (!ColorPresets.CUSTOM.equals(event.getValue())) {
             updateColorPreset(event.getValue());
         }
     }
@@ -133,7 +132,7 @@ public class RespMainScreen extends MainScreen {
 
     @Subscribe("resetBtn")
     public void onResetBtnClick(Button.ClickEvent event) {
-        if (ColorPreset.CUSTOM.equals(colorPresetField.getValue())) {
+        if (ColorPresets.CUSTOM.equals(colorPresetField.getValue())) {
             dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
                     .withCaption(messages.getMessage(RespMainScreen.class, "warningNotification.caption"))
                     .withContentMode(ContentMode.HTML)
@@ -141,7 +140,7 @@ public class RespMainScreen extends MainScreen {
                     .withActions(
                             new DialogAction(DialogAction.Type.OK)
                                     .withHandler(actionPerformedEvent -> {
-                                        updateFieldsByColorPreset(ColorPreset.LIGHT);
+                                        updateFieldsByColorPreset(ColorPresets.LIGHT);
                                         modifiedThemeVariables = new HashMap<>();
                                         resetValues();
                                     }),
@@ -160,7 +159,7 @@ public class RespMainScreen extends MainScreen {
                 .withOptions(new MapScreenOptions(
                         ImmutableMap.of(
                                 DownloadScreen.COLOR_PRESET_PARAM,
-                                colorPreset.getId(),
+                                colorPreset,
                                 DownloadScreen.TEXT_PARAM,
                                 generateDownloadText()
                         )
@@ -174,8 +173,7 @@ public class RespMainScreen extends MainScreen {
     }
 
     protected void initColorPresetField() {
-        List<ColorPreset> colorPresetList = Arrays.asList(ColorPreset.LIGHT, ColorPreset.DARK, ColorPreset.BLUE);
-        colorPresetField.setOptionsList(colorPresetList);
+        colorPresetField.setOptionsList(themeVariablesManager.getColorPresets());
         colorPresetField.setValue(colorPreset);
     }
 
@@ -234,18 +232,18 @@ public class RespMainScreen extends MainScreen {
                         ThemeVariableUtils.convertHexToRGB(valueChangeEvent.getValue()));
             }
 
-            ColorPreset newColorPreset = modifiedThemeVariables.isEmpty()
+            String newColorPreset = modifiedThemeVariables.isEmpty()
                     ? colorPreset
-                    : ColorPreset.CUSTOM;
+                    : ColorPresets.CUSTOM;
             colorPresetField.setValue(newColorPreset);
         });
 
         return themeVariableField;
     }
 
-    protected void updateColorPreset(ColorPreset newColorPreset) {
-        if (newColorPreset != ColorPreset.CUSTOM
-                && newColorPreset != colorPreset) {
+    protected void updateColorPreset(String newColorPreset) {
+        if (!ColorPresets.CUSTOM.equals(newColorPreset)
+                && !colorPreset.equals(newColorPreset)) {
             colorPreset = newColorPreset;
         }
 
@@ -256,14 +254,14 @@ public class RespMainScreen extends MainScreen {
     protected void updateMainScreenStyleName() {
         String colorPresetValue = colorPreset == null
                 ? ""
-                : colorPreset.getId();
+                : colorPreset;
 
         workArea.setStyleName(appWindowTheme + " " + colorPresetValue + " " + sizeField.getValue());
         horizontalWrap.setStyleName(appWindowTheme + " " + colorPresetValue);
     }
 
     protected void resetValues() {
-        colorPresetField.setValue(ColorPreset.LIGHT);
+        colorPresetField.setValue(ColorPresets.LIGHT);
         modifiedThemeVariables.clear();
         sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
         updateMainScreenStyleName();
@@ -275,7 +273,7 @@ public class RespMainScreen extends MainScreen {
                 .forEach(component -> component.setVisible(value));
     }
 
-    protected void updateFieldsByColorPreset(ColorPreset colorPresetValue) {
+    protected void updateFieldsByColorPreset(String colorPresetValue) {
         settingsBox.getComponents()
                 .forEach(component -> {
                     if (component instanceof ThemeVariableField) {
@@ -334,7 +332,7 @@ public class RespMainScreen extends MainScreen {
     protected String generateDownloadText() {
         StringBuilder builder = new StringBuilder();
         builder.append(".helium.")
-                .append(colorPreset.getId())
+                .append(colorPreset)
                 .append(" {\n");
 
         for (Map.Entry<String, String> entry : modifiedThemeVariables.entrySet()) {

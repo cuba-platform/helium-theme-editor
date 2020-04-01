@@ -14,7 +14,7 @@ import com.haulmont.cuba.web.gui.components.CompositeComponent;
 import com.haulmont.cuba.web.gui.components.CompositeDescriptor;
 import com.haulmont.cuba.web.gui.components.CompositeWithIcon;
 import com.haulmont.cuba.web.gui.components.JavaScriptComponent;
-import com.haulmont.editor.helium.web.tools.ColorPreset;
+import com.haulmont.editor.helium.web.tools.ColorPresets;
 import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
@@ -48,7 +48,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
     protected JavaScript javaScript;
 
     protected ThemeVariable themeVariable;
-    protected ColorPreset currentColorPreset = ColorPreset.LIGHT;
+    protected String currentColorPreset = ColorPresets.LIGHT;
     protected String parentValue;
 
     public ThemeVariableField() {
@@ -77,7 +77,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
     @Override
     public void setValue(@Nullable ThemeVariable themeVariable) {
         this.themeVariable = themeVariable;
-        setValueByPreset(ColorPreset.LIGHT);
+        setValueByPreset(ColorPresets.LIGHT);
     }
 
     @Override
@@ -257,7 +257,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
         return null;
     }
 
-    public void setValueByPreset(ColorPreset colorPreset) {
+    public void setValueByPreset(String colorPreset) {
         if (themeVariable == null) {
             return;
         }
@@ -277,7 +277,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
     }
 
     public void setColorValueByParent(String parentColorValue) {
-        ThemeVariableDetails details = themeVariable.getThemeVariableDetails(currentColorPreset);
+        ThemeVariableDetails details = getThemeVariableDetailsByPreset(currentColorPreset);
 
         if (parentColorValue == null) {
             parentColorValue = details.getValue();
@@ -360,7 +360,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
         });
     }
 
-    protected ThemeVariableDetails getThemeVariableDetailsByPreset(ColorPreset colorPreset) {
+    protected ThemeVariableDetails getThemeVariableDetailsByPreset(String colorPreset) {
         ThemeVariableDetails details = themeVariable.getThemeVariableDetails(colorPreset);
         if (details == null) {
             details = themeVariable.getThemeVariableDetails();
