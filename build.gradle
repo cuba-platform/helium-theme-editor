@@ -36,7 +36,7 @@ cuba {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent('com.haulmont.addon.helium:helium-global:0.2.0.BETA.2')
+    appComponent('com.haulmont.addon.helium:helium-global:0.2.0.BETA.3')
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.4.1'
@@ -161,6 +161,22 @@ configure(webModule) {
     task themesJar(type: Jar) {
         from file('themes')
         classifier = 'themes'
+
+        doLast {
+            project.copy {
+                from zipTree(configurations.themes.resolvedConfiguration.resolvedArtifacts.find { artifact ->
+                    artifact.name == 'helium-web'
+                }.file)
+                include 'helium/helium.scss'
+
+                eachFile {
+                    path = name
+                }
+                includeEmptyDirs = false
+
+                into "$cuba.tomcat.dir/webapps/${modulePrefix}/VAADIN/scss"
+            }
+        }
     }
 
     artifacts {
@@ -188,16 +204,32 @@ restart.finalizedBy start
 task buildUberJar(type: CubaUberJarBuilding) {
     logbackConfigurationFile = 'etc/uber-jar-logback.xml'
     singleJar = true
-    appProperties = ['cuba.automaticDatabaseUpdate'       : true,
-                     'cuba.dataSource.username'           : 'sa',
-                     'cuba.dataSource.password'           : '',
-                     'cuba.dataSource.dbName'             : 'helium-editor',
-                     'cuba.dataSource.host'               : 'localhost',
-                     'cuba.dataSource.port'               : '9010',
-                     'cuba.dataSource.connectionParams'   : '',
-                     'cuba.dataSourceProvider'            : 'application',
-                     'cuba.web.productionMode'            : true,
-                     'cuba.web.loginDialogDefaultUser'    : '<disabled>',
-                     'cuba.web.loginDialogDefaultPassword': '<disabled>',
+    appProperties = ['cuba.automaticDatabaseUpdate'        : true,
+                     'cuba.dataSource.username'            : 'sa',
+                     'cuba.dataSource.password'            : '',
+                     'cuba.dataSource.dbName'              : 'helium-editor',
+                     'cuba.dataSource.host'                : 'localhost',
+                     'cuba.dataSource.port'                : '9010',
+                     'cuba.dataSource.connectionParams'    : '',
+                     'cuba.dataSourceProvider'             : 'application',
+                     'cuba.web.productionMode'             : true,
+                     'cuba.web.loginDialogDefaultUser'     : '<disabled>',
+                     'cuba.web.loginDialogDefaultPassword' : '<disabled>',
+                     'helium.editor.themeVariablesFilePath': "./scss/helium.scss"
     ]
+
+    doLast {
+        project.copy {
+            from zipTree(webProject.configurations.themes.resolvedConfiguration.resolvedArtifacts.find { artifact ->
+                artifact.name == 'helium-web'
+            }.file)
+            include 'helium/helium.scss'
+
+            eachFile {
+                path = name
+            }
+            includeEmptyDirs = false
+            into "$buildDir/distributions/uberJar/scss"
+        }
+    }
 }

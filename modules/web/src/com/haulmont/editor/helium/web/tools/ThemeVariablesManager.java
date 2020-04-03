@@ -1,12 +1,13 @@
 package com.haulmont.editor.helium.web.tools;
 
+import com.haulmont.cuba.core.sys.AppContext;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,7 +23,7 @@ public class ThemeVariablesManager {
 
     public static final String NAME = "helium_ThemeVariablesManager";
 
-    protected static final String THEME_VARIABLES_FILE_NAME = "helium-ext-variables.scss";
+    protected static final String THEME_VARIABLES_FILE_NAME = "helium.scss";
 
     /**
      * Theme variable module regexp. Intended to match the theme variable module.
@@ -200,8 +201,14 @@ public class ThemeVariablesManager {
      */
     protected void initThemeVariables() {
         try {
-            InputStream fileStream = getClass().getClassLoader().getResourceAsStream(THEME_VARIABLES_FILE_NAME);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
+            String themeVariablesFilePath = AppContext.getProperty("helium.editor.themeVariablesFilePath");
+            if (themeVariablesFilePath == null) {
+                return;
+            }
+
+            File file = new File(themeVariablesFilePath);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+
             String line;
             String module = null;
             String colorPreset = ColorPresets.LIGHT;
