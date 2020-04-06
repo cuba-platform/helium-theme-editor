@@ -103,7 +103,7 @@ public class ThemeVariableUtils {
     public static String lighten(String colorValue, int percent) {
         Color color = ColorUtil.stringToColor(colorValue);
         int[] hsl = calculateHslFromColor(color);
-        hsl[2] = (int) (hsl[2] + (1 - hsl[2]) * percent * 0.01);
+        hsl[2] = (int) (hsl[2] + (100 - hsl[2]) * percent * 0.01);
         int rgb = Color.HSLtoRGB(hsl[0], hsl[1], hsl[2]);
         return new Color(rgb).getCSS().toUpperCase();
     }
