@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="com.haulmont.editor.helium.web.screens.sandbox.LegacyFrame">
+    <dsContext>
+        <collectionDatasource id="usersDs"
+                              class="com.haulmont.cuba.security.entity.User"
+                              view="_local">
+            <query>
+                select e from sec$User e
+                where e.login like :(?i)custom$searchString
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <groupBox caption="SearchField" spacing="true" collapsable="true" collapsed="false">
+            <searchField id="searchFieldSample" caption="SearchField" optionsDatasource="usersDs"/>
+            <searchField id="searchFieldReadonly" caption="Read-only" editable="false" optionsDatasource="usersDs"/>
+            <searchField id="searchFieldDisabled" caption="Disabled" enable="false" optionsDatasource="usersDs"/>
+            <searchField id="searchFieldRequired" caption="Required" required="true" optionsDatasource="usersDs"/>
+
+            <hbox spacing="true">
+                <searchField id="searchFieldLarge" caption="LARGE" stylename="large" optionsDatasource="usersDs"/>
+                <searchField id="searchFieldMiddle" caption="Middle" stylename="middle" optionsDatasource="usersDs"/>
+                <searchField id="searchFieldSmall" caption="small" stylename="small" optionsDatasource="usersDs"/>
+            </hbox>
+        </groupBox>
+
+        <groupBox caption="SearchPickerField" spacing="true" collapsable="true" collapsed="false">
+            <searchPickerField id="searchPickerFieldSample" caption="SearchPickerField" metaClass="sec$User"
+                               optionsDatasource="usersDs"/>
+            <searchPickerField id="searchPickerFieldReadonly" caption="Read-only" editable="false" metaClass="sec$User"
+                               optionsDatasource="usersDs"/>
+            <searchPickerField id="searchPickerFieldDisabled" caption="Disabled" enable="false" metaClass="sec$User"
+                               optionsDatasource="usersDs"/>
+            <searchPickerField id="searchPickerFieldRequired" caption="Required" required="true" metaClass="sec$User"
+                               optionsDatasource="usersDs"/>
+
+            <hbox spacing="true">
+                <searchPickerField id="searchPickerFieldLarge" metaClass="sec$User" caption="LARGE" stylename="large"
+                                   optionsDatasource="usersDs"/>
+                <searchPickerField id="searchPickerFieldMiddle" metaClass="sec$User" caption="Middle" stylename="middle"
+                                   optionsDatasource="usersDs"/>
+                <searchPickerField id="searchPickerFieldSmall" metaClass="sec$User" caption="small" stylename="small"
+                                   optionsDatasource="usersDs"/>
+            </hbox>
+        </groupBox>
+    </layout>
+</window>

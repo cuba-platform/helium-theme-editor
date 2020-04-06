@@ -1,5 +1,6 @@
 package com.haulmont.editor.helium.core.role;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.security.app.role.AnnotatedRoleDefinition;
 import com.haulmont.cuba.security.app.role.annotation.EntityAccess;
 import com.haulmont.cuba.security.app.role.annotation.EntityAttributeAccess;
@@ -14,13 +15,14 @@ import com.haulmont.cuba.security.role.ScreenPermissionsContainer;
 
 @Role(name = "demo", description = "Demo role")
 public class DemoRole extends AnnotatedRoleDefinition {
-    @ScreenAccess(screenIds = {"respMainScreen", "helium_ComponentsSandbox", "helium_DownloadScreen"})
+    @ScreenAccess(screenIds = {"respMainScreen", "helium_ComponentsSandbox", "helium_DownloadScreen", "helium_LegacyFrame"})
     @Override
     public ScreenPermissionsContainer screenPermissions() {
         return super.screenPermissions();
     }
 
 
+    @EntityAccess(entityClass = FileDescriptor.class, operations = {EntityOp.READ, EntityOp.UPDATE})
     @EntityAccess(entityClass = Group.class, operations = EntityOp.READ)
     @EntityAccess(entityClass = User.class, operations = EntityOp.READ)
     @Override

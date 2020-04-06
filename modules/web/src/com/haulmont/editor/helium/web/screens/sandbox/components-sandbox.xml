@@ -2,7 +2,7 @@
 <fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd"
           messagesPack="com.haulmont.editor.helium.web.screens.sandbox">
     <layout expand="previewTabSheet" spacing="true">
-        <tabSheet id="previewTabSheet" width="100%">
+        <tabSheet id="previewTabSheet" width="100%" stylename="preview-tab-sheet">
             <tab id="basicFunctionalityBox" caption="msg://basicFunctionalityBox.caption" spacing="true" margin="true">
                 <scrollBox id="innerPreviewBox" height="100%" width="100%" spacing="true">
                     <flowBox spacing="true" width="100%">
@@ -189,7 +189,7 @@
                                          caption="PopupButton">
                                 <actions>
                                     <action id="popupAction1" caption="Save as DOC"/>
-                                    <!--                        <action id="popupAction2" caption="Save as PDF"/>-->
+                                    <action id="popupAction2" caption="Save as PDF"/>
                                 </actions>
                             </popupButton>
                             <popupButton caption="Primary"
@@ -213,8 +213,6 @@
                                     <action id="popupAction2" caption="Save as PDF"/>
                                 </actions>
                             </popupButton>
-                            <lookupField inputPrompt="Placeholder"
-                                         optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
                         </hbox>
                     </groupBox>
 
@@ -345,28 +343,25 @@
                             <textArea id="textAreaD" caption="Disabled" enable="false" width="100%"/>
                             <textArea id="textAreaR" caption="Required" required="true" width="100%"/>
                         </vbox>
-                        <vbox spacing="true">
-                            <resizableTextArea id="resizableTextArea" caption="Resizable TextArea"
-                                               inputPrompt="Placeholder" width="100%"/>
-                            <resizableTextArea id="resizableTextAreaRO" caption="Read-only" editable="false"
-                                               width="100%"/>
-                            <resizableTextArea id="resizableTextAreaD" caption="Disabled" enable="false" width="100%"/>
-                            <resizableTextArea id="resizableTextAreaR" caption="Required" required="true" width="100%"/>
-                        </vbox>
 
                         <vbox spacing="true">
                             <textArea caption="LARGE" inputPrompt="Placeholder" stylename="large" width="100%"/>
                             <textArea caption="Middle" inputPrompt="Placeholder" stylename="middle" width="100%"/>
                             <textArea caption="small" inputPrompt="Placeholder" stylename="small" width="100%"/>
                         </vbox>
+                    </groupBox>
 
+                    <groupBox caption="Resizable TextArea" spacing="true" collapsable="true" collapsed="false"
+                              orientation="horizontal">
                         <vbox spacing="true">
-                            <resizableTextArea caption="LARGE" inputPrompt="Placeholder" stylename="large"
-                                               width="100%"/>
-                            <resizableTextArea caption="Middle" inputPrompt="Placeholder" stylename="middle"
-                                               width="100%"/>
-                            <resizableTextArea caption="small" inputPrompt="Placeholder" stylename="small"
-                                               width="100%"/>
+                            <resizableTextArea id="resizableTextArea" caption="Resizable TextArea"
+                                               inputPrompt="Placeholder"/>
+                            <resizableTextArea id="resizableTextAreaRO" caption="Read-only" editable="false"/>
+                            <resizableTextArea id="resizableTextAreaD" caption="Disabled" enable="false"/>
+                            <resizableTextArea id="resizableTextAreaR" caption="Required" required="true"/>
+                            <resizableTextArea caption="LARGE" inputPrompt="Placeholder" stylename="large"/>
+                            <resizableTextArea caption="Middle" inputPrompt="Placeholder" stylename="middle"/>
+                            <resizableTextArea caption="small" inputPrompt="Placeholder" stylename="small"/>
                         </vbox>
                     </groupBox>
 
@@ -832,6 +827,486 @@
                             <textField caption="TextField"/>
                             <checkBox caption="CheckBox"/>
                         </form>
+                    </groupBox>
+
+                    <groupBox caption="Upload" spacing="true" collapsable="true" collapsed="false">
+                        <upload/>
+                        <upload caption="File Upload" showClearButton="true"/>
+                        <upload caption="File Upload" showFileName="true"/>
+                        <upload caption="File Upload" showClearButton="true" showFileName="true"/>
+                        <upload caption="File Upload | Read-only" showClearButton="true" showFileName="true"
+                                editable="false"/>
+                        <upload caption="File Upload | Disabled" showClearButton="true" showFileName="true"
+                                enable="false"/>
+                        <upload caption="File Upload | Required" showClearButton="true" showFileName="true"
+                                required="true"/>
+                        <hbox spacing="true">
+                            <upload caption="LARGE" showClearButton="true" showFileName="true" stylename="large"/>
+                            <upload caption="Middle" showClearButton="true" showFileName="true" stylename="middle"/>
+                            <upload caption="small" showClearButton="true" showFileName="true" stylename="small"/>
+                        </hbox>
+                        <vbox spacing="true">
+                            <upload id="upload"
+                                    dropZone="dropZone"
+                                    showClearButton="true"
+                                    showFileName="true"/>
+                            <vbox id="dropZone"
+                                  height="150px"
+                                  spacing="true"
+                                  stylename="dropzone-container">
+                                <label stylename="dropzone-description"
+                                       value="Drop file here"
+                                       align="MIDDLE_CENTER"/>
+                            </vbox>
+                        </vbox>
+                        <multiUpload caption="Multi Upload"/>
+                        <hbox spacing="true">
+                            <multiUpload caption="LARGE" stylename="large"/>
+                            <multiUpload caption="Middle" stylename="middle"/>
+                            <multiUpload caption="small" stylename="small"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="MaskedField" spacing="true" collapsable="true" collapsed="false">
+                        <maskedField id="maskedField" caption="MaskedField" icon="APPLE" mask="###-##-##"/>
+                        <maskedField id="maskedFieldRO" caption="Read-only" editable="false" mask="###-##-##"/>
+                        <maskedField id="maskedFieldD" caption="Disabled" enable="false" mask="###-##-##"/>
+                        <maskedField id="maskedFieldR" caption="Required" required="true" requiredMessage="Required"
+                                     description="Description" mask="###-##-##"/>
+                        <hbox spacing="true">
+                            <maskedField caption="LARGE" mask="###-##-##" stylename="large"/>
+                            <maskedField caption="Middle" mask="###-##-##" stylename="middle"/>
+                            <maskedField caption="small" mask="###-##-##" stylename="small"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="SuggestionField" spacing="true" collapsable="true" collapsed="false">
+                        <suggestionField id="suggestionFieldSample"
+                                         caption="SuggestionField"
+                                         inputPrompt="Start typing"/>
+                        <suggestionField id="suggestionFieldReadOnly"
+                                         caption="Read-only"
+                                         editable="false"
+                                         inputPrompt="Start typing"/>
+                        <suggestionField id="suggestionFieldDisabled"
+                                         caption="Disabled"
+                                         enable="false"
+                                         inputPrompt="Start typing"/>
+                        <suggestionField id="suggestionFieldRequired"
+                                         caption="Required"
+                                         required="true"
+                                         inputPrompt="Start typing"/>
+                        <hbox spacing="true">
+                            <suggestionField id="suggestionFieldLarge"
+                                             caption="LARGE"
+                                             inputPrompt="Start typing"
+                                             stylename="large"/>
+                            <suggestionField id="suggestionFieldMiddle"
+                                             caption="Middle"
+                                             inputPrompt="Start typing"
+                                             stylename="middle"/>
+                            <suggestionField id="suggestionFieldSmall"
+                                             caption="small"
+                                             inputPrompt="Start typing"
+                                             stylename="small"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="SuggestionPickerField" spacing="true" collapsable="true" collapsed="false">
+                        <suggestionPickerField id="suggestionPickerFieldSample"
+                                               metaClass="sec$User"
+                                               caption="SuggestionField"
+                                               inputPrompt="Start typing">
+                            <actions>
+                                <action id="open" type="picker_open"/>
+                            </actions>
+                        </suggestionPickerField>
+
+                        <suggestionPickerField id="suggestionPickerFieldReadonly"
+                                               editable="false"
+                                               metaClass="sec$User"
+                                               caption="Read-only"
+                                               inputPrompt="Start typing">
+                            <actions>
+                                <action id="open" type="picker_open"/>
+                            </actions>
+                        </suggestionPickerField>
+
+                        <suggestionPickerField id="suggestionPickerFieldDisabled"
+                                               enable="false"
+                                               metaClass="sec$User"
+                                               caption="Disabled"
+                                               inputPrompt="Start typing">
+                            <actions>
+                                <action id="open" type="picker_open"/>
+                            </actions>
+                        </suggestionPickerField>
+
+                        <hbox spacing="true">
+                            <suggestionPickerField id="suggestionPickerFieldLarge"
+                                                   metaClass="sec$User"
+                                                   caption="LARGE"
+                                                   inputPrompt="Start typing"
+                                                   stylename="large">
+                                <actions>
+                                    <action id="open" type="picker_open"/>
+                                </actions>
+                            </suggestionPickerField>
+                            <suggestionPickerField id="suggestionPickerFieldMiddle"
+                                                   metaClass="sec$User"
+                                                   caption="Middle"
+                                                   inputPrompt="Start typing"
+                                                   stylename="middle">
+                                <actions>
+                                    <action id="open" type="picker_open"/>
+                                </actions>
+                            </suggestionPickerField>
+                            <suggestionPickerField id="suggestionPickerFieldSmall"
+                                                   metaClass="sec$User"
+                                                   caption="small"
+                                                   inputPrompt="Start typing"
+                                                   stylename="small">
+                                <actions>
+                                    <action id="open" type="picker_open"/>
+                                </actions>
+                            </suggestionPickerField>
+                        </hbox>
+                    </groupBox>
+
+                    <frame id="legacyFrame" screen="helium_LegacyFrame"
+                           src="com/haulmont/editor/helium/web/screens/sandbox/legacy-frame.xml"/>
+
+                    <groupBox caption="CapsLockIndicator" spacing="true" collapsable="true" collapsed="false">
+                        <hbox spacing="true">
+                            <groupBox caption="Simple CapsLockIndicator">
+                                <capsLockIndicator id="capsLock1"
+                                                   align="MIDDLE_CENTER" stylename="large"/>
+                                <passwordField capsLockIndicator="capsLock1"
+                                               align="MIDDLE_CENTER"/>
+                            </groupBox>
+                            <groupBox caption="CapsLockIndicator with OFF message">
+                                <capsLockIndicator id="capsLock2"
+                                                   align="MIDDLE_CENTER"
+                                                   capsLockOffMessage="Caps Lock is off"/>
+                                <passwordField capsLockIndicator="capsLock2"
+                                               align="MIDDLE_CENTER"/>
+                            </groupBox>
+                            <groupBox caption="CapsLockIndicator without messages"
+                                      orientation="horizontal"
+                                      spacing="true">
+                                <passwordField capsLockIndicator="capsLock3"/>
+                                <capsLockIndicator id="capsLock3"
+                                                   capsLockOnMessage=""/>
+                            </groupBox>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="Link" spacing="true" collapsable="true" collapsed="false">
+                        <link caption="Link"
+                              target="_blank"
+                              url="https://www.cuba-platform.com/"/>
+                        <link caption="Link"
+                              icon="icons/chain.png"
+                              target="_blank"
+                              url="https://www.cuba-platform.com/"/>
+                        <link icon="icons/chain.png"
+                              target="_blank"
+                              url="https://www.cuba-platform.com/"/>
+                        <link caption="Disabled"
+                              icon="icons/chain.png"
+                              target="_blank"
+                              url="https://www.cuba-platform.com/"
+                              enable="false"/>
+                        <hbox>
+                            <link caption="LARGE"
+                                  icon="icons/chain.png"
+                                  target="_blank"
+                                  url="https://www.cuba-platform.com/"
+                                  stylename="large"/>
+                            <link caption="Middle"
+                                  icon="icons/chain.png"
+                                  target="_blank"
+                                  url="https://www.cuba-platform.com/"
+                                  stylename="middle"/>
+                            <link caption="small"
+                                  icon="icons/chain.png"
+                                  target="_blank"
+                                  url="https://www.cuba-platform.com/"
+                                  stylename="small"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="ProgressBar" spacing="true" collapsable="true" collapsed="false">
+                        <progressBar id="progressBar" caption="ProgressBar" width="100%"/>
+                        <progressBar id="progressBarP" caption="Point" width="100%" stylename="point"/>
+                        <progressBar indeterminate="true" width="500px"/>
+                        <progressBar indeterminate="true" stylename="indeterminate-circle"/>
+                    </groupBox>
+
+                    <groupBox caption="Slider" spacing="true" collapsable="true" collapsed="false">
+                        <hbox spacing="true">
+                            <vbox spacing="true">
+                                <slider caption="Slider" width="500px"/>
+                                <slider caption="Read-only" editable="false" width="500px"/>
+                                <slider caption="Disabled" enable="false" width="500px"/>
+                                <slider caption="Required" required="true" width="500px"/>
+                            </vbox>
+
+                            <slider caption="Vertical" height="300px" orientation="vertical"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="PopupView" spacing="true" collapsable="true" collapsed="false">
+                        <popupView caption="Hide by clicking on outside area" minimizedValue="Click me!"
+                                   hideOnMouseOut="false">
+                            <vbox spacing="true">
+                                <textField caption="Text Field"/>
+                                <button caption="Button" align="MIDDLE_RIGHT"/>
+                            </vbox>
+                        </popupView>
+
+                        <popupView caption="Hide by clicking on outside area" icon="APPLE"
+                                   align="BOTTOM_RIGHT"
+                                   minimizedValue="Click me!" hideOnMouseOut="false">
+                            <vbox spacing="true">
+                                <table id="tablePopupView" width="400px" height="300px" multiselect="true"
+                                       aggregatable="true" editable="true" aggregationStyle="TOP" metaClass="sec$User">
+                                    <actions>
+                                        <action id="bulkEdit" type="bulkEdit"/>
+                                    </actions>
+                                    <columns>
+                                        <column id="login">
+                                            <aggregation type="COUNT"/>
+                                        </column>
+                                        <column id="name">
+                                            <aggregation type="COUNT"/>
+                                        </column>
+                                        <column id="group"/>
+                                        <column id="active">
+                                            <aggregation type="COUNT"/>
+                                        </column>
+                                    </columns>
+                                    <buttonsPanel>
+                                        <relatedEntities for="tablePopupView">
+                                            <property name="group"/>
+                                        </relatedEntities>
+                                    </buttonsPanel>
+                                </table>
+                            </vbox>
+                        </popupView>
+                    </groupBox>
+
+                    <groupBox caption="OptionsGroup" spacing="true" collapsable="true" collapsed="false">
+                        <optionsGroup optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
+                        <optionsGroup id="optionsGroupRO" caption="Read-only" editable="false"
+                                      optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
+                        <optionsGroup id="optionsGroupD" caption="Disabled" enable="false"
+                                      optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
+
+                        <optionsGroup optionsEnum="com.haulmont.cuba.security.entity.RoleType"
+                                      orientation="horizontal"/>
+
+                        <hbox stylename="card" spacing="true">
+                            <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
+                                          align="MIDDLE_CENTER" stylename="large"/>
+                            <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
+                                          align="MIDDLE_CENTER" stylename="middle"/>
+                            <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
+                                          align="MIDDLE_CENTER" stylename="small"/>
+                        </hbox>
+
+                        <hbox margin="true" stylename="card">
+                            <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" multiselect="true"
+                                          align="MIDDLE_CENTER"/>
+                            <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" multiselect="true"
+                                          align="MIDDLE_CENTER" stylename="large"/>
+                            <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" multiselect="true"
+                                          align="MIDDLE_CENTER" stylename="middle"/>
+                            <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" multiselect="true"
+                                          align="MIDDLE_CENTER" stylename="small"/>
+                        </hbox>
+                        <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" orientation="horizontal"
+                                      multiselect="true"/>
+                    </groupBox>
+
+                    <groupBox caption="RichTextArea" spacing="true" collapsable="true" collapsed="false">
+                        <richTextArea caption="RichTextArea"/>
+                        <richTextArea caption="Read-only" editable="false"/>
+                        <richTextArea caption="Disabled" enable="false"/>
+                        <richTextArea caption="Required" required="true" requiredMessage="Required"/>
+
+                        <vbox spacing="true">
+                            <richTextArea caption="LARGE" stylename="large"/>
+                            <richTextArea caption="Middle" stylename="middle"/>
+                            <richTextArea caption="small" stylename="small"/>
+                        </vbox>
+                    </groupBox>
+
+                    <groupBox caption="ColorPicker" spacing="true" collapsable="true" collapsed="false">
+                        <colorPicker/>
+                        <colorPicker caption="Read-only" editable="false"/>
+                        <colorPicker caption="Disabled" enable="false"/>
+                        <colorPicker caption="Required" required="true"/>
+                        <colorPicker caption="Required" required="true" defaultCaptionEnabled="true"/>
+                        <colorPicker defaultCaptionEnabled="true"/>
+                        <colorPicker caption="With Tabs"
+                                     hsvVisible="true"
+                                     historyVisible="true"
+                                     swatchesVisible="true"/>
+                        <hbox spacing="true">
+                            <colorPicker caption="LARGE" stylename="large"/>
+                            <colorPicker caption="Middle" stylename="middle"/>
+                            <colorPicker caption="small" stylename="small"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="OptionsList" spacing="true" collapsable="true" collapsed="false">
+                        <optionsList optionsEnum="com.haulmont.cuba.security.entity.RoleType"
+                                     height="180px"
+                                     width="160px"/>
+                        <optionsList id="optionsListRO" caption="Read-only" editable="false"
+                                     optionsEnum="com.haulmont.cuba.security.entity.RoleType"
+                                     height="180px"
+                                     width="160px"/>
+                        <optionsList id="optionsListD" caption="Disabled" enable="false"
+                                     optionsEnum="com.haulmont.cuba.security.entity.RoleType"
+                                     height="180px"
+                                     width="160px"/>
+                        <optionsList caption="Required" required="true"
+                                     optionsEnum="com.haulmont.cuba.security.entity.RoleType"
+                                     height="180px"
+                                     width="160px"/>
+                        <hbox stylename="card" spacing="true" margin="true">
+                            <optionsList caption="LARGE"
+                                         optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
+                                         stylename="large"/>
+                            <optionsList caption="Middle"
+                                         optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
+                                         stylename="middle"/>
+                            <optionsList caption="small"
+                                         optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
+                                         stylename="small"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="TwinColumn" spacing="true" collapsable="true" collapsed="false">
+                        <twinColumn id="twinColumnSample"
+                                    addAllBtnEnabled="true"/>
+                        <twinColumn id="twinColumnRequired"
+                                    required="true"
+                                    addAllBtnEnabled="true"/>
+                        <hbox spacing="true">
+                            <twinColumn id="twinColumnLarge"
+                                        stylename="large"
+                                        addAllBtnEnabled="true"
+                                        width="100%"/>
+                            <twinColumn id="twinColumnMiddle"
+                                        stylename="middle"
+                                        addAllBtnEnabled="true"
+                                        width="100%"/>
+                            <twinColumn id="twinColumnSmall"
+                                        stylename="small"
+                                        addAllBtnEnabled="true"
+                                        width="100%"/>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="Calendar" spacing="true" collapsable="true" collapsed="false">
+                        <tabSheet width="100%" height="800px">
+                            <tab id="monthTab" caption="Month Calendar" margin="true,false,false,false">
+                                <calendar id="monthCalendar"
+                                          endDate="2020-03-31"
+                                          height="100%"
+                                          startDate="2020-03-01"
+                                          width="100%"/>
+                            </tab>
+                            <tab id="weekTab" caption="Week Calendar" margin="true,false,false,false">
+                                <calendar id="weekCalendar" navigationButtonsVisible="true"
+                                          endDate="2020-03-28"
+                                          height="100%"
+                                          startDate="2020-03-22"
+                                          width="100%"/>
+                            </tab>
+                            <tab id="dayTab" caption="Day Calendar" margin="true,false,false,false">
+                                <calendar id="dayCalendar"
+                                          endDate="2020-03-25"
+                                          height="100%"
+                                          startDate="2020-03-25"
+                                          width="100%"/>
+                            </tab>
+                        </tabSheet>
+                    </groupBox>
+
+                    <groupBox caption="Accordion" spacing="true" collapsable="true" collapsed="false">
+                        <accordion id="accordion"
+                                   height="500px">
+                            <tab id="tabAccordion11"
+                                 caption="Tab 1"
+                                 expand="spacerAccordion1"
+                                 icon="icons/upload.png"
+                                 margin="true"
+                                 spacing="true">
+                                <label value="Label 1"/>
+                                <textField inputPrompt="TextField 1"/>
+                                <button caption="Button 1"/>
+                                <label id="spacerAccordion1"/>
+                            </tab>
+                            <tab id="tabAccordion12"
+                                 caption="Tab 2"
+                                 expand="spacerAccordion2"
+                                 icon="icons/upload.png"
+                                 margin="true"
+                                 spacing="true">
+                                <label value="Label 2"/>
+                                <textField inputPrompt="TextField 2"/>
+                                <button caption="Button 2"/>
+                                <label id="spacerAccordion2"/>
+                            </tab>
+                            <tab id="tabAccordion2" caption="Tab 2"/>
+                            <tab id="tabAccordion3" caption="Tab 3"/>
+                            <tab id="tabAccordion4" caption="Tab 4" enable="false"/>
+                        </accordion>
+                        <hbox margin="true" stylename="card" width="100%" spacing="true">
+                            <accordion height="400px" width="100%" stylename="large">
+                                <tab id="tabAccordion111"
+                                     caption="Tab 1"/>
+                                <tab id="tabAccordion112"
+                                     caption="Tab 2"/>
+                                <tab id="tabAccordion113"
+                                     caption="Tab 3"/>
+                            </accordion>
+                            <accordion height="400px" width="100%" stylename="middle">
+                                <tab id="tabAccordion121"
+                                     caption="Tab 1"/>
+                                <tab id="tabAccordion122"
+                                     caption="Tab 2"/>
+                                <tab id="tabAccordion123"
+                                     caption="Tab 3"/>
+                            </accordion>
+                            <accordion height="400px" width="100%" stylename="small">
+                                <tab id="tabAccordion131"
+                                     caption="Tab 1"/>
+                                <tab id="tabAccordion132"
+                                     caption="Tab 2"/>
+                                <tab id="tabAccordion133"
+                                     caption="Tab 3"/>
+                            </accordion>
+                        </hbox>
+                    </groupBox>
+
+                    <groupBox caption="CurrencyField" spacing="true" collapsable="true" collapsed="false">
+                        <currencyField caption="CurrencyField" icon="APPLE" currency="$"/>
+                        <currencyField caption="CurrencyField" icon="APPLE" currency="$" currencyLabelPosition="LEFT"/>
+                        <currencyField caption="Read-only" editable="false" currency="$"/>
+                        <currencyField caption="Disabled" enable="false" currency="$"/>
+                        <currencyField caption="Required" required="true" currency="$"
+                                       requiredMessage="Required"
+                                       description="Description"/>
+                        <hbox spacing="true">
+                            <currencyField caption="LARGE" stylename="large" currency="$"/>
+                            <currencyField caption="Middle" stylename="middle" currency="$"/>
+                            <currencyField caption="small" stylename="small" currency="$"/>
+                        </hbox>
                     </groupBox>
                 </scrollBox>
             </tab>

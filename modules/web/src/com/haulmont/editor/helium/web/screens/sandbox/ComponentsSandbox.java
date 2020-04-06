@@ -7,6 +7,8 @@ import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.app.core.inputdialog.DialogActions;
 import com.haulmont.cuba.gui.app.core.inputdialog.InputParameter;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.calendar.ListCalendarEventProvider;
+import com.haulmont.cuba.gui.components.calendar.SimpleCalendarEvent;
 import com.haulmont.cuba.gui.components.data.datagrid.ContainerDataGridItems;
 import com.haulmont.cuba.gui.components.data.datagrid.ContainerTreeDataGridItems;
 import com.haulmont.cuba.gui.components.data.table.ContainerGroupTableItems;
@@ -25,12 +27,16 @@ import com.haulmont.cuba.security.entity.Group;
 import com.haulmont.cuba.security.entity.RoleType;
 import com.haulmont.cuba.security.entity.User;
 import com.haulmont.cuba.web.app.UserSettingsTools;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @UiController("helium_ComponentsSandbox")
@@ -43,8 +49,6 @@ public class ComponentsSandbox extends ScreenFragment {
 
     @Inject
     protected TabSheet previewTabSheet;
-    @Inject
-    protected ScrollBoxLayout innerPreviewBox;
 
     @Inject
     protected Table<User> basicTable;
@@ -240,6 +244,8 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected Table<User> smallTableSample;
     @Inject
+    protected Table<User> tablePopupView;
+    @Inject
     protected TreeTable<Group> treeTableSample;
 
     @Inject
@@ -268,6 +274,57 @@ public class ComponentsSandbox extends ScreenFragment {
     protected CheckBox printMarginCheck;
     @Inject
     protected CheckBox showGutterCheck;
+
+    @Inject
+    protected TwinColumn<Group> twinColumnLarge;
+    @Inject
+    protected TwinColumn<Group> twinColumnMiddle;
+    @Inject
+    protected TwinColumn<Group> twinColumnSmall;
+    @Inject
+    protected TwinColumn<Group> twinColumnRequired;
+    @Inject
+    protected TwinColumn<Group> twinColumnSample;
+
+    @Inject
+    protected ProgressBar progressBarP;
+    @Inject
+    protected ProgressBar progressBar;
+
+    @Inject
+    protected SuggestionField<User> suggestionFieldLarge;
+    @Inject
+    protected SuggestionField<User> suggestionFieldMiddle;
+    @Inject
+    protected SuggestionField<User> suggestionFieldSmall;
+    @Inject
+    protected SuggestionField<User> suggestionFieldDisabled;
+    @Inject
+    protected SuggestionField<User> suggestionFieldReadOnly;
+    @Inject
+    protected SuggestionField<User> suggestionFieldRequired;
+    @Inject
+    protected SuggestionField<User> suggestionFieldSample;
+
+    @Inject
+    protected SuggestionPickerField<User> suggestionPickerFieldLarge;
+    @Inject
+    protected SuggestionPickerField<User> suggestionPickerFieldMiddle;
+    @Inject
+    protected SuggestionPickerField<User> suggestionPickerFieldSmall;
+    @Inject
+    protected SuggestionPickerField<User> suggestionPickerFieldDisabled;
+    @Inject
+    protected SuggestionPickerField<User> suggestionPickerFieldReadonly;
+    @Inject
+    protected SuggestionPickerField<User> suggestionPickerFieldSample;
+
+    @Inject
+    protected Calendar<Date> monthCalendar;
+    @Inject
+    protected Calendar<Date> weekCalendar;
+    @Inject
+    protected Calendar<Date> dayCalendar;
 
     @Inject
     protected Dialogs dialogs;
@@ -363,11 +420,77 @@ public class ComponentsSandbox extends ScreenFragment {
         smallTableSample.setItems(new ContainerTableItems<>(usersDc));
         middleTableSample.setItems(new ContainerTableItems<>(usersDc));
         largeTableSample.setItems(new ContainerTableItems<>(usersDc));
+        tablePopupView.setItems(new ContainerTableItems<>(usersDc));
         dataGridSample.setItems(new ContainerDataGridItems<>(usersDc));
 
         treeDataGridSample.setItems(new ContainerTreeDataGridItems<>(groupsDc, "parent"));
         treeTableSample.setItems(new ContainerTreeTableItems<>(groupsDc, "parent"));
         tree.setItems(new ContainerTreeItems<>(groupsDc, "parent"));
+
+        twinColumnSample.setOptionsList(groupsDc.getItems());
+        twinColumnRequired.setOptionsList(groupsDc.getItems());
+        twinColumnSmall.setOptionsList(groupsDc.getItems());
+        twinColumnMiddle.setOptionsList(groupsDc.getItems());
+        twinColumnLarge.setOptionsList(groupsDc.getItems());
+
+        progressBar.setValue(0.5);
+        progressBarP.setValue(0.5);
+
+        suggestionFieldSample.setSearchExecutor(this::userSearchExecutor);
+        suggestionFieldReadOnly.setSearchExecutor(this::userSearchExecutor);
+        suggestionFieldDisabled.setSearchExecutor(this::userSearchExecutor);
+        suggestionFieldRequired.setSearchExecutor(this::userSearchExecutor);
+        suggestionFieldLarge.setSearchExecutor(this::userSearchExecutor);
+        suggestionFieldMiddle.setSearchExecutor(this::userSearchExecutor);
+        suggestionFieldSmall.setSearchExecutor(this::userSearchExecutor);
+
+        suggestionPickerFieldSample.setSearchExecutor(this::userSearchExecutor);
+        suggestionPickerFieldReadonly.setSearchExecutor(this::userSearchExecutor);
+        suggestionPickerFieldDisabled.setSearchExecutor(this::userSearchExecutor);
+        suggestionPickerFieldLarge.setSearchExecutor(this::userSearchExecutor);
+        suggestionPickerFieldMiddle.setSearchExecutor(this::userSearchExecutor);
+        suggestionPickerFieldSmall.setSearchExecutor(this::userSearchExecutor);
+
+        ListCalendarEventProvider eventProvider = new ListCalendarEventProvider();
+
+        SimpleCalendarEvent<Date> calendarEvent1 = new SimpleCalendarEvent<>();
+        calendarEvent1.setCaption("Event 1");
+        calendarEvent1.setDescription("Description 1");
+        calendarEvent1.setStart(new Date());
+        calendarEvent1.setEnd(DateUtils.addHours(new Date(), 2));
+        eventProvider.addEvent(calendarEvent1);
+
+        SimpleCalendarEvent<Date> calendarEvent2 = new SimpleCalendarEvent<>();
+        calendarEvent2.setCaption("Event 2");
+        calendarEvent2.setDescription("Description 2");
+        calendarEvent2.setStart(DateUtils.addDays(new Date(), -2));
+        calendarEvent2.setEnd(DateUtils.addHours(DateUtils.addDays(new Date(), -2), 2));
+        eventProvider.addEvent(calendarEvent2);
+
+        SimpleCalendarEvent<Date> calendarEvent3 = new SimpleCalendarEvent<>();
+        calendarEvent3.setCaption("Event 3");
+        calendarEvent3.setDescription("Description 3");
+        calendarEvent3.setStart(DateUtils.addDays(new Date(), -2));
+        calendarEvent3.setEnd(DateUtils.addHours(DateUtils.addDays(new Date(), -2), 2));
+        calendarEvent3.setAllDay(true);
+        eventProvider.addEvent(calendarEvent3);
+
+        monthCalendar.setEventProvider(eventProvider);
+        weekCalendar.setEventProvider(eventProvider);
+        dayCalendar.setEventProvider(eventProvider);
+
+        monthCalendar.addRangeSelectListener(dateCalendarRangeSelectEvent -> {
+        });
+        weekCalendar.addRangeSelectListener(dateCalendarRangeSelectEvent -> {
+        });
+        dayCalendar.addRangeSelectListener(dateCalendarRangeSelectEvent -> {
+        });
+    }
+
+    protected List<User> userSearchExecutor(String searchString, Map<String, Object> searchParams) {
+        return usersDc.getItems().stream()
+                .filter(user -> StringUtils.containsIgnoreCase(user.getName(), searchString))
+                .collect(Collectors.toList());
     }
 
     protected void changeTableStyle(HasValue.ValueChangeEvent<Boolean> e) {
@@ -473,7 +596,6 @@ public class ComponentsSandbox extends ScreenFragment {
                 .withCaption("Tray notification")
                 .withDescription("Hi there! I’m a CUBA’s tray message")
                 .withType(Notifications.NotificationType.TRAY)
-//                .withHideDelayMs(-1)
                 .show();
     }
 
@@ -483,7 +605,6 @@ public class ComponentsSandbox extends ScreenFragment {
                 .withCaption("Humanized notification")
                 .withDescription("Hi there! I’m a CUBA’s humanized message")
                 .withType(Notifications.NotificationType.HUMANIZED)
-//                .withHideDelayMs(-1)
                 .show();
     }
 

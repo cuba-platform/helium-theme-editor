@@ -109,4 +109,8 @@ $helium-sidemenu-width: 400px;
       }
     }
   }
+
+  .preview-tab-sheet .v-tabsheet-content-preview-tab-sheet > .v-tabsheet-tabsheetpanel > .v-scrollable {
+    overflow: hidden;
+  }
 }
