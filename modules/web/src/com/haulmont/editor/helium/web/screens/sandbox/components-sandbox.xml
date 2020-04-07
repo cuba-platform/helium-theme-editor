@@ -829,44 +829,6 @@
                         </form>
                     </groupBox>
 
-                    <groupBox caption="Upload" spacing="true" collapsable="true" collapsed="false">
-                        <upload/>
-                        <upload caption="File Upload" showClearButton="true"/>
-                        <upload caption="File Upload" showFileName="true"/>
-                        <upload caption="File Upload" showClearButton="true" showFileName="true"/>
-                        <upload caption="File Upload | Read-only" showClearButton="true" showFileName="true"
-                                editable="false"/>
-                        <upload caption="File Upload | Disabled" showClearButton="true" showFileName="true"
-                                enable="false"/>
-                        <upload caption="File Upload | Required" showClearButton="true" showFileName="true"
-                                required="true"/>
-                        <hbox spacing="true">
-                            <upload caption="LARGE" showClearButton="true" showFileName="true" stylename="large"/>
-                            <upload caption="Middle" showClearButton="true" showFileName="true" stylename="middle"/>
-                            <upload caption="small" showClearButton="true" showFileName="true" stylename="small"/>
-                        </hbox>
-                        <vbox spacing="true">
-                            <upload id="upload"
-                                    dropZone="dropZone"
-                                    showClearButton="true"
-                                    showFileName="true"/>
-                            <vbox id="dropZone"
-                                  height="150px"
-                                  spacing="true"
-                                  stylename="dropzone-container">
-                                <label stylename="dropzone-description"
-                                       value="Drop file here"
-                                       align="MIDDLE_CENTER"/>
-                            </vbox>
-                        </vbox>
-                        <multiUpload caption="Multi Upload"/>
-                        <hbox spacing="true">
-                            <multiUpload caption="LARGE" stylename="large"/>
-                            <multiUpload caption="Middle" stylename="middle"/>
-                            <multiUpload caption="small" stylename="small"/>
-                        </hbox>
-                    </groupBox>
-
                     <groupBox caption="MaskedField" spacing="true" collapsable="true" collapsed="false">
                         <maskedField id="maskedField" caption="MaskedField" icon="APPLE" mask="###-##-##"/>
                         <maskedField id="maskedFieldRO" caption="Read-only" editable="false" mask="###-##-##"/>
