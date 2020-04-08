@@ -18,6 +18,7 @@ import com.haulmont.editor.helium.web.tools.ColorPreset;
 import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
+import com.haulmont.editor.helium.web.tools.ThemeVariablesManager;
 import com.vaadin.ui.JavaScript;
 
 import javax.annotation.Nullable;
@@ -298,7 +299,11 @@ public class ThemeVariableField extends CompositeComponent<Form>
         }
 
         valueField.setValue(null);
-        colorValueField.setValue(parentColorValue);
+        if (ThemeVariablesManager.TRANSPARENT_COLOR_VALUE.equals(parentColorValue)) {
+            colorValueField.setValue(null);
+        } else {
+            colorValueField.setValue(parentColorValue);
+        }
         this.parentValue = parentColorValue;
 
         String placeHolder = valueField.getInputPrompt();
@@ -376,8 +381,15 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
         String value = parentValue != null
                 ? parentValue
+                : ThemeVariablesManager.TRANSPARENT_COLOR_VALUE.equals(details.getValue())
+                ? details.getValue()
                 : ThemeVariableUtils.getColorString(details.getValue());
-        colorValueField.setValue(value);
+
+        if (value.equals(ThemeVariablesManager.TRANSPARENT_COLOR_VALUE)) {
+            colorValueField.setValue(null);
+        } else {
+            colorValueField.setValue(value);
+        }
 
         if (currentColorPreset != null
                 && currentColorPreset.getParent() != null

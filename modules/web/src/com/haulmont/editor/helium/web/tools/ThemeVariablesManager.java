@@ -26,7 +26,8 @@ public class ThemeVariablesManager {
 
     public static final String NAME = "helium_ThemeVariablesManager";
 
-    protected static final String THEME_VARIABLES_FILE_NAME = "helium.scss";
+    public static final String TRANSPARENT_COLOR_VALUE = "transparent";
+
     protected static final String PRESETS_FILE_NAME = "helium-presets.scss";
 
     /**
@@ -258,6 +259,7 @@ public class ThemeVariablesManager {
 
     /**
      * Parse theme variables from reader.
+     *
      * @param reader reader
      */
     protected void parseThemeVariables(BufferedReader reader) {
@@ -318,7 +320,7 @@ public class ThemeVariablesManager {
                             if (themeVariable != null) {
                                 themeVariable.setRgbUsed(true);
                             }
-                        } else if (HEX_PATTERN.matcher(value).find()) {
+                        } else if (HEX_PATTERN.matcher(value).find() || TRANSPARENT_COLOR_VALUE.equals(value)) {
                             ThemeVariableDetails details = new ThemeVariableDetails();
                             details.setPlaceHolder(matcher.group(VALUE_GROUP));
                             details.setValue(value);
