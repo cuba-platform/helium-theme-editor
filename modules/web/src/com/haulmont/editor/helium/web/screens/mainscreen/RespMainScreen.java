@@ -297,7 +297,10 @@ public class RespMainScreen extends MainScreen {
                 .withMessage(messages.getMessage(RespMainScreen.class, "warningNotification.message"))
                 .withActions(
                         new DialogAction(DialogAction.Type.OK)
-                                .withHandler(actionPerformedEvent -> updateColorPreset(value)),
+                                .withHandler(actionPerformedEvent -> {
+                                    updateColorPresetField(value);
+                                    updateColorPreset(value);
+                                }),
                         new DialogAction(DialogAction.Type.CANCEL)
                                 .withHandler(actionPerformedEvent -> optionsField.setValue(prevValue))
                 )
