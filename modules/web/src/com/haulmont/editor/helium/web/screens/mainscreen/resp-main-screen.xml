@@ -33,6 +33,13 @@
                                   collapsed="false"
                                   stylename="padding-less" collapsable="true">
                             <vbox>
+                                <label id="baseThemeLabel"
+                                       align="MIDDLE_LEFT"
+                                       stylename="bold"
+                                       value="Base theme" width="100%"/>
+                                <radioButtonGroup id="baseThemeField" orientation="horizontal" width="100%" captionProperty="name"/>
+                            </vbox>
+                            <vbox>
                                 <label id="colorPresetLabel"
                                        align="MIDDLE_LEFT"
                                        stylename="bold"

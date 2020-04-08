@@ -22,13 +22,13 @@ import javax.inject.Inject;
 @DialogMode(forceDialog = true)
 public class DownloadScreen extends Screen {
 
-    public static final String COLOR_PRESET_PARAM = "colorPreset";
+    public static final String BASE_THEME_PARAM = "baseTheme";
     public static final String TEXT_PARAM = "text";
 
     protected static final String FILE_NAME = "helium-ext-defaults.scss";
 
-    @WindowParam(name = COLOR_PRESET_PARAM)
-    protected String colorPreset;
+    @WindowParam(name = BASE_THEME_PARAM)
+    protected String baseTheme;
     @WindowParam(name = TEXT_PARAM)
     protected String text;
 
@@ -46,7 +46,7 @@ public class DownloadScreen extends Screen {
 
     @Subscribe
     public void onInit(InitEvent event) {
-        firstStepLabel.setValue(messages.formatMessage(DownloadScreen.class, "firstStep", colorPreset));
+        firstStepLabel.setValue(messages.formatMessage(DownloadScreen.class, "firstStep", baseTheme));
         textArea.setValue(text);
     }
 

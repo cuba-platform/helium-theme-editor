@@ -11,7 +11,7 @@ public class ThemeVariable {
     protected String module;
     protected String name;
     protected boolean rgbUsed;
-    protected Map<String, ThemeVariableDetails> detailsMap = new HashMap<>();
+    protected Map<ColorPreset, ThemeVariableDetails> detailsMap = new HashMap<>();
 
     public ThemeVariable() {
     }
@@ -40,15 +40,15 @@ public class ThemeVariable {
         this.rgbUsed = rgbUsed;
     }
 
-    public Map<String, ThemeVariableDetails> getDetailsMap() {
+    public Map<ColorPreset, ThemeVariableDetails> getDetailsMap() {
         return detailsMap;
     }
 
-    public void setDetailsMap(Map<String, ThemeVariableDetails> detailsMap) {
+    public void setDetailsMap(Map<ColorPreset, ThemeVariableDetails> detailsMap) {
         this.detailsMap = detailsMap;
     }
 
-    public void setThemeVariableDetails(String colorPreset, ThemeVariableDetails details) {
+    public void setThemeVariableDetails(ColorPreset colorPreset, ThemeVariableDetails details) {
         if (colorPreset != null) {
             if (detailsMap.containsKey(colorPreset)) {
                 detailsMap.replace(colorPreset, details);
@@ -58,11 +58,35 @@ public class ThemeVariable {
         }
     }
 
-    public ThemeVariableDetails getThemeVariableDetails() {
-        return detailsMap.get(ColorPresets.LIGHT);
+    public ThemeVariableDetails getThemeVariableDetails(ColorPreset colorPreset) {
+        if (colorPreset == null) {
+            return null;
+        }
+
+        ThemeVariableDetails details = detailsMap.get(colorPreset);
+        if (details == null && colorPreset.getParent() != null) {
+            details = detailsMap.get(colorPreset.getParent());
+        }
+
+        if (details == null) {
+            ColorPreset lightColorPreset = getDefaultColorPreset();
+            if (lightColorPreset != null) {
+                details = detailsMap.get(lightColorPreset);
+            }
+        }
+
+        return details;
     }
 
-    public ThemeVariableDetails getThemeVariableDetails(String colorPreset) {
-        return detailsMap.get(colorPreset);
+    public ColorPreset getDefaultColorPreset() {
+        return detailsMap.keySet().stream()
+                .filter(preset -> ColorPresets.LIGHT.equals(preset.getName()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean hasColorPreset(ColorPreset colorPreset) {
+        return detailsMap.keySet().stream()
+                .anyMatch(preset -> preset.equals(colorPreset));
     }
 }

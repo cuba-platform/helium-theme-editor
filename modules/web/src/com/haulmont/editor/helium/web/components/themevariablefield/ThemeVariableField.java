@@ -14,7 +14,7 @@ import com.haulmont.cuba.web.gui.components.CompositeComponent;
 import com.haulmont.cuba.web.gui.components.CompositeDescriptor;
 import com.haulmont.cuba.web.gui.components.CompositeWithIcon;
 import com.haulmont.cuba.web.gui.components.JavaScriptComponent;
-import com.haulmont.editor.helium.web.tools.ColorPresets;
+import com.haulmont.editor.helium.web.tools.ColorPreset;
 import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
@@ -48,7 +48,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
     protected JavaScript javaScript;
 
     protected ThemeVariable themeVariable;
-    protected String currentColorPreset = ColorPresets.LIGHT;
+    protected ColorPreset currentColorPreset;
     protected String parentValue;
 
     public ThemeVariableField() {
@@ -77,7 +77,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
     @Override
     public void setValue(@Nullable ThemeVariable themeVariable) {
         this.themeVariable = themeVariable;
-        setValueByPreset(ColorPresets.LIGHT);
+        setValueByPreset(themeVariable.getDefaultColorPreset());
     }
 
     @Override
@@ -257,7 +257,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
         return null;
     }
 
-    public void setValueByPreset(String colorPreset) {
+    public void setValueByPreset(ColorPreset colorPreset) {
         if (themeVariable == null) {
             return;
         }
@@ -292,7 +292,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
                             ? ThemeVariableUtils.darken(parentColorValue, percent)
                             : ThemeVariableUtils.lighten(parentColorValue, percent);
 
-                    setThemeVariable(parentColorValue);
+                    setThemeVariable(parentColorValue, true);
                 }
             }
         }
@@ -327,8 +327,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
                     value = parentValue;
                 } else if (themeVariable.getThemeVariableDetails(currentColorPreset) != null) {
                     value = themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
-                } else if (themeVariable.getThemeVariableDetails() != null) {
-                    value = themeVariable.getThemeVariableDetails().getValue();
                 }
             }
             value = ThemeVariableUtils.getColorString(value);
@@ -343,7 +341,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
             if (valueIsNull && parentValue == null) {
                 removeThemeVariable();
             } else {
-                setThemeVariable(value);
+                setThemeVariable(value, true);
             }
         });
     }
@@ -360,13 +358,8 @@ public class ThemeVariableField extends CompositeComponent<Form>
         });
     }
 
-    protected ThemeVariableDetails getThemeVariableDetailsByPreset(String colorPreset) {
-        ThemeVariableDetails details = themeVariable.getThemeVariableDetails(colorPreset);
-        if (details == null) {
-            details = themeVariable.getThemeVariableDetails();
-        }
-
-        return details;
+    protected ThemeVariableDetails getThemeVariableDetailsByPreset(ColorPreset colorPreset) {
+        return themeVariable.getThemeVariableDetails(colorPreset);
     }
 
     protected void reset(ThemeVariableDetails details) {
@@ -386,12 +379,18 @@ public class ThemeVariableField extends CompositeComponent<Form>
                 : ThemeVariableUtils.getColorString(details.getValue());
         colorValueField.setValue(value);
 
+        if (currentColorPreset != null
+                && currentColorPreset.getParent() != null
+                && themeVariable.hasColorPreset(currentColorPreset)) {
+            setThemeVariable(value, false);
+        }
+
         if (parentValue == null) {
             setInputPrompt(details.getPlaceHolder());
         }
     }
 
-    protected void setThemeVariable(String value) {
+    protected void setThemeVariable(String value, boolean isBaseTheme) {
         javaScript.execute(String.format(SET_THEME_VARIABLE_VOID, themeVariable.getName(), value));
 
         if (themeVariable.isRgbUsed()) {
@@ -399,7 +398,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
                     ThemeVariableUtils.convertHexToRGB(value)));
         }
 
-        fireValueChangeEvent(value);
+        fireValueChangeEvent(value, isBaseTheme);
     }
 
     protected void removeThemeVariable() {
@@ -409,11 +408,11 @@ public class ThemeVariableField extends CompositeComponent<Form>
             javaScript.execute(String.format(REMOVE_THEME_VARIABLE_VOID, themeVariable.getName() + RGB_POSTFIX));
         }
 
-        fireValueChangeEvent(null);
+        fireValueChangeEvent(null, true);
     }
 
-    protected void fireValueChangeEvent(@Nullable String value) {
-        ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value);
+    protected void fireValueChangeEvent(@Nullable String value, boolean isBaseTheme) {
+        ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value, isBaseTheme);
         publish(ValueChangeEvent.class, valueChangeEvent);
     }
 }

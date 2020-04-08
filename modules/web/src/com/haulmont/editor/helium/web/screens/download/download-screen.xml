@@ -2,6 +2,7 @@
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://caption"
         messagesPack="com.haulmont.editor.helium.web.screens.download">
+    <dialogMode height="600" width="800"/>
     <facets>
         <clipboardTrigger id="clipboardTrigger" button="clipboardBtn" input="textArea"/>
     </facets>

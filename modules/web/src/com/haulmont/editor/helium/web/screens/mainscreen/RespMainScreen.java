@@ -8,6 +8,7 @@ import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.mainwindow.AppWorkArea;
+import com.haulmont.cuba.gui.screen.Install;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
 import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiController;
@@ -18,18 +19,24 @@ import com.haulmont.cuba.web.events.UIRefreshEvent;
 import com.haulmont.cuba.web.theme.HaloTheme;
 import com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField;
 import com.haulmont.editor.helium.web.screens.download.DownloadScreen;
+import com.haulmont.editor.helium.web.tools.ColorPreset;
 import com.haulmont.editor.helium.web.tools.ColorPresets;
+import com.haulmont.editor.helium.web.tools.ModifiedThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariable;
 import com.haulmont.editor.helium.web.tools.ThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.ThemeVariableUtils;
 import com.haulmont.editor.helium.web.tools.ThemeVariablesManager;
+import com.vaadin.ui.JavaScript;
 import org.springframework.context.event.EventListener;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField.RGB_POSTFIX;
 
@@ -41,6 +48,9 @@ public class RespMainScreen extends MainScreen {
     protected static final String GROUPBOX_PADDING_LESS_STYLENAME = "padding-less";
     protected static final String GROUPBOX_POSTFIX = "-box";
     protected static final String THEME_VARIABLE_FIELD_POSTFIX = "-field";
+
+    protected static final String MAIN_CLASSNAME = "v-app helium appui";
+    protected static final String OVERLAY_CLASSNAME = "v-app helium appui v-overlay-container";
 
     @Inject
     protected HeliumThemeVariantsManager variantsManager;
@@ -60,9 +70,11 @@ public class RespMainScreen extends MainScreen {
     @Inject
     protected ScrollBoxLayout settingsBox;
     @Inject
-    protected LookupField<String> colorPresetField;
+    protected LookupField<ColorPreset> colorPresetField;
     @Inject
     protected LookupField<String> sizeField;
+    @Inject
+    protected RadioButtonGroup<ColorPreset> baseThemeField;
     @Inject
     protected CssLayout sideMenuPanel;
     @Inject
@@ -71,14 +83,16 @@ public class RespMainScreen extends MainScreen {
     protected HBoxLayout horizontalWrap;
 
     protected String appWindowTheme;
-    protected Map<String, String> modifiedThemeVariables = new HashMap<>();
-    protected String colorPreset = ColorPresets.LIGHT;
+    protected List<ModifiedThemeVariableDetails> modifiedThemeVariables = new ArrayList<>();
+    protected List<ModifiedThemeVariableDetails> modifiedColorPresetThemeVariables = new ArrayList<>();
+    protected ColorPreset currentColorPreset;
+    protected ColorPreset customColorPreset = new ColorPreset(ColorPresets.CUSTOM);
 
     @Subscribe
     public void onInit(InitEvent event) {
         appWindowTheme = userSettingsTools.loadAppWindowTheme();
 
-        initColorPresetField();
+        initColorPresets();
         initSizeField();
         initThemeVariablesFields();
 
@@ -88,26 +102,28 @@ public class RespMainScreen extends MainScreen {
 
     @EventListener
     public void onUIRefresh(UIRefreshEvent event) {
-        colorPresetField.setValue(colorPreset);
+        baseThemeField.setValue(currentColorPreset);
         modifiedThemeVariables.clear();
     }
 
+    @Subscribe("baseThemeField")
+    public void onBaseThemeFieldValueChange(HasValue.ValueChangeEvent<ColorPreset> event) {
+        if (event.isUserOriginated()) {
+            if (customColorPreset.equals(colorPresetField.getValue())
+                    && event.isUserOriginated()) {
+                showConfirmationDialog(baseThemeField, event.getValue(), event.getPrevValue());
+            } else {
+                updateColorPresetField(event.getValue());
+            }
+        }
+    }
+
     @Subscribe("colorPresetField")
-    public void onColorPresetFieldValueChange(HasValue.ValueChangeEvent<String> event) {
-        if (ColorPresets.CUSTOM.equals(event.getPrevValue())
+    public void onColorPresetFieldValueChange(HasValue.ValueChangeEvent<ColorPreset> event) {
+        if (customColorPreset.equals(event.getPrevValue())
                 && event.isUserOriginated()) {
-            dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
-                    .withCaption(messages.getMessage(RespMainScreen.class, "warningNotification.caption"))
-                    .withContentMode(ContentMode.HTML)
-                    .withMessage(messages.getMessage(RespMainScreen.class, "warningNotification.message"))
-                    .withActions(
-                            new DialogAction(DialogAction.Type.OK)
-                                    .withHandler(actionPerformedEvent -> updateColorPreset(event.getValue())),
-                            new DialogAction(DialogAction.Type.CANCEL)
-                                    .withHandler(actionPerformedEvent -> colorPresetField.setValue(event.getPrevValue()))
-                    )
-                    .show();
-        } else if (!ColorPresets.CUSTOM.equals(event.getValue())) {
+            showConfirmationDialog(colorPresetField, event.getValue(), event.getPrevValue());
+        } else if (!customColorPreset.equals(event.getValue())) {
             updateColorPreset(event.getValue());
         }
     }
@@ -132,7 +148,7 @@ public class RespMainScreen extends MainScreen {
 
     @Subscribe("resetBtn")
     public void onResetBtnClick(Button.ClickEvent event) {
-        if (ColorPresets.CUSTOM.equals(colorPresetField.getValue())) {
+        if (customColorPreset.equals(colorPresetField.getValue())) {
             dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
                     .withCaption(messages.getMessage(RespMainScreen.class, "warningNotification.caption"))
                     .withContentMode(ContentMode.HTML)
@@ -140,8 +156,9 @@ public class RespMainScreen extends MainScreen {
                     .withActions(
                             new DialogAction(DialogAction.Type.OK)
                                     .withHandler(actionPerformedEvent -> {
-                                        updateFieldsByColorPreset(ColorPresets.LIGHT);
-                                        modifiedThemeVariables = new HashMap<>();
+                                        modifiedThemeVariables = new ArrayList<>();
+                                        modifiedColorPresetThemeVariables = new ArrayList<>();
+                                        updateFieldsByColorPreset(baseThemeField.getValue());
                                         resetValues();
                                     }),
                             new DialogAction(DialogAction.Type.CANCEL)
@@ -158,8 +175,8 @@ public class RespMainScreen extends MainScreen {
                 .withScreenClass(DownloadScreen.class)
                 .withOptions(new MapScreenOptions(
                         ImmutableMap.of(
-                                DownloadScreen.COLOR_PRESET_PARAM,
-                                colorPreset,
+                                DownloadScreen.BASE_THEME_PARAM,
+                                baseThemeField.getValue().getName(),
                                 DownloadScreen.TEXT_PARAM,
                                 generateDownloadText()
                         )
@@ -172,9 +189,38 @@ public class RespMainScreen extends MainScreen {
         updateAdvancedBoxesVisible(event.getValue() != null ? event.getValue() : false);
     }
 
-    protected void initColorPresetField() {
-        colorPresetField.setOptionsList(themeVariablesManager.getColorPresets());
+    protected void initColorPresets() {
+        List<ColorPreset> colorPresets = themeVariablesManager.getColorPresets();
+        List<ColorPreset> baseThemes = colorPresets.stream()
+                .filter(preset -> preset.getParent() == null)
+                .collect(Collectors.toList());
+        baseThemeField.setOptionsList(baseThemes);
+
+        currentColorPreset = baseThemes.stream()
+                .filter(preset -> ColorPresets.LIGHT.equals(preset.getName()))
+                .findFirst()
+                .orElse(null);
+        baseThemeField.setValue(currentColorPreset);
+
+        updateColorPresetField(currentColorPreset);
+    }
+
+    protected void updateColorPresetField(ColorPreset colorPreset) {
+        List<ColorPreset> colorPresetsValues = themeVariablesManager.getColorPresets().stream()
+                .filter(preset -> Objects.equals(colorPreset, preset.getParent()) || Objects.equals(colorPreset, preset))
+                .collect(Collectors.toList());
+        colorPresetField.setOptionsList(colorPresetsValues);
         colorPresetField.setValue(colorPreset);
+    }
+
+    @Install(to = "baseThemeField", subject = "optionCaptionProvider")
+    protected String baseThemeFieldOptionCaptionProvider(ColorPreset colorPreset) {
+        return colorPreset.getName();
+    }
+
+    @Install(to = "colorPresetField", subject = "optionCaptionProvider")
+    protected String colorPresetFieldOptionCaptionProvider(ColorPreset colorPreset) {
+        return colorPreset.getName();
     }
 
     protected void initSizeField() {
@@ -225,26 +271,46 @@ public class RespMainScreen extends MainScreen {
         themeVariableField.setId(themeVariable.getName() + THEME_VARIABLE_FIELD_POSTFIX);
 
         themeVariableField.addColorValueChangeListener(valueChangeEvent -> {
-            updateThemeVariable(themeVariable.getName(), valueChangeEvent.getValue());
+            boolean isBaseTheme = valueChangeEvent.isUserOriginated();
+            updateThemeVariable(themeVariable.getName(), valueChangeEvent.getValue(), themeVariable.getModule(), isBaseTheme);
 
             if (themeVariable.isRgbUsed()) {
                 updateThemeVariable(themeVariable.getName() + RGB_POSTFIX,
-                        ThemeVariableUtils.convertHexToRGB(valueChangeEvent.getValue()));
+                        ThemeVariableUtils.convertHexToRGB(valueChangeEvent.getValue()),
+                        themeVariable.getModule(),
+                        isBaseTheme);
             }
 
-            String newColorPreset = modifiedThemeVariables.isEmpty()
-                    ? colorPreset
-                    : ColorPresets.CUSTOM;
+            ColorPreset newColorPreset = modifiedThemeVariables.isEmpty()
+                    ? currentColorPreset
+                    : customColorPreset;
             colorPresetField.setValue(newColorPreset);
         });
 
         return themeVariableField;
     }
 
-    protected void updateColorPreset(String newColorPreset) {
-        if (!ColorPresets.CUSTOM.equals(newColorPreset)
-                && !colorPreset.equals(newColorPreset)) {
-            colorPreset = newColorPreset;
+    protected void showConfirmationDialog(OptionsField<ColorPreset, ColorPreset> optionsField, ColorPreset value, ColorPreset prevValue) {
+        dialogs.createOptionDialog(Dialogs.MessageType.WARNING)
+                .withCaption(messages.getMessage(RespMainScreen.class, "warningNotification.caption"))
+                .withContentMode(ContentMode.HTML)
+                .withMessage(messages.getMessage(RespMainScreen.class, "warningNotification.message"))
+                .withActions(
+                        new DialogAction(DialogAction.Type.OK)
+                                .withHandler(actionPerformedEvent -> updateColorPreset(value)),
+                        new DialogAction(DialogAction.Type.CANCEL)
+                                .withHandler(actionPerformedEvent -> optionsField.setValue(prevValue))
+                )
+                .show();
+    }
+
+    protected void updateColorPreset(ColorPreset newColorPreset) {
+        if (!customColorPreset.equals(newColorPreset)
+                && !currentColorPreset.equals(newColorPreset)) {
+            currentColorPreset = newColorPreset;
+
+            modifiedThemeVariables = new ArrayList<>();
+            modifiedColorPresetThemeVariables = new ArrayList<>();
         }
 
         updateMainScreenStyleName();
@@ -252,16 +318,22 @@ public class RespMainScreen extends MainScreen {
     }
 
     protected void updateMainScreenStyleName() {
-        String colorPresetValue = colorPreset == null
-                ? ""
-                : colorPreset;
+        String colorPresetValue = Objects.requireNonNull(baseThemeField.getValue()).getName();
 
         workArea.setStyleName(appWindowTheme + " " + colorPresetValue + " " + sizeField.getValue());
-        horizontalWrap.setStyleName(appWindowTheme + " " + colorPresetValue);
+
+        updateMainScreenClassName(MAIN_CLASSNAME, colorPresetValue);
+        updateMainScreenClassName(OVERLAY_CLASSNAME, colorPresetValue);
+    }
+
+    protected void updateMainScreenClassName(String mainClassName, String baseTheme) {
+        JavaScript.getCurrent()
+                .execute(String.format("document.getElementsByClassName('%s')[0].className = '%s %s'",
+                        mainClassName, mainClassName, baseTheme));
     }
 
     protected void resetValues() {
-        colorPresetField.setValue(ColorPresets.LIGHT);
+        colorPresetField.setValue(baseThemeField.getValue());
         modifiedThemeVariables.clear();
         sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
         updateMainScreenStyleName();
@@ -273,7 +345,7 @@ public class RespMainScreen extends MainScreen {
                 .forEach(component -> component.setVisible(value));
     }
 
-    protected void updateFieldsByColorPreset(String colorPresetValue) {
+    protected void updateFieldsByColorPreset(ColorPreset colorPresetValue) {
         settingsBox.getComponents()
                 .forEach(component -> {
                     if (component instanceof ThemeVariableField) {
@@ -282,18 +354,50 @@ public class RespMainScreen extends MainScreen {
                 });
     }
 
-    protected void updateThemeVariable(String themeVariableName, String value) {
-        updateModifiedThemeVariables(themeVariableName, value);
+    protected void updateThemeVariable(String themeVariableName, String value, String module, boolean isBaseTheme) {
+        updateModifiedThemeVariables(themeVariableName, value, module, isBaseTheme);
         updateChildThemeVariables(themeVariableName, value);
     }
 
-    protected void updateModifiedThemeVariables(String themeVariableName, String value) {
+    protected void updateModifiedThemeVariables(String themeVariableName, String value, String module, boolean isBaseTheme) {
         if (value == null) {
-            modifiedThemeVariables.remove(themeVariableName);
-        } else if (modifiedThemeVariables.containsKey(themeVariableName)) {
-            modifiedThemeVariables.replace(themeVariableName, value);
+            removeModifiedThemeVariableDetails(themeVariableName, modifiedThemeVariables);
+            removeModifiedThemeVariableDetails(themeVariableName, modifiedColorPresetThemeVariables);
         } else {
-            modifiedThemeVariables.put(themeVariableName, value);
+            if (isBaseTheme) {
+                addModifiedThemeVariableDetails(themeVariableName, value, module, modifiedThemeVariables);
+                removeModifiedThemeVariableDetails(themeVariableName, modifiedColorPresetThemeVariables);
+            } else {
+                addModifiedThemeVariableDetails(themeVariableName, value, module, modifiedColorPresetThemeVariables);
+                removeModifiedThemeVariableDetails(themeVariableName, modifiedThemeVariables);
+            }
+        }
+    }
+
+    protected void removeModifiedThemeVariableDetails(String name, List<ModifiedThemeVariableDetails> modifiedThemeVariableDetails) {
+        if (modifiedThemeVariableDetails != null) {
+            modifiedThemeVariableDetails.stream()
+                    .filter(details -> details.getName().equals(name))
+                    .findFirst()
+                    .ifPresent(modifiedThemeVariableDetails::remove);
+        }
+    }
+
+    protected void addModifiedThemeVariableDetails(String name, String value, String module, List<ModifiedThemeVariableDetails> modifiedThemeVariableDetails) {
+        if (modifiedThemeVariableDetails != null) {
+            ModifiedThemeVariableDetails existingDetails = modifiedThemeVariableDetails.stream()
+                    .filter(details -> details.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
+
+            if (existingDetails != null) {
+                int index = modifiedThemeVariableDetails.indexOf(existingDetails);
+                existingDetails.setValue(value);
+                modifiedThemeVariableDetails.set(index, existingDetails);
+            } else {
+                existingDetails = new ModifiedThemeVariableDetails(name, module, value);
+                modifiedThemeVariableDetails.add(existingDetails);
+            }
         }
     }
 
@@ -312,10 +416,7 @@ public class RespMainScreen extends MainScreen {
     protected List<ThemeVariable> getChildrenThemeVariables(String variableName) {
         List<ThemeVariable> childrenThemeVariables = new ArrayList<>();
         for (ThemeVariable themeVariable : getDefaultThemeVariables()) {
-            ThemeVariableDetails themeVariableDetails = themeVariable.getThemeVariableDetails(colorPreset);
-            if (themeVariableDetails == null) {
-                themeVariableDetails = themeVariable.getThemeVariableDetails();
-            }
+            ThemeVariableDetails themeVariableDetails = themeVariable.getThemeVariableDetails(currentColorPreset);
 
             if (themeVariableDetails != null) {
                 ThemeVariable parentThemeVariable = themeVariableDetails.getParentThemeVariable();
@@ -332,14 +433,31 @@ public class RespMainScreen extends MainScreen {
     protected String generateDownloadText() {
         StringBuilder builder = new StringBuilder();
         builder.append(".helium.")
-                .append(colorPreset)
+                .append(baseThemeField.getValue().getName())
                 .append(" {\n");
 
-        for (Map.Entry<String, String> entry : modifiedThemeVariables.entrySet()) {
+        List<ModifiedThemeVariableDetails> modifiedThemeVariablesList =
+                Stream.of(modifiedThemeVariables, modifiedColorPresetThemeVariables)
+                        .flatMap(Collection::stream)
+                        .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getName))
+                        .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getModule))
+                        .collect(Collectors.toList());
+
+        String module = null;
+        for (ModifiedThemeVariableDetails details : modifiedThemeVariablesList) {
+            if (!details.getModule().equals(module)) {
+                module = details.getModule();
+                builder.append("\n")
+                        .append("  /* ")
+                        .append(module)
+                        .append(" */")
+                        .append("\n");
+            }
+
             builder.append("  ")
-                    .append(entry.getKey())
+                    .append(details.getName())
                     .append(": ")
-                    .append(entry.getValue())
+                    .append(details.getValue())
                     .append(";\n");
         }
 
