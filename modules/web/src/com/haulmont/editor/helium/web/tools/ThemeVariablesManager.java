@@ -112,7 +112,7 @@ public class ThemeVariablesManager {
      *     <li>{@code \\h+} - matches any horizontal whitespace character</li>
      *     <li>{@code ([^;!]+)?;} - matches a theme variable value ending in ";"</li>
      *     <li>{@code \\h+\\/\\/\\h+\\(} - matches a parent variable start</li>
-     *     <li>{@code (.*(?=\)\\h\())} - matches a parent variable</li>
+     *     <li>{@code ((-(-\w+)*(?=\)))} - matches a parent variable</li>
      *     <li>{@code (\\)} - matches a parent variable end</li>
      *     <li>{@code \\h\(} - matches a color modifier start</li>
      *     <li>{@code (?i)(d|l)} - matches a color modifier (darken | lighten)</li>
@@ -132,7 +132,7 @@ public class ThemeVariablesManager {
      * </ul>
      */
     protected static final Pattern THEME_VARIABLE_PATTERN =
-            Pattern.compile("^\\h+(-(-\\w+)*(-color|-color_rgb)*):\\h+([^;!]+)?;(\\h+//\\h+\\((.*(?=\\)\\h\\())(\\)\\h\\((?i)(d|l)([0-9]+?%))|)");
+            Pattern.compile("^^\\h+(-(-\\w+)*(-color|-color_rgb)*):\\h+([^;!]+)?;(\\h+//\\h+\\((-(-\\w+)*(?=\\)))\\)(?=\\h\\(|)(\\h\\((?i)(d|l)([0-9]+?%)|)|)");
 
     /**
      * The index of a theme variable name in {@code THEME_VARIABLE_PATTERN} pattern.
@@ -152,12 +152,12 @@ public class ThemeVariablesManager {
     /**
      * The index of a color modifier in {@code THEME_VARIABLE_PATTERN} pattern.
      */
-    protected static final int COLOR_MODIFIER_GROUP = 8;
+    protected static final int COLOR_MODIFIER_GROUP = 9;
 
     /**
      * The index of a color modifier value in {@code THEME_VARIABLE_PATTERN} pattern.
      */
-    protected static final int COLOR_MODIFIER_VALUE_GROUP = 9;
+    protected static final int COLOR_MODIFIER_VALUE_GROUP = 10;
 
     /**
      * RGB color regexp. Intended to match the RGB color value.
@@ -299,6 +299,7 @@ public class ThemeVariablesManager {
                     if (matcher.find()) {
                         String name = matcher.group(NAME_GROUP);
                         String value = matcher.group(VALUE_GROUP);
+                        boolean commentDependence = false;
 
                         int groupCount = matcher.groupCount();
                         ThemeVariable parentThemeVariable = loadParentThemeVariable(matcher.group(VALUE_GROUP));
@@ -308,6 +309,7 @@ public class ThemeVariablesManager {
                             String parentVariableName = matcher.group(PARENT_VARIABLE_GROUP);
                             if (parentVariableName != null) {
                                 parentThemeVariable = getThemeVariableByName(parentVariableName);
+                                commentDependence = true;
                             }
                         }
 
@@ -325,6 +327,7 @@ public class ThemeVariablesManager {
                             details.setPlaceHolder(matcher.group(VALUE_GROUP));
                             details.setValue(value);
                             details.setParentThemeVariable(parentThemeVariable);
+                            details.setCommentDependence(commentDependence);
 
                             if (groupCount >= COLOR_MODIFIER_GROUP) {
                                 String colorModifier = matcher.group(COLOR_MODIFIER_GROUP);
@@ -342,6 +345,24 @@ public class ThemeVariablesManager {
 
                             themeVariable = getThemeVariableByName(name);
                             if (colorPreset != null) {
+                                ColorPreset parentColorPreset = colorPreset.getParent();
+                                if (parentColorPreset != null) {
+                                    ThemeVariableDetails parentThemeDetails = themeVariable.getThemeVariableDetails(parentColorPreset);
+                                    if (parentThemeDetails != null && parentThemeDetails.isCommentDependence()) {
+                                        if (details.getParentThemeVariable() == null) {
+                                            details.setParentThemeVariable(parentThemeDetails.getParentThemeVariable());
+                                        }
+
+                                        if (details.getColorModifier() == null) {
+                                            details.setColorModifier(parentThemeDetails.getColorModifier());
+                                        }
+
+                                        if (details.getColorModifierValue() == null) {
+                                            details.setColorModifierValue(parentThemeDetails.getColorModifierValue());
+                                        }
+                                    }
+                                }
+
                                 if (themeVariable != null) {
                                     themeVariable.setThemeVariableDetails(colorPreset, details);
                                 } else {

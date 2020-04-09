@@ -10,6 +10,7 @@ public class ThemeVariableDetails {
     protected String colorModifierValue;
     protected String placeHolder;
     protected ThemeVariable parentThemeVariable;
+    protected boolean commentDependence;
 
     public ThemeVariableDetails() {
     }
@@ -52,5 +53,13 @@ public class ThemeVariableDetails {
 
     public void setParentThemeVariable(ThemeVariable parentThemeVariable) {
         this.parentThemeVariable = parentThemeVariable;
+    }
+
+    public boolean isCommentDependence() {
+        return commentDependence;
+    }
+
+    public void setCommentDependence(boolean commentDependence) {
+        this.commentDependence = commentDependence;
     }
 }

@@ -263,6 +263,8 @@ public class ThemeVariableField extends CompositeComponent<Form>
             return;
         }
 
+        currentColorPreset = colorPreset;
+
         ThemeVariableDetails details = getThemeVariableDetailsByPreset(colorPreset);
         setVisible(details != null);
 
@@ -271,7 +273,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
         }
 
         if (!Objects.equals(details.getValue(), ThemeVariableUtils.getColorString(colorValueField.getValue()))) {
-            currentColorPreset = colorPreset;
             parentValue = null;
             reset(details);
         }
@@ -295,6 +296,8 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
                     setThemeVariable(parentColorValue, true);
                 }
+            } else if (details.isCommentDependence()) {
+                setThemeVariable(parentColorValue, true);
             }
         }
 
