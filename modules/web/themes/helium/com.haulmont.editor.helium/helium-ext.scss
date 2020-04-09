@@ -33,7 +33,7 @@ $helium-sidemenu-width: 400px;
       flex-direction: column;
 
       .c-sidemenu-wrap {
-        overflow-y: auto;
+        overflow-y: visible;
       }
 
       .reset-btn,
