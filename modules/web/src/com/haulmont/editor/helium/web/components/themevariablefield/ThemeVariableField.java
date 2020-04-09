@@ -266,10 +266,13 @@ public class ThemeVariableField extends CompositeComponent<Form>
         currentColorPreset = colorPreset;
 
         ThemeVariableDetails details = getThemeVariableDetailsByPreset(colorPreset);
-        setVisible(details != null);
-
         if (details == null) {
             return;
+        }
+
+        if (details.getParentThemeVariable() != null
+                && !details.isCommentDependence()) {
+            details.setValue(details.getParentThemeVariable().getThemeVariableDetails(colorPreset).getValue());
         }
 
         if (!Objects.equals(details.getValue(), ThemeVariableUtils.getColorString(colorValueField.getValue()))) {
