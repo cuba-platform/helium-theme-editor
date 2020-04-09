@@ -49,7 +49,7 @@
   --button-success-disabled-color: #5DE5A7;
 }
 
-.helium.light.mint {
+.helium.light.minty {
   /* Basic */
   --primary-color: #78C2AD;
   --secondary-color: #6CC3D5;
@@ -57,7 +57,7 @@
   --error-color: #F3969A;
   --success-color: #56CC9D;
   --border-color: #6EB8A3;
-  --dim-color: #F7FCF7;
+  --dim-color: #F0FCF0;
 
   /* Common */
   --primary-color_rgb: 120, 194, 173;
@@ -121,7 +121,7 @@
   --button-default-color: #7788BE;
   --button-default-hover-color: #6275B4;
   --button-default-active-color: #4F64A7;
-  --button-default-disabled-color: #9FABC4;
+  --button-default-disabled-color: #9FABD1;
 
   --button-secondary-hover-color: #4C4C4C;
   --button-secondary-active-color: #444444;
@@ -162,11 +162,9 @@
   --panel-background-color: #060606;
 
   /* Table */
-  --table-background-color: #060606;
   --table-row-stripe-color: #3C3C3C;
 
   /* Grid */
-  --grid-background-color: #060606;
   --grid-row-stripe-color: #3C3C3C;
 
   /* SelectionOverlay (ContextMenu) */
