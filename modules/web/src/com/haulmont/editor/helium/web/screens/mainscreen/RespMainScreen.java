@@ -441,9 +441,12 @@ public class RespMainScreen extends MainScreen {
 
     protected String generateDownloadText() {
         StringBuilder builder = new StringBuilder();
-        builder.append(".helium.")
-                .append(variantField.getValue().getName())
-                .append(" {\n");
+        builder.append(".helium");
+        if (!variantsManager.getDefaultAppThemeMode().equals(variantField.getValue().getName())) {
+            builder.append(".")
+                    .append(variantField.getValue().getName());
+        }
+        builder.append(" {\n");
 
         List<ModifiedThemeVariableDetails> modifiedThemeVariablesList =
                 Stream.of(modifiedThemeVariables, modifiedColorTemplateThemeVariables)
