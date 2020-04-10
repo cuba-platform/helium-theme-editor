@@ -15,7 +15,6 @@ import com.haulmont.cuba.gui.components.data.table.ContainerGroupTableItems;
 import com.haulmont.cuba.gui.components.data.table.ContainerTableItems;
 import com.haulmont.cuba.gui.components.data.table.ContainerTreeTableItems;
 import com.haulmont.cuba.gui.components.data.tree.ContainerTreeItems;
-import com.haulmont.cuba.gui.components.validation.NotEmptyValidator;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.DataComponents;
 import com.haulmont.cuba.gui.screen.Install;
@@ -435,22 +434,22 @@ public class ComponentsSandbox extends ScreenFragment {
         SimpleCalendarEvent<Date> calendarEvent1 = new SimpleCalendarEvent<>();
         calendarEvent1.setCaption("Event 1");
         calendarEvent1.setDescription("Description 1");
-        calendarEvent1.setStart(new Date());
-        calendarEvent1.setEnd(DateUtils.addHours(new Date(), 2));
+        calendarEvent1.setStart(new Date(2020 - 1900, 2, 23));
+        calendarEvent1.setEnd(DateUtils.addHours(calendarEvent1.getStart(), 4));
         eventProvider.addEvent(calendarEvent1);
 
         SimpleCalendarEvent<Date> calendarEvent2 = new SimpleCalendarEvent<>();
         calendarEvent2.setCaption("Event 2");
         calendarEvent2.setDescription("Description 2");
-        calendarEvent2.setStart(DateUtils.addDays(new Date(), -2));
-        calendarEvent2.setEnd(DateUtils.addHours(DateUtils.addDays(new Date(), -2), 2));
+        calendarEvent2.setStart(new Date(2020 - 1900, 2, 25));
+        calendarEvent2.setEnd(DateUtils.addHours(calendarEvent2.getStart(), 6));
         eventProvider.addEvent(calendarEvent2);
 
         SimpleCalendarEvent<Date> calendarEvent3 = new SimpleCalendarEvent<>();
         calendarEvent3.setCaption("Event 3");
         calendarEvent3.setDescription("Description 3");
-        calendarEvent3.setStart(DateUtils.addDays(new Date(), -2));
-        calendarEvent3.setEnd(DateUtils.addHours(DateUtils.addDays(new Date(), -2), 2));
+        calendarEvent3.setStart(new Date(2020 - 1900, 2, 26));
+        calendarEvent3.setEnd(DateUtils.addHours(calendarEvent3.getStart(), 2));
         calendarEvent3.setAllDay(true);
         eventProvider.addEvent(calendarEvent3);
 
@@ -464,6 +463,10 @@ public class ComponentsSandbox extends ScreenFragment {
         });
         dayCalendar.addRangeSelectListener(dateCalendarRangeSelectEvent -> {
         });
+
+
+        dayCalendar.setStartDate(new Date());
+        dayCalendar.setEndDate(new Date());
     }
 
     protected List<User> userSearchExecutor(String searchString, Map<String, Object> searchParams) {

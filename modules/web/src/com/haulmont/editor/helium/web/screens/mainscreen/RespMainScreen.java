@@ -45,6 +45,7 @@ import static com.haulmont.editor.helium.web.components.themevariablefield.Theme
 public class RespMainScreen extends MainScreen {
 
     protected static final String BASIC_MODULE_NAME = "Basic";
+    protected static final String COMMON_MODULE_NAME = "Common";
     protected static final String GROUPBOX_PADDING_LESS_STYLENAME = "padding-less";
     protected static final String GROUPBOX_POSTFIX = "-box";
     protected static final String THEME_VARIABLE_FIELD_POSTFIX = "-field";
@@ -233,24 +234,37 @@ public class RespMainScreen extends MainScreen {
     }
 
     protected void initThemeVariablesFields() {
+        List<Component> advancedGroupBoxLayouts = new ArrayList<>();
         for (ThemeVariable themeVariable : getDefaultThemeVariables()) {
             String module = themeVariable.getModule();
 
             Component groupBoxLayout = settingsBox.getComponent(module.toLowerCase() + GROUPBOX_POSTFIX);
+            if (groupBoxLayout == null) {
+                groupBoxLayout = advancedGroupBoxLayouts.stream()
+                        .filter(groupBox -> (module.toLowerCase() + GROUPBOX_POSTFIX).equals(groupBox.getId()))
+                        .findFirst()
+                        .orElse(null);
+            }
             if (groupBoxLayout == null) {
                 groupBoxLayout = createGroupBoxLayout(module);
 
                 if (module.equals(BASIC_MODULE_NAME)) {
                     ((GroupBoxLayout) groupBoxLayout).setExpanded(true);
                     settingsBox.add(groupBoxLayout, 2);
-                } else {
+                } else if (module.equals(COMMON_MODULE_NAME)) {
                     settingsBox.add(groupBoxLayout);
+                } else {
+                    advancedGroupBoxLayouts.add(groupBoxLayout);
                 }
             }
 
             ThemeVariableField field = createThemeVariableField(themeVariable);
             ((GroupBoxLayout) groupBoxLayout).add(field);
         }
+
+        advancedGroupBoxLayouts.stream()
+                .sorted(Comparator.comparing(Component::getId))
+                .forEach(component -> settingsBox.add(component));
     }
 
     protected List<ThemeVariable> getDefaultThemeVariables() {
