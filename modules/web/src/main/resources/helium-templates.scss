@@ -34,19 +34,19 @@
 
   --border-dim-color: #A0AACD;
 
+  --error-color-shade-1: #FB042D;
+  --error-color-shade-2: #DD0328;
+  --error-dim-color: #FC4A68;
+
+  --success-color-shade-1: #1FBD76;
+  --success-color-shade-2: #1BA768;
+  --success-dim-color: #5DE5A7;
+
   /* Button */
   --button-default-color: #F2F2FF;
   --button-default-hover-color: #CECEDB;
   --button-default-active-color: #A7A7B4;
   --button-default-focused-border-color: #E7E7F4;
-
-  --button-error-hover-color: #FB042D;
-  --button-error-active-color: #DD0328;
-  --button-error-disabled-color: #FC4A68;
-
-  --button-success-hover-color: #1FBD76;
-  --button-success-active-color: #1BA768;
-  --button-success-disabled-color: #5DE5A7;
 }
 
 .helium.light.minty {
@@ -71,18 +71,17 @@
 
   --border-dim-color: #A0B9C0;
 
-  /* Button */
-  --button-secondary-hover-color: #4EB7CD;
-  --button-secondary-active-color: #44B3CA;
-  --button-secondary-disabled-color: #C0E5ED;
+  --secondary-color-shade-1: #4EB7CD;
+  --secondary-color-shade-2: #44B3CA;
+  --secondary-dim-color: #C0E5ED;
 
-  --button-success-hover-color: #3CC38D;
-  --button-success-active-color: #35AC7C;
-  --button-success-disabled-color: #92DEC0;
+  --success-color-shade-1: #3CC38D;
+  --success-color-shade-2: #35AC7C;
+  --success-dim-color: #92DEC0;
 
-  --button-error-hover-color: #EE7278;
-  --button-error-active-color: #EA4D55;
-  --button-error-disabled-color: #F7BBBE;
+  --error-color-shade-1: #EE7278;
+  --error-color-shade-2: #EA4D55;
+  --error-dim-color: #F7BBBE;
 
   /* SourceCodeEditor */
   --sourcecodeeditor-gutter-background-color: #CED3CE;
@@ -117,6 +116,18 @@
   --border-dim-color: #3C3C3C;
   --warning-contrast-text-color: #FFFFFF;
 
+  --secondary-color-shade-1: #4C4C4C;
+  --secondary-color-shade-2: #444444;
+  --secondary-dim-color: #757575;
+
+  --error-color-shade-1: #B80000;
+  --error-color-shade-2: #A30000;
+  --error-dim-color: #FF0A0A;
+
+  --success-color-shade-1: #699E00;
+  --success-color-shade-2: #5F8F00;
+  --success-dim-color: #B1FF14;
+
   /* Button */
   --button-default-color: #7788BE;
   --button-default-hover-color: #6275B4;
@@ -130,30 +141,9 @@
   --button-secondary-focused-border-color: #888888;
   --button-secondary-text-color: #FFFFFF;
 
-  --button-error-hover-color: #B80000;
-  --button-error-active-color: #A30000;
-  --button-error-disabled-color: #FF0A0A;
-
-  --button-success-hover-color: #699E00;
-  --button-success-active-color: #5F8F00;
-  --button-success-disabled-color: #B1FF14;
-
   /* DateField */
   --datefield-calendarpanel-month-color: #FFFFFF;
   --datefield-calendarpanel-weekdays-color: #FFFFFF;
-
-  /* ComboBox */
-  --combobox-popup-page-text-color: #4F5C78;
-  --combobox-popup-status-text-color: #4F5C78;
-
-  /* CheckBox */
-  --checkbox-background-color: #282828;
-  --checkbox-read-only-checked-border-color: #3C3C3C;
-  --checkbox-focused-background-color: #3C3C3C;
-  --checkbox-checked-background-color: #282828;
-  --checkbox-checked-focused-background-color: #2A9FD6;
-  --checkbox-read-only-background-color: #282828;
-  --checkbox-checked-focused-color: #2A9FD6;
 
   /* SideMenu */
   --sidemenu-background-color: #060606;
@@ -166,23 +156,6 @@
 
   /* Grid */
   --grid-row-stripe-color: #3C3C3C;
-
-  /* SelectionOverlay (ContextMenu) */
-  --overlay-background-color: #282828;
-
-  /* SourceCodeEditor */
-  --sourcecodeeditor-gutter-active-line-background-color: #828282;
-  --sourcecodeeditor-gutter-background-color: #AFAFAF;
-  --sourcecodeeditor-active-line-background-color: #555555;
-
-  /* RichTextArea */
-  --richtextarea-textarea-background-color: #282828;
-  --richtextarea-toolbar-background-color: #555555;
-  --richtextarea-toolbar-togglebutton-down-background-color: #444444;
-  --richtextarea-toolbar-text-hover-color: #FFFFFF;
-
-  /* NativeSelect */
-  --select-background-color: #282828;
 }
 
 .helium.dark.night {
@@ -205,6 +178,10 @@
   --border-dim-focused-color: #444444;
   --text-secondary-color: #FFFFFF;
 
+  --secondary-color-shade-1: #3B3B3B;
+  --secondary-color-shade-2: #333333;
+  --secondary-dim-color: #7A7A7A;
+
   /* Button */
   --button-default-color: #637497;
   --button-default-hover-color: #596887;
@@ -216,6 +193,7 @@
   --button-secondary-active-color: #333333;
   --button-secondary-disabled-color: #7A7A7A;
   --button-secondary-text-color: #FFFFFF;
+  --button-secondary-disabled-text-color: #FFFFFF;
 
   /* DateField */
   --datefield-calendarpanel-month-color: #FFFFFF;
@@ -232,14 +210,4 @@
 
   /* Window */
   --window-background-color: #222222;
-
-  /* SourceCodeEditor */
-  --sourcecodeeditor-gutter-active-line-background-color: #AFAFAF;
-  --sourcecodeeditor-gutter-background-color: #969696;
-  --sourcecodeeditor-active-line-background-color: #7D7D7D;
-
-  /* RichTextArea */
-  --richtextarea-toolbar-background-color: #6F5CC3;
-  --richtextarea-toolbar-togglebutton-down-background-color: #423287;
-  --richtextarea-toolbar-text-hover-color: #FFFFFF;
 }
