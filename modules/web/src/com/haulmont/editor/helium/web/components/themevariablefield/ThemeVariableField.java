@@ -287,7 +287,14 @@ public class ThemeVariableField extends CompositeComponent<Form>
         if (parentColorValue == null) {
             parentColorValue = details.getValue();
             parentValue = null;
-            removeThemeVariable();
+
+            if (currentTemplate != null
+                    && currentTemplate.getParent() != null
+                    && themeVariable.hasColorTemplate(currentTemplate)) {
+                setThemeVariable(parentColorValue, false);
+            } else {
+                removeThemeVariable();
+            }
         } else {
             String colorModifier = details.getColorModifier();
             if ((colorModifier == null && details.isCommentDependence()) ||
