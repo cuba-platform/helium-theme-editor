@@ -207,15 +207,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected TokenList<User> tokenListRO;
     @Inject
-    protected TokenList<User> tokenListR1;
-    @Inject
-    protected TokenList<User> tokenListR2;
-    @Inject
-    protected TokenList<User> tokenListR3;
-    @Inject
     protected TokenList<User> tokenListSmall;
-    @Inject
-    protected TokenList<User> tokenListSimpleRO;
     @Inject
     protected TokenList<User> tokenListSimple;
     @Inject
@@ -228,8 +220,6 @@ public class ComponentsSandbox extends ScreenFragment {
     protected TokenList<User> tokenListInline;
     @Inject
     protected TokenList<User> tokenListDisabledSimple;
-    @Inject
-    protected TokenList<User> tokenListDisabledLookup;
     @Inject
     protected TokenList<User> tokenListDisabled;
 
@@ -370,36 +360,25 @@ public class ComponentsSandbox extends ScreenFragment {
         radioButtonGroupRO.setValue(RoleType.DENYING);
         radioButtonGroupD.setValue(RoleType.DENYING);
 
-        tokenListRO.setValue(usersDc.getItems());
-        tokenListR1.setValue(usersDc.getItems());
-        tokenListR2.setValue(usersDc.getItems());
-        tokenListR3.setValue(usersDc.getItems());
-        tokenListSmall.setValue(usersDc.getItems());
-        tokenListSimpleRO.setValue(usersDc.getItems());
-        tokenListSimple.setValue(usersDc.getItems());
-        tokenListSample.setValue(usersDc.getItems());
-        tokenListMiddle.setValue(usersDc.getItems());
-        tokenListLarge.setValue(usersDc.getItems());
-        tokenListInline.setValue(usersDc.getItems());
-        tokenListDisabledSimple.setValue(usersDc.getItems());
-        tokenListDisabledLookup.setValue(usersDc.getItems());
-        tokenListDisabled.setValue(usersDc.getItems());
+        tokenListRO.setOptionsList(usersDc.getItems());
+        tokenListSmall.setOptionsList(usersDc.getItems());
+        tokenListSimple.setOptionsList(usersDc.getItems());
+        tokenListSample.setOptionsList(usersDc.getItems());
+        tokenListMiddle.setOptionsList(usersDc.getItems());
+        tokenListLarge.setOptionsList(usersDc.getItems());
+        tokenListInline.setOptionsList(usersDc.getItems());
+        tokenListDisabledSimple.setOptionsList(usersDc.getItems());
+        tokenListDisabled.setOptionsList(usersDc.getItems());
 
-        tokenListR1.addValidator(getBeanLocator().get(NotEmptyValidator.NAME));
-        tokenListR2.addValidator(getBeanLocator().get(NotEmptyValidator.NAME));
-        tokenListR3.addValidator(getBeanLocator().get(NotEmptyValidator.NAME));
-        try {
-            tokenListR1.validate();
-        } catch (Exception ignored) {
-        }
-        try {
-            tokenListR3.validate();
-        } catch (Exception ignored) {
-        }
-        try {
-            tokenListR2.validate();
-        } catch (Exception ignored) {
-        }
+        tokenListRO.setValue(tokenListRO.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListSmall.setValue(tokenListSmall.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListSimple.setValue(tokenListSimple.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListSample.setValue(tokenListSample.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListMiddle.setValue(tokenListMiddle.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListLarge.setValue(tokenListLarge.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListInline.setValue(tokenListInline.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListDisabledSimple.setValue(tokenListDisabledSimple.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListDisabled.setValue(tokenListDisabled.getOptions().getOptions().skip(2).collect(Collectors.toList()));
 
         tabSheetStylesBox.getComponents().stream()
                 .filter(component -> component instanceof CheckBox)

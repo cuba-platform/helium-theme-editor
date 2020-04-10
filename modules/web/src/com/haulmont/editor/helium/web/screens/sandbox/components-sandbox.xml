@@ -702,8 +702,6 @@
 
                         <hbox id="checkBoxGroupSampleBox" margin="true" stylename="card">
                             <checkBoxGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
-                                           align="MIDDLE_CENTER"/>
-                            <checkBoxGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                            align="MIDDLE_CENTER" stylename="large"/>
                             <checkBoxGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                            align="MIDDLE_CENTER" stylename="middle"/>
@@ -715,6 +713,27 @@
                     <groupBox caption="TokenList" spacing="true" collapsable="true" collapsed="false">
                         <tokenList id="tokenListSample" caption="TokenList">
                             <lookup lookup="true"/>
+                        </tokenList>
+
+                        <tokenList id="tokenListInline" caption="TokenList | Inline" inline="true">
+                            <lookup/>
+                        </tokenList>
+
+                        <tokenList id="tokenListSimple" caption="TokenList | Simple" simple="true">
+                            <lookup/>
+                        </tokenList>
+
+                        <tokenList id="tokenListRO" caption="TokenList | Read-Only" editable="false">
+                            <lookup/>
+                        </tokenList>
+
+                        <tokenList id="tokenListDisabled" caption="TokenList | Disabled" enable="false">
+                            <lookup/>
+                        </tokenList>
+
+                        <tokenList id="tokenListDisabledSimple" caption="TokenList | Simple | Disabled" enable="false"
+                                   simple="true">
+                            <lookup/>
                         </tokenList>
 
                         <hbox spacing="true">
@@ -730,48 +749,6 @@
                                 <lookup lookup="true"/>
                             </tokenList>
                         </hbox>
-
-                        <tokenList id="tokenListInline" caption="TokenList | Inline" inline="true">
-                            <lookup/>
-                        </tokenList>
-
-                        <tokenList id="tokenListSimple" caption="TokenList | Simple" simple="true">
-                            <lookup/>
-                        </tokenList>
-
-                        <tokenList id="tokenListR1" caption="TokenList | Errored">
-                            <lookup/>
-                        </tokenList>
-
-                        <tokenList id="tokenListR2" caption="TokenList | Errored">
-                            <lookup lookup="true"/>
-                        </tokenList>
-
-                        <tokenList id="tokenListR3" caption="TokenList | Simple | Errored" simple="true">
-                            <lookup/>
-                        </tokenList>
-
-                        <tokenList id="tokenListRO" caption="TokenList | read-only" editable="false">
-                            <lookup/>
-                        </tokenList>
-
-                        <tokenList id="tokenListSimpleRO" caption="TokenList | Simple | read-only" editable="false"
-                                   simple="true">
-                            <lookup/>
-                        </tokenList>
-
-                        <tokenList id="tokenListDisabled" caption="TokenList | disabled" enable="false">
-                            <lookup/>
-                        </tokenList>
-
-                        <tokenList id="tokenListDisabledLookup" caption="TokenList | disabled" enable="false">
-                            <lookup lookup="true"/>
-                        </tokenList>
-
-                        <tokenList id="tokenListDisabledSimple" caption="TokenList | Simple | disabled" enable="false"
-                                   simple="true">
-                            <lookup/>
-                        </tokenList>
                     </groupBox>
 
                     <groupBox caption="SourceCodeEditor" spacing="true" collapsable="true" collapsed="false">
