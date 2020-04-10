@@ -1,17 +1,17 @@
 package com.haulmont.editor.helium.web.tools;
 
 /**
- * Color preset
+ * Color template
  */
-public class ColorPreset {
+public class Template {
 
     protected String name;
-    protected ColorPreset parent;
+    protected Template parent;
 
-    public ColorPreset() {
+    public Template() {
     }
 
-    public ColorPreset(String name) {
+    public Template(String name) {
         this.name = name;
     }
 
@@ -23,11 +23,11 @@ public class ColorPreset {
         this.name = name;
     }
 
-    public ColorPreset getParent() {
+    public Template getParent() {
         return parent;
     }
 
-    public void setParent(ColorPreset parent) {
+    public void setParent(Template parent) {
         this.parent = parent;
     }
 }

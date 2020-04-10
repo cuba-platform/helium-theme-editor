@@ -1,9 +1,9 @@
 package com.haulmont.editor.helium.web.tools;
 
 /**
- * Default color presets.
+ * Default color templates.
  */
-public class ColorPresets {
+public class Templates {
     public static final String LIGHT = "light";
     public static final String CUSTOM = "custom";
 }

@@ -29,30 +29,27 @@
                                 width="100%"/>
                     </hbox>
                     <scrollBox id="settingsBox" stylename="settings-box" spacing="true" margin="true">
-                        <groupBox spacing="true" caption="msg://screenDefaultsBox.caption" width="100%"
-                                  collapsed="false"
-                                  stylename="padding-less" collapsable="true">
+                        <vbox spacing="true" margin="true" width="100%" stylename="card">
                             <vbox>
-                                <label id="baseThemeLabel"
-                                       align="MIDDLE_LEFT"
-                                       stylename="bold"
-                                       value="Base theme" width="100%"/>
-                                <radioButtonGroup id="baseThemeField" orientation="horizontal" width="100%" captionProperty="name"/>
+                                <radioButtonGroup id="variantField" orientation="horizontal" width="100%"
+                                                  captionProperty="name"/>
                             </vbox>
                             <vbox>
-                                <label id="colorPresetLabel"
+                                <label id="templateLabel"
                                        align="MIDDLE_LEFT"
                                        stylename="bold"
-                                       value="Color Preset" width="100%"/>
-                                <lookupField id="colorPresetField" width="100%" nullOptionVisible="false"/>
+                                       value="msg://templateLabel.value" width="100%"/>
+                                <lookupField id="templateField" width="100%" nullOptionVisible="false"/>
                             </vbox>
-                            <vbox>
-                                <label id="sizeLabel"
-                                       align="MIDDLE_LEFT"
-                                       stylename="bold"
-                                       value="Size" width="100%"/>
-                                <lookupField id="sizeField" width="100%" nullOptionVisible="false"/>
-                            </vbox>
+                        </vbox>
+                        <groupBox id="sizeBox" caption="msg://sizeBox.caption" spacing="true" collapsable="true"
+                                  collapsed="true" stylename="padding-less">
+                            <label id="sizeLabel"
+                                   align="MIDDLE_LEFT"
+                                   stylename="bold"
+                                   value="msg://sizeLabel.caption" width="100%"
+                                   contextHelpText="msg://sizeField.contextHelp"/>
+                            <lookupField id="sizeField" width="100%" nullOptionVisible="false"/>
                         </groupBox>
                         <hbox spacing="true" width="100%">
                             <checkBox id="advancedModeValue" align="MIDDLE_LEFT" captionAsHtml="true"

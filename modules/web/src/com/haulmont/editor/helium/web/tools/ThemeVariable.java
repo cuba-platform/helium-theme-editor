@@ -11,7 +11,7 @@ public class ThemeVariable {
     protected String module;
     protected String name;
     protected boolean rgbUsed;
-    protected Map<ColorPreset, ThemeVariableDetails> detailsMap = new HashMap<>();
+    protected Map<Template, ThemeVariableDetails> detailsMap = new HashMap<>();
 
     public ThemeVariable() {
     }
@@ -40,53 +40,53 @@ public class ThemeVariable {
         this.rgbUsed = rgbUsed;
     }
 
-    public Map<ColorPreset, ThemeVariableDetails> getDetailsMap() {
+    public Map<Template, ThemeVariableDetails> getDetailsMap() {
         return detailsMap;
     }
 
-    public void setDetailsMap(Map<ColorPreset, ThemeVariableDetails> detailsMap) {
+    public void setDetailsMap(Map<Template, ThemeVariableDetails> detailsMap) {
         this.detailsMap = detailsMap;
     }
 
-    public void setThemeVariableDetails(ColorPreset colorPreset, ThemeVariableDetails details) {
-        if (colorPreset != null) {
-            if (detailsMap.containsKey(colorPreset)) {
-                detailsMap.replace(colorPreset, details);
+    public void setThemeVariableDetails(Template template, ThemeVariableDetails details) {
+        if (template != null) {
+            if (detailsMap.containsKey(template)) {
+                detailsMap.replace(template, details);
             } else {
-                detailsMap.put(colorPreset, details);
+                detailsMap.put(template, details);
             }
         }
     }
 
-    public ThemeVariableDetails getThemeVariableDetails(ColorPreset colorPreset) {
-        if (colorPreset == null) {
+    public ThemeVariableDetails getThemeVariableDetails(Template template) {
+        if (template == null) {
             return null;
         }
 
-        ThemeVariableDetails details = detailsMap.get(colorPreset);
-        if (details == null && colorPreset.getParent() != null) {
-            details = detailsMap.get(colorPreset.getParent());
+        ThemeVariableDetails details = detailsMap.get(template);
+        if (details == null && template.getParent() != null) {
+            details = detailsMap.get(template.getParent());
         }
 
         if (details == null) {
-            ColorPreset lightColorPreset = getDefaultColorPreset();
-            if (lightColorPreset != null) {
-                details = detailsMap.get(lightColorPreset);
+            Template lightTemplate = getDefaultColorTemplate();
+            if (lightTemplate != null) {
+                details = detailsMap.get(lightTemplate);
             }
         }
 
         return details;
     }
 
-    public ColorPreset getDefaultColorPreset() {
+    public Template getDefaultColorTemplate() {
         return detailsMap.keySet().stream()
-                .filter(preset -> ColorPresets.LIGHT.equals(preset.getName()))
+                .filter(template -> Templates.LIGHT.equals(template.getName()))
                 .findFirst()
                 .orElse(null);
     }
 
-    public boolean hasColorPreset(ColorPreset colorPreset) {
+    public boolean hasColorTemplate(Template template) {
         return detailsMap.keySet().stream()
-                .anyMatch(preset -> preset.equals(colorPreset));
+                .anyMatch(colorTemplate -> colorTemplate.equals(template));
     }
 }

@@ -28,7 +28,7 @@ public class ThemeVariablesManager {
 
     public static final String TRANSPARENT_COLOR_VALUE = "transparent";
 
-    protected static final String PRESETS_FILE_NAME = "helium-presets.scss";
+    protected static final String TEMPLATES_FILE_NAME = "helium-templates.scss";
 
     /**
      * Theme variable module regexp. Intended to match the theme variable module.
@@ -51,13 +51,13 @@ public class ThemeVariablesManager {
     protected static final Pattern MODULE_PATTERN = Pattern.compile("(?<=/\\*\\s).*(?=\\s\\*/)");
 
     /**
-     * Base theme regexp. Intended to match the base theme value.
+     * Variant regexp. Intended to match the variant value.
      * <p>
      * Regexp explanation:
      * <ul>
-     *     <li>{@code (?<=&\.)} - matches the beginning of base theme value</li>
-     *     <li>{@code \w*} - matches a color preset</li>
-     *     <li>{@code (?=\s\{)} - matches the ending of base theme value</li>
+     *     <li>{@code (?<=&\.)} - matches the beginning of variant value</li>
+     *     <li>{@code \w*} - matches a color template</li>
+     *     <li>{@code (?=\s\{)} - matches the ending of variant value</li>
      * </ul>
      * <p>
      * Example:
@@ -65,19 +65,19 @@ public class ThemeVariablesManager {
      *      &.dark {
      * }</pre>
      * <ul>
-     *     <li>{@code dark} - a base theme</li>
+     *     <li>{@code dark} - a variant</li>
      * </ul>
      */
-    protected static final Pattern BASE_THEME_PATTERN = Pattern.compile("(?<=&\\.)\\w*(?=\\s\\{)");
+    protected static final Pattern VARIANT_PATTERN = Pattern.compile("(?<=&\\.)\\w*(?=\\s\\{)");
 
     /**
-     * Color preset regexp. Intended to match the color preset.
+     * Color template regexp. Intended to match the color template.
      * <p>
      * Regexp explanation:
      * <ul>
-     *     <li>{@code (?<=\\.helium\\.)(\\w*)} - matches the base theme value</li>
+     *     <li>{@code (?<=\\.helium\\.)(\\w*)} - matches the variant value</li>
      *     <li>{@code \\.} - matches a dot</li>
-     *     <li>{@code (\\w*)(?=\\s\\{)} - matches the color preset value</li>
+     *     <li>{@code (\\w*)(?=\\s\\{)} - matches the color template value</li>
      * </ul>
      * <p>
      * Example:
@@ -85,21 +85,21 @@ public class ThemeVariablesManager {
      *      .helium.cobalt.light {
      * }</pre>
      * <ul>
-     *     <li>{@code light} - a base theme</li>
-     *     <li>{@code cobalt} - a color preset</li>
+     *     <li>{@code light} - a variant</li>
+     *     <li>{@code cobalt} - a color template</li>
      * </ul>
      */
-    protected static final Pattern COLOR_PRESET_PATTERN = Pattern.compile("(?<=\\.helium\\.)(\\w*)\\.(\\w*)(?=\\s\\{)");
+    protected static final Pattern COLOR_TEMPLATE_PATTERN = Pattern.compile("(?<=\\.helium\\.)(\\w*)\\.(\\w*)(?=\\s\\{)");
 
     /**
-     * The index of a base theme in {@code COLOR_PRESET_PATTERN} pattern.
+     * The index of a variant in {@code COLOR_TEMPLATE_PATTERN} pattern.
      */
-    protected static final int BASE_THEME_GROUP = 1;
+    protected static final int VARIANT_GROUP = 1;
 
     /**
-     * The index of a color preset in {@code COLOR_PRESET_PATTERN} pattern.
+     * The index of a color template in {@code COLOR_TEMPLATE_PATTERN} pattern.
      */
-    protected static final int COLOR_PRESET_GROUP = 2;
+    protected static final int COLOR_TEMPLATE_GROUP = 2;
 
     /**
      * Theme variable regexp. Intended to match the theme variable.
@@ -202,17 +202,17 @@ public class ThemeVariablesManager {
     protected List<ThemeVariable> themeVariables = new ArrayList<>();
 
     /**
-     * The list of color presets.
+     * The list of color templates.
      */
-    protected List<ColorPreset> colorPresets = new ArrayList<>();
+    protected List<Template> templates = new ArrayList<>();
 
     /**
-     * The default color preset - light.
+     * The default color template - light.
      */
-    protected ColorPreset lightColorPreset = new ColorPreset(ColorPresets.LIGHT);
+    protected Template lightTemplate = new Template(Templates.LIGHT);
 
     public ThemeVariablesManager() {
-        initColorPresets();
+        initColorTemplates();
         initThemeVariables();
     }
 
@@ -224,17 +224,17 @@ public class ThemeVariablesManager {
     }
 
     /**
-     * @return the list of color presets
+     * @return the list of color templates
      */
-    public List<ColorPreset> getColorPresets() {
-        return colorPresets;
+    public List<Template> getTemplates() {
+        return templates;
     }
 
     /**
-     * Init color presets list.
+     * Init color templates list.
      */
-    protected void initColorPresets() {
-        colorPresets.add(lightColorPreset);
+    protected void initColorTemplates() {
+        templates.add(lightTemplate);
     }
 
     /**
@@ -253,7 +253,7 @@ public class ThemeVariablesManager {
             log.error("File with theme variables not found", e);
         }
 
-        InputStream fileStream = getClass().getClassLoader().getResourceAsStream(PRESETS_FILE_NAME);
+        InputStream fileStream = getClass().getClassLoader().getResourceAsStream(TEMPLATES_FILE_NAME);
         parseThemeVariables(new BufferedReader(new InputStreamReader(fileStream)));
     }
 
@@ -266,27 +266,27 @@ public class ThemeVariablesManager {
         try {
             String line;
             String module = null;
-            ColorPreset colorPreset = lightColorPreset;
+            Template template = lightTemplate;
             Matcher matcher;
 
             while ((line = reader.readLine()) != null) {
-                matcher = BASE_THEME_PATTERN.matcher(line);
+                matcher = VARIANT_PATTERN.matcher(line);
                 if (matcher.find()) {
-                    ColorPreset newColorPreset = new ColorPreset(matcher.group());
-                    colorPresets.add(newColorPreset);
-                    colorPreset = newColorPreset;
+                    Template newTemplate = new Template(matcher.group());
+                    templates.add(newTemplate);
+                    template = newTemplate;
                 }
 
-                matcher = COLOR_PRESET_PATTERN.matcher(line);
+                matcher = COLOR_TEMPLATE_PATTERN.matcher(line);
                 if (matcher.find()) {
-                    String baseTheme = matcher.group(BASE_THEME_GROUP);
-                    String colorPresetValue = matcher.group(COLOR_PRESET_GROUP);
+                    String variant = matcher.group(VARIANT_GROUP);
+                    String colorTemplateValue = matcher.group(COLOR_TEMPLATE_GROUP);
 
-                    ColorPreset newColorPreset = new ColorPreset(colorPresetValue);
-                    newColorPreset.setParent(getColorPresetByName(baseTheme));
+                    Template newTemplate = new Template(colorTemplateValue);
+                    newTemplate.setParent(getColorTemplateByName(variant));
 
-                    colorPresets.add(newColorPreset);
-                    colorPreset = newColorPreset;
+                    templates.add(newTemplate);
+                    template = newTemplate;
                 }
 
                 matcher = MODULE_PATTERN.matcher(line);
@@ -304,7 +304,7 @@ public class ThemeVariablesManager {
                         int groupCount = matcher.groupCount();
                         ThemeVariable parentThemeVariable = loadParentThemeVariable(matcher.group(VALUE_GROUP));
                         if (parentThemeVariable != null) {
-                            value = parentThemeVariable.getThemeVariableDetails(colorPreset).getValue();
+                            value = parentThemeVariable.getThemeVariableDetails(template).getValue();
                         } else if (groupCount >= PARENT_VARIABLE_GROUP) {
                             String parentVariableName = matcher.group(PARENT_VARIABLE_GROUP);
                             if (parentVariableName != null) {
@@ -344,14 +344,15 @@ public class ThemeVariablesManager {
                             }
 
                             themeVariable = getThemeVariableByName(name);
-                            if (colorPreset != null) {
-                                ColorPreset parentColorPreset = colorPreset.getParent();
-                                if (parentColorPreset != null) {
-                                    ThemeVariableDetails parentThemeDetails = themeVariable.getThemeVariableDetails(parentColorPreset);
-                                    if (parentThemeDetails != null && parentThemeDetails.isCommentDependence()) {
-                                        if (details.getParentThemeVariable() == null) {
-                                            details.setParentThemeVariable(parentThemeDetails.getParentThemeVariable());
-                                        }
+                            if (template != null) {
+                                Template parentTemplate = template.getParent();
+                                if (parentTemplate != null) {
+                                    ThemeVariableDetails parentThemeDetails = themeVariable.getThemeVariableDetails(parentTemplate);
+                                    if (parentThemeDetails != null
+                                            && parentThemeDetails.isCommentDependence()
+                                            && details.getParentThemeVariable() == null) {
+                                        details.setCommentDependence(true);
+                                        details.setParentThemeVariable(parentThemeDetails.getParentThemeVariable());
 
                                         if (details.getColorModifier() == null) {
                                             details.setColorModifier(parentThemeDetails.getColorModifier());
@@ -364,12 +365,12 @@ public class ThemeVariablesManager {
                                 }
 
                                 if (themeVariable != null) {
-                                    themeVariable.setThemeVariableDetails(colorPreset, details);
+                                    themeVariable.setThemeVariableDetails(template, details);
                                 } else {
                                     themeVariable = new ThemeVariable();
                                     themeVariable.setModule(module);
                                     themeVariable.setName(name);
-                                    themeVariable.setThemeVariableDetails(colorPreset, details);
+                                    themeVariable.setThemeVariableDetails(template, details);
                                     themeVariables.add(themeVariable);
                                 }
                             }
@@ -414,15 +415,15 @@ public class ThemeVariablesManager {
     }
 
     /**
-     * Returns the color preset by given name.
+     * Returns the color template by given name.
      *
-     * @param name a color preset name
-     * @return a color preset
+     * @param name a color template name
+     * @return a color template
      */
-    protected ColorPreset getColorPresetByName(String name) {
-        return colorPresets != null
-                ? colorPresets.stream()
-                .filter(colorPreset -> colorPreset.getName().equals(name))
+    protected Template getColorTemplateByName(String name) {
+        return templates != null
+                ? templates.stream()
+                .filter(colorTemplate -> colorTemplate.getName().equals(name))
                 .findFirst()
                 .orElse(null)
                 : null;
