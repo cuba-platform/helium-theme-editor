@@ -290,7 +290,11 @@ public class ThemeVariableField extends CompositeComponent<Form>
             removeThemeVariable();
         } else {
             String colorModifier = details.getColorModifier();
-            if (colorModifier != null) {
+
+            if ((colorModifier == null && details.isCommentDependence()) ||
+                    ThemeVariablesManager.TRANSPARENT_COLOR_VALUE.equals(parentColorValue)) {
+                setThemeVariable(parentColorValue, true);
+            } else if (colorModifier != null) {
                 String colorModifierValue = details.getColorModifierValue();
                 if (colorModifierValue != null) {
                     int percent = Integer.parseInt(colorModifierValue.substring(0, colorModifierValue.length() - 1));
@@ -300,8 +304,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
                     setThemeVariable(parentColorValue, true);
                 }
-            } else if (details.isCommentDependence()) {
-                setThemeVariable(parentColorValue, true);
             }
             parentValue = parentColorValue;
         }
@@ -341,10 +343,17 @@ public class ThemeVariableField extends CompositeComponent<Form>
                     value = themeVariable.getThemeVariableDetails(currentColorPreset).getValue();
                 }
             }
-            value = ThemeVariableUtils.getColorString(value);
+
+            if (!ThemeVariablesManager.TRANSPARENT_COLOR_VALUE.equals(value)) {
+                value = ThemeVariableUtils.getColorString(value);
+            }
 
             if (valueChangeEvent.isUserOriginated()) {
-                colorValueField.setValue(value);
+                if (ThemeVariablesManager.TRANSPARENT_COLOR_VALUE.equals(value)) {
+                    colorValueField.setValue(null);
+                } else {
+                    colorValueField.setValue(value);
+                }
             }
 
             boolean valueIsNull = valueChangeEvent.getValue() == null;
