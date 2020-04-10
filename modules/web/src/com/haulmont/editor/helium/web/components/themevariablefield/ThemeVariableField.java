@@ -65,7 +65,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
         initColorValueField();
         initValueField();
-        initJavaScript();
+        refreshJavaScriptComponent();
         initResetBtn();
     }
 
@@ -324,6 +324,11 @@ public class ThemeVariableField extends CompositeComponent<Form>
         return getEventHub().subscribe(ValueChangeEvent.class, (Consumer) listener);
     }
 
+    public void refreshJavaScriptComponent() {
+        javaScript = JavaScript.getCurrent();
+        javaScript.execute(jsComponent.getInitFunctionName() + "()");
+    }
+
     protected void initColorValueField() {
         colorValueField.addValueChangeListener(valueChangeEvent -> {
             if (valueChangeEvent.isUserOriginated()) {
@@ -364,11 +369,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
                 setThemeVariable(value, true);
             }
         });
-    }
-
-    protected void initJavaScript() {
-        javaScript = JavaScript.getCurrent();
-        javaScript.execute(jsComponent.getInitFunctionName() + "()");
     }
 
     protected void initResetBtn() {

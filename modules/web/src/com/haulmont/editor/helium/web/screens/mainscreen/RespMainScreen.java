@@ -103,8 +103,21 @@ public class RespMainScreen extends MainScreen {
 
     @EventListener
     public void onUIRefresh(UIRefreshEvent event) {
-        variantField.setValue(currentTemplate);
-        modifiedThemeVariables.clear();
+        settingsBox.getComponents()
+                .forEach(component -> {
+                    if (component instanceof ThemeVariableField) {
+                        ((ThemeVariableField) component).refreshJavaScriptComponent();
+                    }
+                });
+
+        updateMainScreenStyleName();
+
+        JavaScript javaScript = JavaScript.getCurrent();
+        getModifiedThemeVariables()
+                .forEach(modifiedThemeVariableDetails -> javaScript.execute(String.format(
+                        "Array.from(document.getElementsByClassName('helium')).forEach(function (element) {element.style.setProperty('%s', '%s')})",
+                        modifiedThemeVariableDetails.getName(),
+                        modifiedThemeVariableDetails.getValue())));
     }
 
     @Subscribe("variantField")
@@ -462,12 +475,7 @@ public class RespMainScreen extends MainScreen {
         }
         builder.append(" {\n");
 
-        List<ModifiedThemeVariableDetails> modifiedThemeVariablesList =
-                Stream.of(modifiedThemeVariables, modifiedColorTemplateThemeVariables)
-                        .flatMap(Collection::stream)
-                        .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getName))
-                        .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getModule))
-                        .collect(Collectors.toList());
+        List<ModifiedThemeVariableDetails> modifiedThemeVariablesList = getModifiedThemeVariables();
 
         String module = null;
         for (ModifiedThemeVariableDetails details : modifiedThemeVariablesList) {
@@ -489,5 +497,13 @@ public class RespMainScreen extends MainScreen {
 
         builder.append("}");
         return builder.toString();
+    }
+
+    protected List<ModifiedThemeVariableDetails> getModifiedThemeVariables() {
+        return Stream.of(modifiedThemeVariables, modifiedColorTemplateThemeVariables)
+                .flatMap(Collection::stream)
+                .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getName))
+                .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getModule))
+                .collect(Collectors.toList());
     }
 }
