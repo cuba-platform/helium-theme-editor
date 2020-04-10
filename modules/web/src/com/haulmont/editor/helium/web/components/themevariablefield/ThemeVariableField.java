@@ -286,6 +286,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
 
         if (parentColorValue == null) {
             parentColorValue = details.getValue();
+            parentValue = null;
             removeThemeVariable();
         } else {
             String colorModifier = details.getColorModifier();
@@ -302,6 +303,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
             } else if (details.isCommentDependence()) {
                 setThemeVariable(parentColorValue, true);
             }
+            parentValue = parentColorValue;
         }
 
         valueField.setValue(null);
@@ -310,7 +312,6 @@ public class ThemeVariableField extends CompositeComponent<Form>
         } else {
             colorValueField.setValue(parentColorValue);
         }
-        this.parentValue = parentColorValue;
 
         String placeHolder = valueField.getInputPrompt();
         if (!placeHolder.startsWith("var(")) {
