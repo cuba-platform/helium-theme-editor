@@ -29,10 +29,10 @@
                                 width="100%"/>
                     </hbox>
                     <scrollBox id="settingsBox" stylename="settings-box" spacing="true" margin="true">
-                        <vbox spacing="true" margin="true" width="100%" stylename="card">
+                        <vbox margin="true" width="100%" stylename="card">
                             <vbox>
-                                <radioButtonGroup id="variantField" orientation="horizontal" width="100%"
-                                                  captionProperty="name"/>
+                                <radioButtonGroup id="variantField" orientation="horizontal" captionProperty="name"
+                                                  align="MIDDLE_CENTER"/>
                             </vbox>
                             <vbox>
                                 <label id="templateLabel"
