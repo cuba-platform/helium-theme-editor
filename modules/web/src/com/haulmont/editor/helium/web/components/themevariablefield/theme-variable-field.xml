@@ -15,7 +15,7 @@
                     <dependency path="vaadin://themevariablefield/theme-variable-field-connector.js"/>
                 </dependencies>
             </jsComponent>
-            <colorPicker id="colorValueField"/>
+            <colorPicker id="colorValueField" hsvVisible="true"/>
         </column>
     </form>
 </composite>
