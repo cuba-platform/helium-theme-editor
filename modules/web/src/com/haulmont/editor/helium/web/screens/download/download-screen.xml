@@ -13,7 +13,7 @@
         <textArea id="textArea" width="100%" editable="false"/>
         <hbox id="buttonsBox" align="MIDDLE_RIGHT" spacing="true">
             <button id="clipboardBtn" caption="msg://clipboardBtn" icon="CLIPBOARD" stylename="primary"/>
-            <button id="downloadBtn" caption="msg://downloadBtn" icon="DOWNLOAD" stylename="secondary"/>
+            <button id="downloadBtn" caption="msg://downloadBtn" icon="DOWNLOAD" stylename="secondary" visible="false"/>
             <button id="closeBtn" caption="msg://closeBtn"/>
         </hbox>
     </layout>
