@@ -1,5 +1,6 @@
 package com.haulmont.editor.helium.web.screens.sandbox;
 
+import com.haulmont.addon.helium.web.theme.HeliumThemeVariantsManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
@@ -47,8 +48,11 @@ public class ComponentsSandbox extends ScreenFragment {
     // Basic functionality
 
     @Inject
+    protected LookupField<String> sizeField;
+    @Inject
     protected TabSheet previewTabSheet;
-
+    @Inject
+    protected ScrollBoxLayout innerPreviewBox;
     @Inject
     protected Table<User> basicTable;
     @Inject
@@ -68,6 +72,8 @@ public class ComponentsSandbox extends ScreenFragment {
     protected DataComponents dataComponents;
     @Inject
     protected UserSettingsTools userSettingsTools;
+    @Inject
+    protected HeliumThemeVariantsManager variantsManager;
 
     protected String appWindowTheme;
 
@@ -77,9 +83,24 @@ public class ComponentsSandbox extends ScreenFragment {
     @Subscribe
     public void onInit(InitEvent event) {
         appWindowTheme = userSettingsTools.loadAppWindowTheme();
+        initSizeField();
         initDataContainers();
         initContainerSamples();
         initOptions();
+    }
+
+    @Subscribe("sizeField")
+    public void onSizeFieldValueChange(HasValue.ValueChangeEvent<String> event) {
+        String size = event.getValue() == null
+                ? ""
+                : event.getValue();
+
+        innerPreviewBox.setStyleName(size);
+    }
+
+    protected void initSizeField() {
+        sizeField.setOptionsList(variantsManager.getAppThemeSizeList());
+        sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
     }
 
     protected void initDataContainers() {

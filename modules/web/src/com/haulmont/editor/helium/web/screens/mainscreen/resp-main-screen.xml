@@ -42,15 +42,6 @@
                                 <lookupField id="templateField" width="100%" nullOptionVisible="false"/>
                             </vbox>
                         </vbox>
-                        <groupBox id="sizeBox" caption="msg://sizeBox.caption" spacing="true" collapsable="true"
-                                  collapsed="true" stylename="padding-less">
-                            <label id="sizeLabel"
-                                   align="MIDDLE_LEFT"
-                                   stylename="bold"
-                                   value="msg://sizeLabel.caption" width="100%"
-                                   contextHelpText="msg://sizeField.contextHelp"/>
-                            <lookupField id="sizeField" width="100%" nullOptionVisible="false"/>
-                        </groupBox>
                         <hbox spacing="true" width="100%">
                             <checkBox id="advancedModeValue" align="MIDDLE_LEFT" captionAsHtml="true"
                                       caption="msg://advancedModeLabel.value"/>

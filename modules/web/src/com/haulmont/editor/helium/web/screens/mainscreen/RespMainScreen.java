@@ -73,8 +73,6 @@ public class RespMainScreen extends MainScreen {
     @Inject
     protected LookupField<Template> templateField;
     @Inject
-    protected LookupField<String> sizeField;
-    @Inject
     protected RadioButtonGroup<Template> variantField;
     @Inject
     protected CssLayout sideMenuPanel;
@@ -94,7 +92,6 @@ public class RespMainScreen extends MainScreen {
         appWindowTheme = userSettingsTools.loadAppWindowTheme();
 
         initColorTemplates();
-        initSizeField();
         initThemeVariablesFields();
 
         updateAdvancedBoxesVisible(false);
@@ -140,11 +137,6 @@ public class RespMainScreen extends MainScreen {
         } else if (!customTemplate.equals(event.getValue())) {
             updateColorTemplate(event.getValue());
         }
-    }
-
-    @Subscribe("sizeField")
-    public void onSizeFieldValueChange(HasValue.ValueChangeEvent<String> event) {
-        updateMainScreenStyleName();
     }
 
 
@@ -241,11 +233,6 @@ public class RespMainScreen extends MainScreen {
                 : template.getName();
     }
 
-    protected void initSizeField() {
-        sizeField.setOptionsList(variantsManager.getAppThemeSizeList());
-        sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
-    }
-
     protected void initThemeVariablesFields() {
         List<Component> advancedGroupBoxLayouts = new ArrayList<>();
         for (ThemeVariable themeVariable : getDefaultThemeVariables()) {
@@ -263,7 +250,7 @@ public class RespMainScreen extends MainScreen {
 
                 if (module.equals(BASIC_MODULE_NAME)) {
                     ((GroupBoxLayout) groupBoxLayout).setExpanded(true);
-                    settingsBox.add(groupBoxLayout, 2);
+                    settingsBox.add(groupBoxLayout, 1);
                 } else if (module.equals(COMMON_MODULE_NAME)) {
                     settingsBox.add(groupBoxLayout);
                 } else {
@@ -354,7 +341,7 @@ public class RespMainScreen extends MainScreen {
     protected void updateMainScreenStyleName() {
         String colorTemplateValue = Objects.requireNonNull(variantField.getValue()).getName();
 
-        workArea.setStyleName(appWindowTheme + " " + colorTemplateValue + " " + sizeField.getValue());
+        workArea.setStyleName(appWindowTheme + " " + colorTemplateValue);
 
         updateMainScreenClassName(MAIN_CLASSNAME, colorTemplateValue);
         updateMainScreenClassName(OVERLAY_CLASSNAME, colorTemplateValue);
@@ -369,13 +356,12 @@ public class RespMainScreen extends MainScreen {
     protected void resetValues() {
         templateField.setValue(variantField.getValue());
         modifiedThemeVariables.clear();
-        sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
         updateMainScreenStyleName();
     }
 
     protected void updateAdvancedBoxesVisible(boolean value) {
         settingsBox.getOwnComponentsStream()
-                .skip(4) // skip Screen defaults and Basic groupboxes
+                .skip(3) // skip Screen defaults and Basic groupboxes
                 .forEach(component -> component.setVisible(value));
     }
 
