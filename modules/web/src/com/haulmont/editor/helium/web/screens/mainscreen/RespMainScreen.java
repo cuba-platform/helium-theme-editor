@@ -73,7 +73,7 @@ public class RespMainScreen extends MainScreen {
     @Inject
     protected LookupField<Template> templateField;
     @Inject
-    protected RadioButtonGroup<Template> variantField;
+    protected RadioButtonGroup<Template> baseThemeModeField;
     @Inject
     protected CssLayout sideMenuPanel;
     @Inject
@@ -117,12 +117,12 @@ public class RespMainScreen extends MainScreen {
                         modifiedThemeVariableDetails.getValue())));
     }
 
-    @Subscribe("variantField")
-    public void onVariantThemeFieldValueChange(HasValue.ValueChangeEvent<Template> event) {
+    @Subscribe("baseThemeModeField")
+    public void onBaseThemeModeFieldValueChange(HasValue.ValueChangeEvent<Template> event) {
         if (event.isUserOriginated()) {
             if (customTemplate.equals(templateField.getValue())
                     && event.isUserOriginated()) {
-                showConfirmationDialog(variantField, event.getValue(), event.getPrevValue());
+                showConfirmationDialog(baseThemeModeField, event.getValue(), event.getPrevValue());
             } else {
                 updateTemplateField(event.getValue());
             }
@@ -164,7 +164,7 @@ public class RespMainScreen extends MainScreen {
                                     .withHandler(actionPerformedEvent -> {
                                         modifiedThemeVariables = new ArrayList<>();
                                         modifiedColorTemplateThemeVariables = new ArrayList<>();
-                                        updateFieldsByColorTemplate(variantField.getValue());
+                                        updateFieldsByColorTemplate(baseThemeModeField.getValue());
                                         resetValues();
                                     }),
                             new DialogAction(DialogAction.Type.CANCEL)
@@ -181,8 +181,8 @@ public class RespMainScreen extends MainScreen {
                 .withScreenClass(DownloadScreen.class)
                 .withOptions(new MapScreenOptions(
                         ImmutableMap.of(
-                                DownloadScreen.VARIANT_PARAM,
-                                variantField.getValue().getName(),
+                                DownloadScreen.BASE_THEME_MODE_PARAM,
+                                baseThemeModeField.getValue().getName(),
                                 DownloadScreen.TEXT_PARAM,
                                 generateDownloadText()
                         )
@@ -197,16 +197,16 @@ public class RespMainScreen extends MainScreen {
 
     protected void initColorTemplates() {
         List<Template> templates = themeVariablesManager.getTemplates();
-        List<Template> variants = templates.stream()
+        List<Template> baseThemeModes = templates.stream()
                 .filter(template -> template.getParent() == null)
                 .collect(Collectors.toList());
-        variantField.setOptionsList(variants);
+        baseThemeModeField.setOptionsList(baseThemeModes);
 
-        currentTemplate = variants.stream()
+        currentTemplate = baseThemeModes.stream()
                 .filter(template -> Templates.LIGHT.equals(template.getName()))
                 .findFirst()
                 .orElse(null);
-        variantField.setValue(currentTemplate);
+        baseThemeModeField.setValue(currentTemplate);
 
         updateTemplateField(currentTemplate);
     }
@@ -219,16 +219,16 @@ public class RespMainScreen extends MainScreen {
         templateField.setValue(colorTemplate);
     }
 
-    @Install(to = "variantField", subject = "optionCaptionProvider")
-    protected String variantFieldOptionCaptionProvider(Template template) {
+    @Install(to = "baseThemeModeField", subject = "optionCaptionProvider")
+    protected String baseThemeModeFieldOptionCaptionProvider(Template template) {
         return template.getName();
     }
 
     @Install(to = "templateField", subject = "optionCaptionProvider")
     protected String templateFieldOptionCaptionProvider(Template template) {
-        return variantField.getOptions()
+        return baseThemeModeField.getOptions()
                 .getOptions()
-                .anyMatch(variant -> variant.equals(template))
+                .anyMatch(baseThemeMode -> baseThemeMode.equals(template))
                 ? template.getName() + " (default)"
                 : template.getName();
     }
@@ -289,14 +289,14 @@ public class RespMainScreen extends MainScreen {
         themeVariableField.setId(themeVariable.getName() + THEME_VARIABLE_FIELD_POSTFIX);
 
         themeVariableField.addColorValueChangeListener(valueChangeEvent -> {
-            boolean isVariant = valueChangeEvent.isUserOriginated();
-            updateThemeVariable(themeVariable.getName(), valueChangeEvent.getValue(), themeVariable.getModule(), isVariant);
+            boolean isBaseThemeMode = valueChangeEvent.isUserOriginated();
+            updateThemeVariable(themeVariable.getName(), valueChangeEvent.getValue(), themeVariable.getModule(), isBaseThemeMode);
 
             if (themeVariable.isRgbUsed()) {
                 updateThemeVariable(themeVariable.getName() + RGB_POSTFIX,
                         ThemeVariableUtils.convertHexToRGB(valueChangeEvent.getValue()),
                         themeVariable.getModule(),
-                        isVariant);
+                        isBaseThemeMode);
             }
 
             Template newTemplate = modifiedThemeVariables.isEmpty()
@@ -339,7 +339,7 @@ public class RespMainScreen extends MainScreen {
     }
 
     protected void updateMainScreenStyleName() {
-        String colorTemplateValue = Objects.requireNonNull(variantField.getValue()).getName();
+        String colorTemplateValue = Objects.requireNonNull(baseThemeModeField.getValue()).getName();
 
         workArea.setStyleName(appWindowTheme + " " + colorTemplateValue);
 
@@ -347,14 +347,14 @@ public class RespMainScreen extends MainScreen {
         updateMainScreenClassName(OVERLAY_CLASSNAME, colorTemplateValue);
     }
 
-    protected void updateMainScreenClassName(String mainClassName, String variant) {
+    protected void updateMainScreenClassName(String mainClassName, String baseThemeMode) {
         JavaScript.getCurrent()
                 .execute(String.format("document.getElementsByClassName('%s')[0].className = '%s %s'",
-                        mainClassName, mainClassName, variant));
+                        mainClassName, mainClassName, baseThemeMode));
     }
 
     protected void resetValues() {
-        templateField.setValue(variantField.getValue());
+        templateField.setValue(baseThemeModeField.getValue());
         modifiedThemeVariables.clear();
         updateMainScreenStyleName();
     }
@@ -374,19 +374,19 @@ public class RespMainScreen extends MainScreen {
                 });
     }
 
-    protected void updateThemeVariable(String themeVariableName, String value, String module, boolean isVariant) {
-        updateModifiedThemeVariables(themeVariableName, value, module, isVariant);
-        if (isVariant) {
+    protected void updateThemeVariable(String themeVariableName, String value, String module, boolean isBaseThemeMode) {
+        updateModifiedThemeVariables(themeVariableName, value, module, isBaseThemeMode);
+        if (isBaseThemeMode) {
             updateChildThemeVariables(themeVariableName, value);
         }
     }
 
-    protected void updateModifiedThemeVariables(String themeVariableName, String value, String module, boolean isVariant) {
+    protected void updateModifiedThemeVariables(String themeVariableName, String value, String module, boolean isBaseThemeMode) {
         if (value == null) {
             removeModifiedThemeVariableDetails(themeVariableName, modifiedThemeVariables);
             removeModifiedThemeVariableDetails(themeVariableName, modifiedColorTemplateThemeVariables);
         } else {
-            if (isVariant) {
+            if (isBaseThemeMode) {
                 addModifiedThemeVariableDetails(themeVariableName, value, module, modifiedThemeVariables);
                 removeModifiedThemeVariableDetails(themeVariableName, modifiedColorTemplateThemeVariables);
             } else {
@@ -455,9 +455,9 @@ public class RespMainScreen extends MainScreen {
     protected String generateDownloadText() {
         StringBuilder builder = new StringBuilder();
         builder.append(".helium");
-        if (!variantsManager.getDefaultAppThemeMode().equals(variantField.getValue().getName())) {
+        if (!variantsManager.getDefaultAppThemeMode().equals(baseThemeModeField.getValue().getName())) {
             builder.append(".")
-                    .append(variantField.getValue().getName());
+                    .append(baseThemeModeField.getValue().getName());
         }
         builder.append(" {\n");
 

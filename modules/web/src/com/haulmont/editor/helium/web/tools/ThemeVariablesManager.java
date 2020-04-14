@@ -51,13 +51,13 @@ public class ThemeVariablesManager {
     protected static final Pattern MODULE_PATTERN = Pattern.compile("(?<=/\\*\\s).*(?=\\s\\*/)");
 
     /**
-     * Variant regexp. Intended to match the variant value.
+     * Base theme mode regexp. Intended to match the base theme mode value.
      * <p>
      * Regexp explanation:
      * <ul>
-     *     <li>{@code (?<=&\.)} - matches the beginning of variant value</li>
+     *     <li>{@code (?<=&\.)} - matches the beginning of base theme mode value</li>
      *     <li>{@code \w*} - matches a color template</li>
-     *     <li>{@code (?=\s\{)} - matches the ending of variant value</li>
+     *     <li>{@code (?=\s\{)} - matches the ending of base theme mode value</li>
      * </ul>
      * <p>
      * Example:
@@ -65,17 +65,17 @@ public class ThemeVariablesManager {
      *      &.dark {
      * }</pre>
      * <ul>
-     *     <li>{@code dark} - a variant</li>
+     *     <li>{@code dark} - a base theme mode</li>
      * </ul>
      */
-    protected static final Pattern VARIANT_PATTERN = Pattern.compile("(?<=&\\.)\\w*(?=\\s\\{)");
+    protected static final Pattern BASE_THEME_MODE_PATTERN = Pattern.compile("(?<=&\\.)\\w*(?=\\s\\{)");
 
     /**
      * Color template regexp. Intended to match the color template.
      * <p>
      * Regexp explanation:
      * <ul>
-     *     <li>{@code (?<=\\.helium\\.)(\\w*)} - matches the variant value</li>
+     *     <li>{@code (?<=\\.helium\\.)(\\w*)} - matches the base theme mode value</li>
      *     <li>{@code \\.} - matches a dot</li>
      *     <li>{@code (\\w*)(?=\\s\\{)} - matches the color template value</li>
      * </ul>
@@ -85,16 +85,16 @@ public class ThemeVariablesManager {
      *      .helium.cobalt.light {
      * }</pre>
      * <ul>
-     *     <li>{@code light} - a variant</li>
+     *     <li>{@code light} - a base theme mode</li>
      *     <li>{@code cobalt} - a color template</li>
      * </ul>
      */
     protected static final Pattern COLOR_TEMPLATE_PATTERN = Pattern.compile("(?<=\\.helium\\.)(\\w*)\\.(\\w*)(?=\\s\\{)");
 
     /**
-     * The index of a variant in {@code COLOR_TEMPLATE_PATTERN} pattern.
+     * The index of a base theme mode in {@code COLOR_TEMPLATE_PATTERN} pattern.
      */
-    protected static final int VARIANT_GROUP = 1;
+    protected static final int BASE_THEME_MODE_GROUP = 1;
 
     /**
      * The index of a color template in {@code COLOR_TEMPLATE_PATTERN} pattern.
@@ -270,7 +270,7 @@ public class ThemeVariablesManager {
             Matcher matcher;
 
             while ((line = reader.readLine()) != null) {
-                matcher = VARIANT_PATTERN.matcher(line);
+                matcher = BASE_THEME_MODE_PATTERN.matcher(line);
                 if (matcher.find()) {
                     Template newTemplate = new Template(matcher.group());
                     templates.add(newTemplate);
@@ -279,11 +279,11 @@ public class ThemeVariablesManager {
 
                 matcher = COLOR_TEMPLATE_PATTERN.matcher(line);
                 if (matcher.find()) {
-                    String variant = matcher.group(VARIANT_GROUP);
+                    String baseThemeMode = matcher.group(BASE_THEME_MODE_GROUP);
                     String colorTemplateValue = matcher.group(COLOR_TEMPLATE_GROUP);
 
                     Template newTemplate = new Template(colorTemplateValue);
-                    newTemplate.setParent(getColorTemplateByName(variant));
+                    newTemplate.setParent(getColorTemplateByName(baseThemeMode));
 
                     templates.add(newTemplate);
                     template = newTemplate;

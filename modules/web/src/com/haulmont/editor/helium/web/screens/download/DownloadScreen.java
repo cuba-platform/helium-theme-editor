@@ -22,13 +22,13 @@ import javax.inject.Inject;
 @DialogMode(forceDialog = true)
 public class DownloadScreen extends Screen {
 
-    public static final String VARIANT_PARAM = "variant";
+    public static final String BASE_THEME_MODE_PARAM = "baseThemeMode";
     public static final String TEXT_PARAM = "text";
 
     protected static final String FILE_NAME = "helium-ext-defaults.scss";
 
-    @WindowParam(name = VARIANT_PARAM)
-    protected String variant;
+    @WindowParam(name = BASE_THEME_MODE_PARAM)
+    protected String baseThemeMode;
     @WindowParam(name = TEXT_PARAM)
     protected String text;
 
@@ -46,7 +46,7 @@ public class DownloadScreen extends Screen {
 
     @Subscribe
     public void onInit(InitEvent event) {
-        firstStepLabel.setValue(messages.formatMessage(DownloadScreen.class, "firstStep", variant));
+        firstStepLabel.setValue(messages.formatMessage(DownloadScreen.class, "firstStep", baseThemeMode));
         textArea.setValue(text);
     }
 

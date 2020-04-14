@@ -424,7 +424,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
         }
     }
 
-    protected void setThemeVariable(String value, boolean isVariant) {
+    protected void setThemeVariable(String value, boolean isBaseThemeMode) {
         javaScript.execute(String.format(SET_THEME_VARIABLE_VOID, themeVariable.getName(), value));
 
         if (themeVariable.isRgbUsed()) {
@@ -432,7 +432,7 @@ public class ThemeVariableField extends CompositeComponent<Form>
                     ThemeVariableUtils.convertHexToRGB(value)));
         }
 
-        fireValueChangeEvent(value, isVariant);
+        fireValueChangeEvent(value, isBaseThemeMode);
     }
 
     protected void removeThemeVariable() {
@@ -445,8 +445,8 @@ public class ThemeVariableField extends CompositeComponent<Form>
         fireValueChangeEvent(null, true);
     }
 
-    protected void fireValueChangeEvent(@Nullable String value, boolean isVariant) {
-        ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value, isVariant);
+    protected void fireValueChangeEvent(@Nullable String value, boolean isBaseThemeMode) {
+        ValueChangeEvent<String> valueChangeEvent = new ValueChangeEvent<>(valueField, value, value, isBaseThemeMode);
         publish(ValueChangeEvent.class, valueChangeEvent);
     }
 }

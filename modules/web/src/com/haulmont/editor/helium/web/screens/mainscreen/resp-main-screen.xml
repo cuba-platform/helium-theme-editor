@@ -31,7 +31,7 @@
                     <scrollBox id="settingsBox" stylename="settings-box" spacing="true" margin="true">
                         <vbox margin="true" width="100%" stylename="card">
                             <vbox>
-                                <radioButtonGroup id="variantField" orientation="horizontal" captionProperty="name"
+                                <radioButtonGroup id="baseThemeModeField" orientation="horizontal" captionProperty="name"
                                                   align="MIDDLE_CENTER"/>
                             </vbox>
                             <vbox>
