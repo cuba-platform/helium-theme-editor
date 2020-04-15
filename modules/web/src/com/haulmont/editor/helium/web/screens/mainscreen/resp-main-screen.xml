@@ -27,6 +27,9 @@
                         <button id="downloadBtn" caption="msg://downloadBtn.caption" icon="DOWNLOAD" height="100%"
                                 stylename="primary download-btn"
                                 width="100%"/>
+                        <button id="uploadBtn" caption="msg://uploadBtn.caption" icon="UPLOAD" height="100%"
+                                stylename="download-btn"
+                                width="100%"/>
                     </hbox>
                     <scrollBox id="settingsBox" stylename="settings-box" spacing="true" margin="true">
                         <vbox margin="true" width="100%" stylename="card">

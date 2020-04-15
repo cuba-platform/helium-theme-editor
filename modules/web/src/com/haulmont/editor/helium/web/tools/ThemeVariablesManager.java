@@ -132,7 +132,7 @@ public class ThemeVariablesManager {
      * </ul>
      */
     protected static final Pattern THEME_VARIABLE_PATTERN =
-            Pattern.compile("^^\\h+(-(-\\w+)*(-color|-color_rgb)*):\\h+([^;!]+)?;(\\h+//\\h+\\((-(-\\w+)*(?=\\)))\\)(?=\\h\\(|)(\\h\\((?i)(d|l)([0-9]+?%)|)|)");
+            Pattern.compile("^\\h*(-(-\\w+)*(-color|-color_rgb)*):\\h+([^;!]+)?;(\\h+//\\h+\\((-(-\\w+)*(?=\\)))\\)(?=\\h\\(|)(\\h\\((?i)(d|l)([0-9]+?%)|)|)");
 
     /**
      * The index of a theme variable name in {@code THEME_VARIABLE_PATTERN} pattern.
@@ -228,6 +228,81 @@ public class ThemeVariablesManager {
      */
     public List<Template> getTemplates() {
         return templates;
+    }
+
+    /**
+     * Parse uploaded theme variable details from reader.
+     *
+     * @param reader reader
+     * @return a list of uploaded theme variable details
+     */
+    public List<ModifiedThemeVariableDetails> parseUploadedThemeVariables(BufferedReader reader) {
+        List<ModifiedThemeVariableDetails> uploadedThemeVariables = new ArrayList<>();
+
+        try {
+            String line;
+            Matcher matcher;
+
+            while ((line = reader.readLine()) != null) {
+                matcher = THEME_VARIABLE_PATTERN.matcher(line);
+                if (matcher.find()) {
+                    String name = matcher.group(NAME_GROUP);
+                    String value = matcher.group(VALUE_GROUP);
+                    String parentVariableName = null;
+
+                    if (getThemeVariableByName(name) != null
+                            || (name.endsWith(RGB_POSTFIX)
+                            && getThemeVariableByName(name.substring(0, name.lastIndexOf(RGB_POSTFIX))) != null)) {
+                        ThemeVariable parentThemeVariable = loadParentThemeVariable(value);
+                        if (parentThemeVariable != null) {
+                            parentVariableName = parentThemeVariable.getName();
+                        }
+
+                        if (HEX_PATTERN.matcher(value).find()
+                                || RGB_PATTERN.matcher(value).find()
+                                || TRANSPARENT_COLOR_VALUE.equals(value)
+                                || parentThemeVariable != null) {
+                            ModifiedThemeVariableDetails details = getThemeVariableDetailsFromDetailsList(uploadedThemeVariables, name);
+                            if (details == null) {
+                                details = new ModifiedThemeVariableDetails();
+                                uploadedThemeVariables.add(details);
+                            }
+
+                            details.setName(name);
+                            details.setParentVariableName(parentVariableName);
+                            details.setValue(value);
+                        }
+                    }
+                }
+            }
+        } catch (
+                IOException e) {
+            log.error("Error parsing file with uploaded theme variables", e);
+        }
+
+        return uploadedThemeVariables;
+    }
+
+    /**
+     * Updates theme variable details by given template if the theme variable has a parent variable.
+     *
+     * @param themeVariableDetailsList a list of theme variable details
+     * @param template                 a template
+     * @return updated list of theme variable details
+     */
+    public List<ModifiedThemeVariableDetails> updateThemeVariableDetailsByTemplate(List<ModifiedThemeVariableDetails> themeVariableDetailsList, Template template) {
+        if (themeVariableDetailsList != null) {
+            themeVariableDetailsList.stream()
+                    .filter(details -> details.getParentVariableName() != null)
+                    .forEach(details -> {
+                        ThemeVariable themeVariable = getThemeVariableByName(details.getParentVariableName());
+                        ThemeVariableDetails variableDetails = themeVariable.getThemeVariableDetails(template);
+                        if (variableDetails != null) {
+                            details.setValue(variableDetails.getValue());
+                        }
+                    });
+        }
+        return themeVariableDetailsList;
     }
 
     /**
@@ -427,5 +502,19 @@ public class ThemeVariablesManager {
                 .findFirst()
                 .orElse(null)
                 : null;
+    }
+
+    /**
+     * Returns theme variable details from theme variable details list by name.
+     *
+     * @param themeVariableDetailsList a list of theme variable details
+     * @param name                     theme variable name
+     * @return theme variable details
+     */
+    protected ModifiedThemeVariableDetails getThemeVariableDetailsFromDetailsList(List<ModifiedThemeVariableDetails> themeVariableDetailsList, String name) {
+        return themeVariableDetailsList.stream()
+                .filter(uploadedThemeVariableDetails -> uploadedThemeVariableDetails.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }

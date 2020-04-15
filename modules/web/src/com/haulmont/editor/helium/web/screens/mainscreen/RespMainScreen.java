@@ -10,6 +10,7 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.mainwindow.AppWorkArea;
 import com.haulmont.cuba.gui.screen.Install;
 import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.StandardOutcome;
 import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
@@ -19,6 +20,7 @@ import com.haulmont.cuba.web.events.UIRefreshEvent;
 import com.haulmont.cuba.web.theme.HaloTheme;
 import com.haulmont.editor.helium.web.components.themevariablefield.ThemeVariableField;
 import com.haulmont.editor.helium.web.screens.download.DownloadScreen;
+import com.haulmont.editor.helium.web.screens.upload.UploadScreen;
 import com.haulmont.editor.helium.web.tools.ModifiedThemeVariableDetails;
 import com.haulmont.editor.helium.web.tools.Template;
 import com.haulmont.editor.helium.web.tools.Templates;
@@ -188,6 +190,42 @@ public class RespMainScreen extends MainScreen {
                         )
                 ))
                 .show();
+    }
+
+    @Subscribe("uploadBtn")
+    protected void onUploadBtnClick(Button.ClickEvent event) {
+        screenBuilders.screen(this)
+                .withScreenClass(UploadScreen.class)
+                .withOptions(new MapScreenOptions(
+                        ImmutableMap.of(
+                                UploadScreen.BASE_THEME_MODE_PARAM,
+                                baseThemeModeField.getValue(),
+                                UploadScreen.BASE_THEME_MODES_PARAM,
+                                baseThemeModeField.getOptions()
+                        )
+                ))
+                .withAfterCloseListener(afterScreenCloseEvent -> {
+                    if (afterScreenCloseEvent.closedWith(StandardOutcome.COMMIT)) {
+                        UploadScreen uploadScreen = afterScreenCloseEvent.getScreen();
+                        baseThemeModeField.setValue(uploadScreen.getBaseThemeMode());
+                        resetValues();
+                        applyUploadedThemeVariables(uploadScreen.getUploadedThemeVariables());
+                    }
+                })
+                .show();
+    }
+
+    protected void applyUploadedThemeVariables(List<ModifiedThemeVariableDetails> uploadedThemeVariables) {
+        if (uploadedThemeVariables != null
+                && !uploadedThemeVariables.isEmpty()) {
+            uploadedThemeVariables.forEach(uploadedThemeVariableDetails -> {
+                ThemeVariableField themeVariableField =
+                        (ThemeVariableField) settingsBox.getComponent(uploadedThemeVariableDetails.getName() + THEME_VARIABLE_FIELD_POSTFIX);
+                if (themeVariableField != null) {
+                    themeVariableField.setColorValue(uploadedThemeVariableDetails.getValue());
+                }
+            });
+        }
     }
 
     @Subscribe("advancedModeValue")

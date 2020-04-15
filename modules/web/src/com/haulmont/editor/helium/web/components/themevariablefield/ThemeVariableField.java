@@ -327,6 +327,10 @@ public class ThemeVariableField extends CompositeComponent<Form>
         }
     }
 
+    public void setColorValue(String value) {
+        valueField.setValue(value);
+    }
+
     public Subscription addColorValueChangeListener(Consumer<ValueChangeEvent<String>> listener) {
         return getEventHub().subscribe(ValueChangeEvent.class, (Consumer) listener);
     }
@@ -359,12 +363,10 @@ public class ThemeVariableField extends CompositeComponent<Form>
                 value = ThemeVariableUtils.getColorString(value);
             }
 
-            if (valueChangeEvent.isUserOriginated()) {
-                if (ThemeVariablesManager.TRANSPARENT_COLOR_VALUE.equals(value)) {
-                    colorValueField.setValue(null);
-                } else {
-                    colorValueField.setValue(value);
-                }
+            if (ThemeVariablesManager.TRANSPARENT_COLOR_VALUE.equals(value)) {
+                colorValueField.setValue(null);
+            } else {
+                colorValueField.setValue(value);
             }
 
             boolean valueIsNull = valueChangeEvent.getValue() == null;

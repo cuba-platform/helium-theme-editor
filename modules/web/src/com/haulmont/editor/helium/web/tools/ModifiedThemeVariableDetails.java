@@ -5,6 +5,7 @@ public class ModifiedThemeVariableDetails {
     protected String name;
     protected String module;
     protected String value;
+    protected String parentVariableName;
 
     public ModifiedThemeVariableDetails() {
     }
@@ -37,5 +38,13 @@ public class ModifiedThemeVariableDetails {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getParentVariableName() {
+        return parentVariableName;
+    }
+
+    public void setParentVariableName(String parentVariableName) {
+        this.parentVariableName = parentVariableName;
     }
 }

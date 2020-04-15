@@ -15,7 +15,7 @@ import com.haulmont.cuba.security.role.ScreenPermissionsContainer;
 
 @Role(name = "demo", description = "Demo role")
 public class DemoRole extends AnnotatedRoleDefinition {
-    @ScreenAccess(screenIds = {"respMainScreen", "helium_ComponentsSandbox", "helium_DownloadScreen", "helium_LegacyFrame", "inputDialog"})
+    @ScreenAccess(screenIds = {"respMainScreen", "helium_ComponentsSandbox", "helium_DownloadScreen", "helium_LegacyFrame", "inputDialog", "helium_UploadScreen"})
     @Override
     public ScreenPermissionsContainer screenPermissions() {
         return super.screenPermissions();

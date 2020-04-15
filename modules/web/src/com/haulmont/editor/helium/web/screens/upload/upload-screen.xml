@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://uploadScreen.caption"
+        messagesPack="com.haulmont.editor.helium.web.screens.upload">
+    <dialogMode height="600" width="800"/>
+    <layout expand="textArea" spacing="true" margin="true">
+        <label id="descriptionLabel" value="msg://description" align="MIDDLE_LEFT" htmlEnabled="true"/>
+        <hbox spacing="true" expand="firstStepLabel">
+            <label id="firstStepLabel" value="msg://firstStep" align="MIDDLE_LEFT" htmlEnabled="true"/>
+            <radioButtonGroup id="baseThemeModeField" orientation="horizontal"/>
+        </hbox>
+        <label id="secondStepLabel" value="msg://secondStep" align="MIDDLE_LEFT" htmlEnabled="true"/>
+        <label id="thirdStepLabel" value="msg://thirdStep" align="MIDDLE_LEFT" htmlEnabled="true"/>
+        <textArea id="textArea" width="100%"/>
+        <hbox id="buttonsBox" align="MIDDLE_RIGHT" spacing="true">
+            <button id="applyBtn" caption="msg://applyBtn" icon="OK" stylename="primary" enable="false"/>
+            <button id="cancelBtn" caption="msg://cancelBtn" icon="CANCEL"/>
+        </hbox>
+    </layout>
+</window>
