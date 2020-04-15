@@ -454,34 +454,45 @@ public class RespMainScreen extends MainScreen {
 
     protected String generateDownloadText() {
         StringBuilder builder = new StringBuilder();
-        builder.append(".helium");
-        if (!variantsManager.getDefaultAppThemeMode().equals(baseThemeModeField.getValue().getName())) {
+        boolean isDefaultThemeMode = variantsManager.getDefaultAppThemeMode().equals(baseThemeModeField.getValue().getName());
+        if (!isDefaultThemeMode) {
             builder.append(".")
-                    .append(baseThemeModeField.getValue().getName());
+                    .append(baseThemeModeField.getValue().getName())
+                    .append(" {\n");
         }
-        builder.append(" {\n");
 
         List<ModifiedThemeVariableDetails> modifiedThemeVariablesList = getModifiedThemeVariables();
 
         String module = null;
+        boolean firstModule = true;
         for (ModifiedThemeVariableDetails details : modifiedThemeVariablesList) {
             if (!details.getModule().equals(module)) {
+                if (firstModule) {
+                    firstModule = false;
+                } else {
+                    builder.append("\n");
+                }
+
                 module = details.getModule();
-                builder.append("\n")
-                        .append("  /* ")
+                builder.append("  /* ")
                         .append(module)
                         .append(" */")
                         .append("\n");
             }
 
-            builder.append("  ")
-                    .append(details.getName())
+            if (!isDefaultThemeMode) {
+                builder.append("  ");
+            }
+
+            builder.append(details.getName())
                     .append(": ")
                     .append(details.getValue())
                     .append(";\n");
         }
 
-        builder.append("}");
+        if (!isDefaultThemeMode) {
+            builder.append("}");
+        }
         return builder.toString();
     }
 
