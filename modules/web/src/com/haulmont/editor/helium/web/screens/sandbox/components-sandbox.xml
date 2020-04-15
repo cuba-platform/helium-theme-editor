@@ -6,11 +6,9 @@
             <tab id="basicFunctionalityBox" caption="msg://basicFunctionalityBox.caption" spacing="true" margin="true"
                  expand="innerPreviewBox">
                 <hbox id="sizeBox" spacing="true">
-                    <label id="sizeLabel"
-                           align="MIDDLE_LEFT"
-                           stylename="bold"
-                           value="msg://sizeLabel.caption" width="100%"/>
-                    <lookupField id="sizeField" width="100%" nullOptionVisible="false" contextHelpText="msg://sizeField.contextHelp"/>
+                    <radioButtonGroup id="sizeField"
+                                      align="MIDDLE_LEFT"
+                                      orientation="horizontal"/>
                 </hbox>
                 <scrollBox id="innerPreviewBox" height="100%" width="100%" spacing="true">
                     <flowBox spacing="true" width="100%">

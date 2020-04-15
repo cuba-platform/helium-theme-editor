@@ -48,7 +48,7 @@ public class ComponentsSandbox extends ScreenFragment {
     // Basic functionality
 
     @Inject
-    protected LookupField<String> sizeField;
+    protected RadioButtonGroup<String> sizeField;
     @Inject
     protected TabSheet previewTabSheet;
     @Inject
