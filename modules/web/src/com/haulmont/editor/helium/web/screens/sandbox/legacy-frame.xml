@@ -22,7 +22,7 @@
 
             <hbox spacing="true">
                 <searchField id="searchFieldLarge" caption="LARGE" stylename="large" optionsDatasource="usersDs"/>
-                <searchField id="searchFieldMiddle" caption="Middle" stylename="middle" optionsDatasource="usersDs"/>
+                <searchField id="searchFieldMedium" caption="Medium" stylename="medium" optionsDatasource="usersDs"/>
                 <searchField id="searchFieldSmall" caption="small" stylename="small" optionsDatasource="usersDs"/>
             </hbox>
         </groupBox>
@@ -40,7 +40,7 @@
             <hbox spacing="true">
                 <searchPickerField id="searchPickerFieldLarge" metaClass="sec$User" caption="LARGE" stylename="large"
                                    optionsDatasource="usersDs"/>
-                <searchPickerField id="searchPickerFieldMiddle" metaClass="sec$User" caption="Middle" stylename="middle"
+                <searchPickerField id="searchPickerFieldMedium" metaClass="sec$User" caption="Medium" stylename="medium"
                                    optionsDatasource="usersDs"/>
                 <searchPickerField id="searchPickerFieldSmall" metaClass="sec$User" caption="small" stylename="small"
                                    optionsDatasource="usersDs"/>

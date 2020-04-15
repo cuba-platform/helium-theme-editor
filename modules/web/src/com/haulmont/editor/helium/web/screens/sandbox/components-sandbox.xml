@@ -147,7 +147,7 @@
                                 <tab id="tabAccordion113"
                                      caption="Tab 3"/>
                             </accordion>
-                            <accordion height="400px" width="100%" stylename="middle">
+                            <accordion height="400px" width="100%" stylename="medium">
                                 <tab id="tabAccordion121"
                                      caption="Tab 1"/>
                                 <tab id="tabAccordion122"
@@ -169,7 +169,7 @@
                     <groupBox caption="Button" collapsable="true" spacing="true" collapsed="false">
                         <hbox spacing="true">
                             <button caption="LARGE" stylename="large"/>
-                            <button caption="Middle" stylename="middle"/>
+                            <button caption="Medium" stylename="medium"/>
                             <button caption="small" stylename="small"/>
                         </hbox>
                         <hbox spacing="true">
@@ -322,7 +322,7 @@
                         <hbox spacing="true">
                             <checkBox caption="normal"/>
                             <checkBox caption="LARGE" stylename="large"/>
-                            <checkBox caption="Middle" stylename="middle"/>
+                            <checkBox caption="Medium" stylename="medium"/>
                             <checkBox caption="small" stylename="small"/>
                         </hbox>
                         <checkBox caption="CheckBox"/>
@@ -336,7 +336,7 @@
                             <checkBoxGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                            align="MIDDLE_CENTER" stylename="large"/>
                             <checkBoxGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
-                                           align="MIDDLE_CENTER" stylename="middle"/>
+                                           align="MIDDLE_CENTER" stylename="medium"/>
                             <checkBoxGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                            align="MIDDLE_CENTER" stylename="small"/>
                         </hbox>
@@ -355,7 +355,7 @@
                                      swatchesVisible="true"/>
                         <hbox spacing="true">
                             <colorPicker caption="LARGE" stylename="large"/>
-                            <colorPicker caption="Middle" stylename="middle"/>
+                            <colorPicker caption="Medium" stylename="medium"/>
                             <colorPicker caption="small" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -380,8 +380,8 @@
                             <lookupField caption="LARGE"
                                          inputPrompt="Placeholder" stylename="large"
                                          optionsEnum="com.haulmont.cuba.core.global.SendingStatus"/>
-                            <lookupField caption="Middle"
-                                         inputPrompt="Placeholder" stylename="middle"
+                            <lookupField caption="Medium"
+                                         inputPrompt="Placeholder" stylename="medium"
                                          optionsEnum="com.haulmont.cuba.core.global.SendingStatus"/>
                             <lookupField caption="small"
                                          inputPrompt="Placeholder" stylename="small"
@@ -397,8 +397,8 @@
 
                         <hbox spacing="true">
                             <pickerField id="pickerFieldLarge" metaClass="sec$User" caption="LARGE" stylename="large"/>
-                            <pickerField id="pickerFieldMiddle" metaClass="sec$User" caption="Middle"
-                                         stylename="middle"/>
+                            <pickerField id="pickerFieldMedium" metaClass="sec$User" caption="Medium"
+                                         stylename="medium"/>
                             <pickerField id="pickerFieldSmall" metaClass="sec$User" caption="small" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -441,8 +441,8 @@
                                 </actions>
                             </lookupPickerField>
 
-                            <lookupPickerField id="lookupPickerFieldMiddle" metaClass="sec$User" caption="Middle"
-                                               stylename="middle">
+                            <lookupPickerField id="lookupPickerFieldMedium" metaClass="sec$User" caption="Medium"
+                                               stylename="medium">
                                 <actions>
                                     <action id="lookup" type="picker_lookup"/>
                                     <action id="clear" type="picker_clear"/>
@@ -469,7 +469,7 @@
                                        description="Description"/>
                         <hbox spacing="true">
                             <currencyField caption="LARGE" stylename="large" currency="$"/>
-                            <currencyField caption="Middle" stylename="middle" currency="$"/>
+                            <currencyField caption="Medium" stylename="medium" currency="$"/>
                             <currencyField caption="small" stylename="small" currency="$"/>
                         </hbox>
                     </groupBox>
@@ -492,7 +492,7 @@
                         </hbox>
                         <hbox spacing="true">
                             <dateField caption="LARGE" stylename="large"/>
-                            <dateField caption="Middle" stylename="middle"/>
+                            <dateField caption="Medium" stylename="medium"/>
                             <dateField caption="small" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -510,7 +510,7 @@
                         </hbox>
                         <hbox spacing="true">
                             <timeField caption="LARGE" stylename="large"/>
-                            <timeField caption="Middle" stylename="middle"/>
+                            <timeField caption="Medium" stylename="medium"/>
                             <timeField caption="small" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -527,7 +527,7 @@
                         </hbox>
                         <hbox spacing="true">
                             <datePicker caption="LARGE" stylename="large"/>
-                            <datePicker caption="Middle" stylename="middle"/>
+                            <datePicker caption="Medium" stylename="medium"/>
                             <datePicker caption="small" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -645,11 +645,11 @@
                                   target="_blank"
                                   url="https://www.cuba-platform.com/"
                                   stylename="large"/>
-                            <link caption="Middle"
+                            <link caption="Medium"
                                   icon="icons/chain.png"
                                   target="_blank"
                                   url="https://www.cuba-platform.com/"
-                                  stylename="middle"/>
+                                  stylename="medium"/>
                             <link caption="small"
                                   icon="icons/chain.png"
                                   target="_blank"
@@ -683,7 +683,7 @@
                             <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                           align="MIDDLE_CENTER" stylename="large"/>
                             <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
-                                          align="MIDDLE_CENTER" stylename="middle"/>
+                                          align="MIDDLE_CENTER" stylename="medium"/>
                             <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                           align="MIDDLE_CENTER" stylename="small"/>
                         </hbox>
@@ -694,7 +694,7 @@
                             <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" multiselect="true"
                                           align="MIDDLE_CENTER" stylename="large"/>
                             <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" multiselect="true"
-                                          align="MIDDLE_CENTER" stylename="middle"/>
+                                          align="MIDDLE_CENTER" stylename="medium"/>
                             <optionsGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus" multiselect="true"
                                           align="MIDDLE_CENTER" stylename="small"/>
                         </hbox>
@@ -722,9 +722,9 @@
                             <optionsList caption="LARGE"
                                          optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                          stylename="large"/>
-                            <optionsList caption="Middle"
+                            <optionsList caption="Medium"
                                          optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
-                                         stylename="middle"/>
+                                         stylename="medium"/>
                             <optionsList caption="small"
                                          optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                          stylename="small"/>
@@ -788,7 +788,7 @@
                             <radioButtonGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                               align="MIDDLE_CENTER" stylename="large"/>
                             <radioButtonGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
-                                              align="MIDDLE_CENTER" stylename="middle"/>
+                                              align="MIDDLE_CENTER" stylename="medium"/>
                             <radioButtonGroup optionsEnum="com.haulmont.cuba.core.global.SendingStatus"
                                               align="MIDDLE_CENTER" stylename="small"/>
                         </hbox>
@@ -802,7 +802,7 @@
 
                         <vbox spacing="true">
                             <richTextArea caption="LARGE" stylename="large"/>
-                            <richTextArea caption="Middle" stylename="middle"/>
+                            <richTextArea caption="Medium" stylename="medium"/>
                             <richTextArea caption="small" stylename="small"/>
                         </vbox>
                     </groupBox>
@@ -851,7 +851,7 @@
 
                         <hbox spacing="true">
                             <sourceCodeEditor caption="LARGE" stylename="large"/>
-                            <sourceCodeEditor caption="Middle" stylename="middle"/>
+                            <sourceCodeEditor caption="Medium" stylename="medium"/>
                             <sourceCodeEditor caption="small" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -888,10 +888,10 @@
                                              caption="LARGE"
                                              inputPrompt="Start typing"
                                              stylename="large"/>
-                            <suggestionField id="suggestionFieldMiddle"
-                                             caption="Middle"
+                            <suggestionField id="suggestionFieldMedium"
+                                             caption="Medium"
                                              inputPrompt="Start typing"
-                                             stylename="middle"/>
+                                             stylename="medium"/>
                             <suggestionField id="suggestionFieldSmall"
                                              caption="small"
                                              inputPrompt="Start typing"
@@ -939,11 +939,11 @@
                                     <action id="open" type="picker_open"/>
                                 </actions>
                             </suggestionPickerField>
-                            <suggestionPickerField id="suggestionPickerFieldMiddle"
+                            <suggestionPickerField id="suggestionPickerFieldMedium"
                                                    metaClass="sec$User"
-                                                   caption="Middle"
+                                                   caption="Medium"
                                                    inputPrompt="Start typing"
-                                                   stylename="middle">
+                                                   stylename="medium">
                                 <actions>
                                     <action id="open" type="picker_open"/>
                                 </actions>
@@ -1029,9 +1029,9 @@
                             </columns>
                         </table>
 
-                        <table id="middleTableSample" metaClass="sec$User" width="100%" height="300px"
+                        <table id="mediumTableSample" metaClass="sec$User" width="100%" height="300px"
                                multiselect="true"
-                               caption="Middle" stylename="middle">
+                               caption="Medium" stylename="medium">
                             <columns>
                                 <column id="login"/>
                                 <column id="name"/>
@@ -1100,7 +1100,7 @@
                                     <tab id="tab113"
                                          caption="Tab 3"/>
                                 </tabSheet>
-                                <tabSheet height="100px" width="100%" stylename="framed middle">
+                                <tabSheet height="100px" width="100%" stylename="framed medium">
                                     <tab id="tab121"
                                          caption="Tab 1"/>
                                     <tab id="tab122"
@@ -1128,7 +1128,7 @@
                                    description="Description"/>
                         <hbox spacing="true">
                             <textField caption="LARGE" inputPrompt="Placeholder" stylename="large"/>
-                            <textField caption="Middle" inputPrompt="Placeholder" stylename="middle"/>
+                            <textField caption="Medium" inputPrompt="Placeholder" stylename="medium"/>
                             <textField caption="small" inputPrompt="Placeholder" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -1144,7 +1144,7 @@
 
                         <vbox spacing="true">
                             <textArea caption="LARGE" inputPrompt="Placeholder" stylename="large" width="100%"/>
-                            <textArea caption="Middle" inputPrompt="Placeholder" stylename="middle" width="100%"/>
+                            <textArea caption="Medium" inputPrompt="Placeholder" stylename="medium" width="100%"/>
                             <textArea caption="small" inputPrompt="Placeholder" stylename="small" width="100%"/>
                         </vbox>
                     </groupBox>
@@ -1158,7 +1158,7 @@
                             <resizableTextArea id="resizableTextAreaD" caption="Disabled" enable="false"/>
                             <resizableTextArea id="resizableTextAreaR" caption="Required" required="true"/>
                             <resizableTextArea caption="LARGE" inputPrompt="Placeholder" stylename="large"/>
-                            <resizableTextArea caption="Middle" inputPrompt="Placeholder" stylename="middle"/>
+                            <resizableTextArea caption="Medium" inputPrompt="Placeholder" stylename="medium"/>
                             <resizableTextArea caption="small" inputPrompt="Placeholder" stylename="small"/>
                         </vbox>
                     </groupBox>
@@ -1171,7 +1171,7 @@
                                      description="Description" mask="###-##-##"/>
                         <hbox spacing="true">
                             <maskedField caption="LARGE" mask="###-##-##" stylename="large"/>
-                            <maskedField caption="Middle" mask="###-##-##" stylename="middle"/>
+                            <maskedField caption="Medium" mask="###-##-##" stylename="medium"/>
                             <maskedField caption="small" mask="###-##-##" stylename="small"/>
                         </hbox>
                     </groupBox>
@@ -1207,7 +1207,7 @@
                                 <lookup lookup="true"/>
                             </tokenList>
 
-                            <tokenList id="tokenListMiddle" caption="Middle" stylename="middle">
+                            <tokenList id="tokenListMedium" caption="Medium" stylename="medium">
                                 <lookup lookup="true"/>
                             </tokenList>
 
@@ -1245,8 +1245,8 @@
                                         stylename="large"
                                         addAllBtnEnabled="true"
                                         width="100%"/>
-                            <twinColumn id="twinColumnMiddle"
-                                        stylename="middle"
+                            <twinColumn id="twinColumnMedium"
+                                        stylename="medium"
                                         addAllBtnEnabled="true"
                                         width="100%"/>
                             <twinColumn id="twinColumnSmall"

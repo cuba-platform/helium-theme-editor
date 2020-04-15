@@ -193,7 +193,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected PickerField<User> pickerFieldSmall;
     @Inject
-    protected PickerField<User> pickerFieldMiddle;
+    protected PickerField<User> pickerFieldMedium;
     @Inject
     protected PickerField<User> pickerFieldLarge;
     @Inject
@@ -208,7 +208,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected LookupPickerField<User> lookupPickerFieldD;
     @Inject
-    protected LookupPickerField<User> lookupPickerFieldMiddle;
+    protected LookupPickerField<User> lookupPickerFieldMedium;
     @Inject
     protected LookupPickerField<User> lookupPickerFieldSmall;
     @Inject
@@ -233,7 +233,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected TokenList<User> tokenListSample;
     @Inject
-    protected TokenList<User> tokenListMiddle;
+    protected TokenList<User> tokenListMedium;
     @Inject
     protected TokenList<User> tokenListLarge;
     @Inject
@@ -250,7 +250,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected Table<User> largeTableSample;
     @Inject
-    protected Table<User> middleTableSample;
+    protected Table<User> mediumTableSample;
     @Inject
     protected Table<User> smallTableSample;
     @Inject
@@ -288,7 +288,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected TwinColumn<Group> twinColumnLarge;
     @Inject
-    protected TwinColumn<Group> twinColumnMiddle;
+    protected TwinColumn<Group> twinColumnMedium;
     @Inject
     protected TwinColumn<Group> twinColumnSmall;
     @Inject
@@ -304,7 +304,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected SuggestionField<User> suggestionFieldLarge;
     @Inject
-    protected SuggestionField<User> suggestionFieldMiddle;
+    protected SuggestionField<User> suggestionFieldMedium;
     @Inject
     protected SuggestionField<User> suggestionFieldSmall;
     @Inject
@@ -319,7 +319,7 @@ public class ComponentsSandbox extends ScreenFragment {
     @Inject
     protected SuggestionPickerField<User> suggestionPickerFieldLarge;
     @Inject
-    protected SuggestionPickerField<User> suggestionPickerFieldMiddle;
+    protected SuggestionPickerField<User> suggestionPickerFieldMedium;
     @Inject
     protected SuggestionPickerField<User> suggestionPickerFieldSmall;
     @Inject
@@ -358,7 +358,7 @@ public class ComponentsSandbox extends ScreenFragment {
         pickerFieldRO.setValue(usersDc.getItems().get(0));
         pickerFieldD.setValue(usersDc.getItems().get(0));
         pickerFieldLarge.setValue(usersDc.getItems().get(0));
-        pickerFieldMiddle.setValue(usersDc.getItems().get(0));
+        pickerFieldMedium.setValue(usersDc.getItems().get(0));
         pickerFieldSmall.setValue(usersDc.getItems().get(0));
 
         lookupPickerField.setOptionsList(usersDc.getItems());
@@ -366,7 +366,7 @@ public class ComponentsSandbox extends ScreenFragment {
         lookupPickerFieldRO.setOptionsList(usersDc.getItems());
         lookupPickerFieldD.setOptionsList(usersDc.getItems());
         lookupPickerFieldLarge.setOptionsList(usersDc.getItems());
-        lookupPickerFieldMiddle.setOptionsList(usersDc.getItems());
+        lookupPickerFieldMedium.setOptionsList(usersDc.getItems());
         lookupPickerFieldSmall.setOptionsList(usersDc.getItems());
 
         lookupPickerField.setValue(usersDc.getItems().get(0));
@@ -374,7 +374,7 @@ public class ComponentsSandbox extends ScreenFragment {
         lookupPickerFieldRO.setValue(usersDc.getItems().get(0));
         lookupPickerFieldD.setValue(usersDc.getItems().get(0));
         lookupPickerFieldLarge.setValue(usersDc.getItems().get(0));
-        lookupPickerFieldMiddle.setValue(usersDc.getItems().get(0));
+        lookupPickerFieldMedium.setValue(usersDc.getItems().get(0));
         lookupPickerFieldSmall.setValue(usersDc.getItems().get(0));
 
         radioButtonGroupRO.setValue(RoleType.DENYING);
@@ -384,7 +384,7 @@ public class ComponentsSandbox extends ScreenFragment {
         tokenListSmall.setOptionsList(usersDc.getItems());
         tokenListSimple.setOptionsList(usersDc.getItems());
         tokenListSample.setOptionsList(usersDc.getItems());
-        tokenListMiddle.setOptionsList(usersDc.getItems());
+        tokenListMedium.setOptionsList(usersDc.getItems());
         tokenListLarge.setOptionsList(usersDc.getItems());
         tokenListInline.setOptionsList(usersDc.getItems());
         tokenListDisabledSimple.setOptionsList(usersDc.getItems());
@@ -394,7 +394,7 @@ public class ComponentsSandbox extends ScreenFragment {
         tokenListSmall.setValue(tokenListSmall.getOptions().getOptions().skip(2).collect(Collectors.toList()));
         tokenListSimple.setValue(tokenListSimple.getOptions().getOptions().skip(2).collect(Collectors.toList()));
         tokenListSample.setValue(tokenListSample.getOptions().getOptions().skip(2).collect(Collectors.toList()));
-        tokenListMiddle.setValue(tokenListMiddle.getOptions().getOptions().skip(2).collect(Collectors.toList()));
+        tokenListMedium.setValue(tokenListMedium.getOptions().getOptions().skip(2).collect(Collectors.toList()));
         tokenListLarge.setValue(tokenListLarge.getOptions().getOptions().skip(2).collect(Collectors.toList()));
         tokenListInline.setValue(tokenListInline.getOptions().getOptions().skip(2).collect(Collectors.toList()));
         tokenListDisabledSimple.setValue(tokenListDisabledSimple.getOptions().getOptions().skip(2).collect(Collectors.toList()));
@@ -417,7 +417,7 @@ public class ComponentsSandbox extends ScreenFragment {
         tableSample.setItems(new ContainerTableItems<>(usersDc));
         groupTableSample.setItems(new ContainerGroupTableItems<>(usersDc));
         smallTableSample.setItems(new ContainerTableItems<>(usersDc));
-        middleTableSample.setItems(new ContainerTableItems<>(usersDc));
+        mediumTableSample.setItems(new ContainerTableItems<>(usersDc));
         largeTableSample.setItems(new ContainerTableItems<>(usersDc));
         tablePopupView.setItems(new ContainerTableItems<>(usersDc));
         dataGridSample.setItems(new ContainerDataGridItems<>(usersDc));
@@ -429,7 +429,7 @@ public class ComponentsSandbox extends ScreenFragment {
         twinColumnSample.setOptionsList(groupsDc.getItems());
         twinColumnRequired.setOptionsList(groupsDc.getItems());
         twinColumnSmall.setOptionsList(groupsDc.getItems());
-        twinColumnMiddle.setOptionsList(groupsDc.getItems());
+        twinColumnMedium.setOptionsList(groupsDc.getItems());
         twinColumnLarge.setOptionsList(groupsDc.getItems());
 
         progressBar.setValue(0.5);
@@ -440,14 +440,14 @@ public class ComponentsSandbox extends ScreenFragment {
         suggestionFieldDisabled.setSearchExecutor(this::userSearchExecutor);
         suggestionFieldRequired.setSearchExecutor(this::userSearchExecutor);
         suggestionFieldLarge.setSearchExecutor(this::userSearchExecutor);
-        suggestionFieldMiddle.setSearchExecutor(this::userSearchExecutor);
+        suggestionFieldMedium.setSearchExecutor(this::userSearchExecutor);
         suggestionFieldSmall.setSearchExecutor(this::userSearchExecutor);
 
         suggestionPickerFieldSample.setSearchExecutor(this::userSearchExecutor);
         suggestionPickerFieldReadonly.setSearchExecutor(this::userSearchExecutor);
         suggestionPickerFieldDisabled.setSearchExecutor(this::userSearchExecutor);
         suggestionPickerFieldLarge.setSearchExecutor(this::userSearchExecutor);
-        suggestionPickerFieldMiddle.setSearchExecutor(this::userSearchExecutor);
+        suggestionPickerFieldMedium.setSearchExecutor(this::userSearchExecutor);
         suggestionPickerFieldSmall.setSearchExecutor(this::userSearchExecutor);
 
         ListCalendarEventProvider eventProvider = new ListCalendarEventProvider();
