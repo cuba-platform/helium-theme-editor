@@ -537,8 +537,21 @@ public class RespMainScreen extends MainScreen {
     protected List<ModifiedThemeVariableDetails> getModifiedThemeVariables() {
         return Stream.of(modifiedThemeVariables, modifiedColorTemplateThemeVariables)
                 .flatMap(Collection::stream)
-                .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getName))
-                .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getModule))
+                .sorted(Comparator.comparing(ModifiedThemeVariableDetails::getModule, (module1, module2) -> {
+                    if (COMMON_MODULE_NAME.equals(module1) && !COMMON_MODULE_NAME.equals(module2)) {
+                        return BASIC_MODULE_NAME.equals(module2)
+                                ? 1
+                                : -1;
+                    }
+
+                    if (COMMON_MODULE_NAME.equals(module2) && !COMMON_MODULE_NAME.equals(module1)) {
+                        return BASIC_MODULE_NAME.equals(module1)
+                                ? 1
+                                : -1;
+                    }
+
+                    return module1.compareTo(module2);
+                }).thenComparing(ModifiedThemeVariableDetails::getName))
                 .collect(Collectors.toList());
     }
 }
