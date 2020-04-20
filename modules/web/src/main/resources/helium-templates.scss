@@ -98,7 +98,7 @@
   --button-default-disabled-color: #6B248F;
   --button-default-hover-color: #8A2EB8;
   --button-secondary-active-color: #424242;
-  --button-secondary-color: #555555;
+  --button-secondary-color: #555555;                                            // (--secondary-color)
   --button-secondary-disabled-color: #3B3B3B;
   --button-secondary-disabled-text-color: #FFFFFF;
   --button-secondary-focused-border-color: #555555;
@@ -140,6 +140,7 @@
   --button-primary-disabled-color: #473692;                                     // (--primary-dim-color)
   --button-success-disabled-color: #257759;                                     // (--success-dim-color)
 
+  --button-secondary-color: #F2F2F2;                                            // (--secondary-color)
   --button-secondary-active-color: #BFBFBF;
   --button-secondary-disabled-color: transparent;
   --button-secondary-focused-border-color: #F2F2F2;
