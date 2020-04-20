@@ -1,7 +1,1 @@
-# Helium theme editor
-Editor for Helium theme
-
-> ### 🛠 Status: preview
-> Helium theme editor is currently in preview status.
-
-![teaser](img/teaser.png)
+Helium editor is available [online](https://demo10.cuba-platform.com/helium-editor/)
