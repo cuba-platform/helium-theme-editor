@@ -546,8 +546,8 @@ public class RespMainScreen extends MainScreen {
 
                     if (COMMON_MODULE_NAME.equals(module2) && !COMMON_MODULE_NAME.equals(module1)) {
                         return BASIC_MODULE_NAME.equals(module1)
-                                ? 1
-                                : -1;
+                                ? -1
+                                : 1;
                     }
 
                     return module1.compareTo(module2);
