@@ -14,7 +14,7 @@
     <dialogMode height="600"
                 width="800"/>
     <layout spacing="true">
-        <groupBox caption="SearchField" spacing="true" collapsable="true" collapsed="false">
+        <groupBox caption="SearchField" spacing="true" collapsable="true" collapsed="true">
             <searchField id="searchFieldSample" caption="SearchField" optionsDatasource="usersDs"/>
             <searchField id="searchFieldReadonly" caption="Read-only" editable="false" optionsDatasource="usersDs"/>
             <searchField id="searchFieldDisabled" caption="Disabled" enable="false" optionsDatasource="usersDs"/>
@@ -27,7 +27,7 @@
             </hbox>
         </groupBox>
 
-        <groupBox caption="SearchPickerField" spacing="true" collapsable="true" collapsed="false">
+        <groupBox caption="SearchPickerField" spacing="true" collapsable="true" collapsed="true">
             <searchPickerField id="searchPickerFieldSample" caption="SearchPickerField" metaClass="sec$User"
                                optionsDatasource="usersDs"/>
             <searchPickerField id="searchPickerFieldReadonly" caption="Read-only" editable="false" metaClass="sec$User"

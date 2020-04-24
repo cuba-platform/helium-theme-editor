@@ -166,7 +166,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="Button" collapsable="true" spacing="true" collapsed="false">
+                    <groupBox caption="Button" collapsable="true" spacing="true" collapsed="true">
                         <hbox spacing="true">
                             <button caption="LARGE" stylename="large"/>
                             <button caption="Medium" stylename="medium"/>
@@ -266,7 +266,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="Calendar" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="Calendar" spacing="true" collapsable="true" collapsed="true">
                         <tabSheet width="100%" height="800px">
                             <tab id="monthTab" caption="Month Calendar" margin="true,false,false,false">
                                 <calendar id="monthCalendar"
@@ -293,7 +293,7 @@
                         </tabSheet>
                     </groupBox>
 
-                    <groupBox caption="CapsLockIndicator" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="CapsLockIndicator" spacing="true" collapsable="true" collapsed="true">
                         <hbox spacing="true">
                             <groupBox caption="Simple CapsLockIndicator">
                                 <capsLockIndicator id="capsLock1"
@@ -318,7 +318,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="CheckBox" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="CheckBox" spacing="true" collapsable="true" collapsed="true">
                         <hbox spacing="true">
                             <checkBox caption="normal"/>
                             <checkBox caption="LARGE" stylename="large"/>
@@ -342,7 +342,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="ColorPicker" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="ColorPicker" spacing="true" collapsable="true" collapsed="true">
                         <colorPicker/>
                         <colorPicker caption="Read-only" editable="false"/>
                         <colorPicker caption="Disabled" enable="false"/>
@@ -360,7 +360,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="LookupField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="LookupField" spacing="true" collapsable="true" collapsed="true">
                         <lookupField caption="LookupField" inputPrompt="Placeholder"
                                      optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
                         <lookupField id="lookupFieldRO" caption="Read-only" editable="false"
@@ -389,7 +389,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="PickerField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="PickerField" spacing="true" collapsable="true" collapsed="true">
                         <pickerField id="pickerField" caption="PickerField" metaClass="sec$User"/>
                         <pickerField id="pickerFieldRO" caption="Read-only" editable="false" metaClass="sec$User"/>
                         <pickerField id="pickerFieldD" caption="Disabled" enable="false" metaClass="sec$User"/>
@@ -403,7 +403,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="LookupPickerField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="LookupPickerField" spacing="true" collapsable="true" collapsed="true">
                         <lookupPickerField id="lookupPickerField" caption="LookupPickerField" metaClass="sec$User">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>
@@ -459,7 +459,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="CurrencyField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="CurrencyField" spacing="true" collapsable="true" collapsed="true">
                         <currencyField caption="CurrencyField" icon="APPLE" currency="$"/>
                         <currencyField caption="CurrencyField" icon="APPLE" currency="$" currencyLabelPosition="LEFT"/>
                         <currencyField caption="Read-only" editable="false" currency="$"/>
@@ -474,7 +474,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="DateField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="DateField" spacing="true" collapsable="true" collapsed="true">
                         <dateField id="dateField" caption="DateField"/>
                         <dateField caption="Read-only" editable="false"/>
                         <dateField caption="Disabled" enable="false"/>
@@ -497,7 +497,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="TimeField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="TimeField" spacing="true" collapsable="true" collapsed="true">
                         <timeField caption="TimeField"/>
                         <timeField caption="Read-only" editable="false"/>
                         <timeField caption="Disabled" enable="false"/>
@@ -515,7 +515,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="DatePicker" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="DatePicker" spacing="true" collapsable="true" collapsed="true">
                         <datePicker caption="DatePicker"/>
                         <datePicker caption="Read-only" editable="false"/>
                         <datePicker caption="Disabled" enable="false"/>
@@ -532,7 +532,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="DataGrid" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="DataGrid" spacing="true" collapsable="true" collapsed="true">
                         <dataGrid id="dataGridSample" metaClass="sec$User" width="100%" height="600px"
                                   selectionMode="MULTI"
                                   editorEnabled="true" editorBuffered="true"
@@ -563,7 +563,7 @@
                         </dataGrid>
                     </groupBox>
 
-                    <groupBox caption="Dialogs" collapsable="true" spacing="true" collapsed="false"
+                    <groupBox caption="Dialogs" collapsable="true" spacing="true" collapsed="true"
                               orientation="horizontal"
                               expand="spacerD">
                         <button id="showMessageDialogBtn" caption="Show Message Dialog"/>
@@ -572,7 +572,7 @@
                         <label id="spacerD"/>
                     </groupBox>
 
-                    <groupBox caption="Form" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="Form" spacing="true" collapsable="true" collapsed="true">
                         <form childrenCaptionWidth="300px" childrenCaptionAlignment="RIGHT">
                             <textField caption="TextField"/>
                             <checkBox caption="CheckBox"/>
@@ -583,7 +583,7 @@
                         </form>
                     </groupBox>
 
-                    <groupBox caption="Label" spacing="true" collapsable="true" collapsed="false"
+                    <groupBox caption="Label" spacing="true" collapsable="true" collapsed="true"
                               orientation="horizontal">
                         <hbox spacing="true">
                             <groupBox caption="Font variants"
@@ -623,7 +623,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="Link" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="Link" spacing="true" collapsable="true" collapsed="true">
                         <link caption="Link"
                               target="_blank"
                               url="https://www.cuba-platform.com/"/>
@@ -658,7 +658,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="Notifications" collapsable="true" spacing="true" collapsed="false"
+                    <groupBox caption="Notifications" collapsable="true" spacing="true" collapsed="true"
                               orientation="horizontal"
                               expand="spacerN">
                         <button id="showTrayBtn" caption="Tray"/>
@@ -669,7 +669,7 @@
                         <label id="spacerN"/>
                     </groupBox>
 
-                    <groupBox caption="OptionsGroup" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="OptionsGroup" spacing="true" collapsable="true" collapsed="true">
                         <optionsGroup optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
                         <optionsGroup id="optionsGroupRO" caption="Read-only" editable="false"
                                       optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
@@ -702,7 +702,7 @@
                                       multiselect="true"/>
                     </groupBox>
 
-                    <groupBox caption="OptionsList" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="OptionsList" spacing="true" collapsable="true" collapsed="true">
                         <optionsList optionsEnum="com.haulmont.cuba.security.entity.RoleType"
                                      height="180px"
                                      width="160px"/>
@@ -731,7 +731,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="PopupView" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="PopupView" spacing="true" collapsable="true" collapsed="true">
                         <popupView caption="Hide by clicking on outside area" minimizedValue="Click me!"
                                    hideOnMouseOut="false">
                             <vbox spacing="true">
@@ -771,14 +771,14 @@
                         </popupView>
                     </groupBox>
 
-                    <groupBox caption="ProgressBar" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="ProgressBar" spacing="true" collapsable="true" collapsed="true">
                         <progressBar id="progressBar" caption="ProgressBar" width="100%"/>
                         <progressBar id="progressBarP" caption="Point" width="100%" stylename="point"/>
                         <progressBar indeterminate="true" width="500px"/>
                         <progressBar indeterminate="true" stylename="indeterminate-circle"/>
                     </groupBox>
 
-                    <groupBox caption="RadioButtonGroup" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="RadioButtonGroup" spacing="true" collapsable="true" collapsed="true">
                         <radioButtonGroup optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
                         <radioButtonGroup id="radioButtonGroupRO" caption="Read-only" editable="false"
                                           optionsEnum="com.haulmont.cuba.security.entity.RoleType"/>
@@ -794,7 +794,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="RichTextArea" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="RichTextArea" spacing="true" collapsable="true" collapsed="true">
                         <richTextArea caption="RichTextArea"/>
                         <richTextArea caption="Read-only" editable="false"/>
                         <richTextArea caption="Disabled" enable="false"/>
@@ -810,7 +810,7 @@
                     <frame id="legacyFrame" screen="helium_LegacyFrame"
                            src="com/haulmont/editor/helium/web/screens/sandbox/legacy-frame.xml"/>
 
-                    <groupBox caption="Slider" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="Slider" spacing="true" collapsable="true" collapsed="true">
                         <hbox spacing="true">
                             <vbox spacing="true">
                                 <slider caption="Slider" width="500px"/>
@@ -823,7 +823,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="SourceCodeEditor" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="SourceCodeEditor" spacing="true" collapsable="true" collapsed="true">
                         <hbox spacing="true">
                             <checkBox id="highlightActiveLineCheck"
                                       align="BOTTOM_LEFT"
@@ -856,7 +856,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="SplitPanel" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="SplitPanel" spacing="true" collapsable="true" collapsed="true">
                         <split orientation="horizontal" width="100%" height="200px" dockable="true" dockMode="LEFT">
                             <label value="Left" align="MIDDLE_CENTER"/>
                             <label value="Right" align="MIDDLE_CENTER"/>
@@ -867,7 +867,7 @@
                         </split>
                     </groupBox>
 
-                    <groupBox caption="SuggestionField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="SuggestionField" spacing="true" collapsable="true" collapsed="true">
                         <suggestionField id="suggestionFieldSample"
                                          caption="SuggestionField"
                                          inputPrompt="Start typing"/>
@@ -899,7 +899,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="SuggestionPickerField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="SuggestionPickerField" spacing="true" collapsable="true" collapsed="true">
                         <suggestionPickerField id="suggestionPickerFieldSample"
                                                metaClass="sec$User"
                                                caption="SuggestionField"
@@ -960,7 +960,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="Table" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="Table" spacing="true" collapsable="true" collapsed="true">
                         <table id="tableSample" metaClass="sec$User" width="100%" height="300px" multiselect="true"
                                aggregatable="true" aggregationStyle="TOP">
                             <columns>
@@ -1041,7 +1041,7 @@
                         </table>
                     </groupBox>
 
-                    <groupBox caption="TabSheet" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="TabSheet" spacing="true" collapsable="true" collapsed="true">
                         <groupBox caption="Styles"
                                   spacing="true">
                             <flowBox id="tabSheetStylesBox" spacing="true">
@@ -1120,7 +1120,7 @@
                         </vbox>
                     </groupBox>
 
-                    <groupBox caption="TextField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="TextField" spacing="true" collapsable="true" collapsed="true">
                         <textField id="textField" caption="TextField" icon="APPLE" inputPrompt="Placeholder"/>
                         <textField id="textFieldRO" caption="Read-only" editable="false"/>
                         <textField id="textFieldD" caption="Disabled" enable="false"/>
@@ -1133,7 +1133,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="TextArea" spacing="true" collapsable="true" collapsed="false"
+                    <groupBox caption="TextArea" spacing="true" collapsable="true" collapsed="true"
                               orientation="horizontal">
                         <vbox spacing="true">
                             <textArea id="textArea" caption="TextArea" inputPrompt="Placeholder" width="100%"/>
@@ -1149,7 +1149,7 @@
                         </vbox>
                     </groupBox>
 
-                    <groupBox caption="Resizable TextArea" spacing="true" collapsable="true" collapsed="false"
+                    <groupBox caption="Resizable TextArea" spacing="true" collapsable="true" collapsed="true"
                               orientation="horizontal">
                         <vbox spacing="true">
                             <resizableTextArea id="resizableTextArea" caption="Resizable TextArea"
@@ -1163,7 +1163,7 @@
                         </vbox>
                     </groupBox>
 
-                    <groupBox caption="MaskedField" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="MaskedField" spacing="true" collapsable="true" collapsed="true">
                         <maskedField id="maskedField" caption="MaskedField" icon="APPLE" mask="###-##-##"/>
                         <maskedField id="maskedFieldRO" caption="Read-only" editable="false" mask="###-##-##"/>
                         <maskedField id="maskedFieldD" caption="Disabled" enable="false" mask="###-##-##"/>
@@ -1176,7 +1176,7 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="TokenList" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="TokenList" spacing="true" collapsable="true" collapsed="true">
                         <tokenList id="tokenListSample" caption="TokenList">
                             <lookup lookup="true"/>
                         </tokenList>
@@ -1217,11 +1217,11 @@
                         </hbox>
                     </groupBox>
 
-                    <groupBox caption="Tree" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="Tree" spacing="true" collapsable="true" collapsed="true">
                         <tree id="tree" width="100%" height="200px"/>
                     </groupBox>
 
-                    <groupBox caption="TreeDataGrid" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="TreeDataGrid" spacing="true" collapsable="true" collapsed="true">
                         <treeDataGrid id="treeDataGridSample" metaClass="sec$Group" width="100%" height="300px"
                                       hierarchyProperty="parent"
                                       aggregatable="true" aggregationPosition="TOP">
@@ -1234,7 +1234,7 @@
                         </treeDataGrid>
                     </groupBox>
 
-                    <groupBox caption="TwinColumn" spacing="true" collapsable="true" collapsed="false">
+                    <groupBox caption="TwinColumn" spacing="true" collapsable="true" collapsed="true">
                         <twinColumn id="twinColumnSample"
                                     addAllBtnEnabled="true"/>
                         <twinColumn id="twinColumnRequired"
