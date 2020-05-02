@@ -100,7 +100,7 @@ public class ComponentsSandbox extends ScreenFragment {
 
     protected void initSizeField() {
         sizeField.setOptionsList(variantsManager.getAppThemeSizeList());
-        sizeField.setValue(variantsManager.loadUserAppThemeSizeSetting());
+        sizeField.setValue(variantsManager.loadUserAppThemeSizeSettingOrDefault());
     }
 
     protected void initDataContainers() {
