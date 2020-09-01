@@ -1,0 +1,82 @@
+@mixin com_haulmont_editor_helium-sandbox-ext {
+  $margin: $v-layout-margin-left;
+
+  .v-csslayout.preview-box {
+    & > * {
+      margin-left: $margin / 2;
+      margin-right: $margin / 2;
+      margin-top: $margin / 2;
+      margin-bottom: $margin / 2;
+    }
+
+    .notifications-box {
+      width: calc(100% - $margin) !important;
+
+      .c-flowlayout > * {
+        margin-left: $margin / 2 !important;
+        margin-right: $margin / 2 !important;
+        margin-top: $margin / 2 !important;
+        margin-bottom: $margin / 2 !important;
+
+        width: calc(100% - $margin) !important;
+      }
+
+      & .v-Notification {
+        position: relative !important;
+        text-align: center;
+        box-shadow: none;
+
+        &.system {
+          border-radius: $v-border-radius;
+        }
+
+        &.error:after {
+          display: none;
+        }
+      }
+    }
+
+    &[width-range~="0-700px"] {
+      & > * {
+        width: calc(100% - $margin) !important;
+      }
+    }
+
+    &[width-range~="701px-1200px"] {
+      & > *:not(.notifications-box) {
+        width: calc(50% - $margin) !important;
+      }
+
+      .notifications-box {
+        .c-flowlayout > * {
+          width: calc(50% - $margin) !important;
+        }
+      }
+    }
+
+    &[width-range~="1201px-"] {
+      .buttons-box,
+      .table-box {
+        width: calc(30% - $margin) !important;
+      }
+
+      .lookupfields-box,
+      .textfields-box,
+      .tokenlist-box,
+      .labels-box {
+        width: calc(25% - $margin) !important;
+      }
+
+      .tabsheets-box,
+      .radiobutton-checkbox-box {
+        width: calc(20% - $margin) !important;
+      }
+
+      .notifications-box {
+        .c-flowlayout > * {
+          width: calc(25% - $margin) !important;
+        }
+      }
+    }
+  }
+}

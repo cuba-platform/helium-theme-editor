@@ -11,8 +11,8 @@
                                       orientation="horizontal"/>
                 </hbox>
                 <scrollBox id="innerPreviewBox" height="100%" width="100%" spacing="true">
-                    <flowBox spacing="true" width="100%">
-                        <vbox id="buttonsBox" margin="true" stylename="card" height="300px" width="450px">
+                    <cssLayout stylename="preview-box" width="100%" responsive="true">
+                        <vbox id="buttonsBox" margin="true" stylename="card buttons-box" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER" width="AUTO">
                                 <hbox spacing="true">
                                     <button caption="OK" icon="OK" stylename="primary" description="Primary"/>
@@ -25,13 +25,13 @@
                                 </hbox>
                             </vbox>
                         </vbox>
-                        <vbox id="textFieldsBox" margin="true" stylename="card" height="300px" width="350px">
+                        <vbox id="textFieldsBox" margin="true" stylename="card textfields-box" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER" width="AUTO">
                                 <textField caption="TextField" inputPrompt="Placeholder"/>
                                 <textField caption="TextField | Required" required="true"/>
                             </vbox>
                         </vbox>
-                        <vbox id="tabSheetsBox" margin="true" stylename="card" height="300px" width="250px">
+                        <vbox id="tabSheetsBox" margin="true" stylename="card tabsheets-box" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER">
                                 <tabSheet height="100px" width="100%">
                                     <tab id="tab11"
@@ -51,7 +51,7 @@
                                 </tabSheet>
                             </vbox>
                         </vbox>
-                        <vbox id="lookupFieldsBox" margin="true" stylename="card" height="300px" width="350px">
+                        <vbox id="lookupFieldsBox" margin="true" stylename="card lookupfields-box" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER" width="AUTO">
                                 <lookupField id="basicLookupField"
                                              caption="LookupField"
@@ -61,19 +61,15 @@
                                              required="true"/>
                             </vbox>
                         </vbox>
-                        <vbox id="notificationsBox" stylename="card" width="AUTO">
-                            <flowBox stylename="notifications-box">
-                                <htmlBox width="315px" align="MIDDLE_CENTER"
-                                         template="notifications/humanized-notification"/>
-                                <htmlBox width="315px" align="MIDDLE_CENTER"
-                                         template="notifications/system-notification"/>
-                                <htmlBox width="315px" align="MIDDLE_CENTER"
-                                         template="notifications/warning-notification"/>
-                                <htmlBox width="315px" align="MIDDLE_CENTER"
-                                         template="notifications/error-notification"/>
+                        <vbox id="notificationsBox" margin="true" stylename="card notifications-box" width="100%">
+                            <flowBox width="100%">
+                                <htmlBox align="MIDDLE_CENTER" template="notifications/humanized-notification"/>
+                                <htmlBox align="MIDDLE_CENTER" template="notifications/system-notification"/>
+                                <htmlBox align="MIDDLE_CENTER" template="notifications/warning-notification"/>
+                                <htmlBox align="MIDDLE_CENTER" template="notifications/error-notification"/>
                             </flowBox>
                         </vbox>
-                        <vbox id="labelsBox" margin="true" stylename="card" width="300px" height="300px">
+                        <vbox id="labelsBox" margin="true" stylename="card labels-box" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER">
                                 <label value="Header 1" stylename="h1"/>
                                 <label value="Header 2" stylename="h2"/>
@@ -83,7 +79,7 @@
                                        width="100%"/>
                             </vbox>
                         </vbox>
-                        <vbox id="tableBox" margin="true" stylename="card" width="450px" height="300px">
+                        <vbox id="tableBox" margin="true" stylename="card table-box" height="300px">
                             <table id="basicTable" metaClass="sec$User" height="100%" width="100%">
                                 <columns>
                                     <column id="login"/>
@@ -92,18 +88,20 @@
                                 </columns>
                             </table>
                         </vbox>
-                        <vbox id="tokenListBox" margin="true" stylename="card" width="400px" height="300px">
+                        <vbox id="tokenListBox" margin="true" stylename="card tokenlist-box" height="300px">
                             <tokenList id="basicTokenList" width="100%" height="100%">
                                 <lookup/>
                             </tokenList>
                         </vbox>
-                        <vbox id="radioButtonGroupBox" margin="true" stylename="card" width="250px" height="145px">
-                            <radioButtonGroup id="basicRadioButtonGroup" align="MIDDLE_CENTER"/>
+                        <vbox spacing="true" stylename="radiobutton-checkbox-box">
+                            <vbox id="radioButtonGroupBox" stylename="card" height="144px">
+                                <radioButtonGroup id="basicRadioButtonGroup" align="MIDDLE_CENTER"/>
+                            </vbox>
+                            <vbox id="checkBoxGroupBox" stylename="card" height="144px">
+                                <checkBoxGroup id="basicCheckBoxGroup" align="MIDDLE_CENTER"/>
+                            </vbox>
                         </vbox>
-                        <vbox id="checkBoxGroupBox" margin="true" stylename="card" width="250px" height="145px">
-                            <checkBoxGroup id="basicCheckBoxGroup" align="MIDDLE_CENTER"/>
-                        </vbox>
-                    </flowBox>
+                    </cssLayout>
                 </scrollBox>
             </tab>
             <tab id="allComponentsBox" caption="msg://allComponentsBox.caption" spacing="true" margin="true"

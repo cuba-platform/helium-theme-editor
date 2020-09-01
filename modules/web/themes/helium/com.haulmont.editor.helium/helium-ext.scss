@@ -85,31 +85,6 @@ $helium-sidemenu-width: 400px;
     }
   }
 
-  .notifications-box {
-    & > * {
-      margin-left: $v-unit-size !important;
-      margin-top: $v-unit-size !important;
-      margin-bottom: $v-unit-size !important;
-
-      &:last-child {
-        margin-right: $v-unit-size !important;
-      }
-    }
-
-    & .v-Notification {
-      position: relative !important;
-      text-align: center;
-
-      &.system {
-        border-radius: $v-border-radius;
-      }
-
-      &.error:after {
-        display: none;
-      }
-    }
-  }
-
   .preview-tab-sheet .v-tabsheet-content-preview-tab-sheet > .v-tabsheet-tabsheetpanel > .v-scrollable {
     overflow: hidden;
   }
