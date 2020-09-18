@@ -14,15 +14,15 @@
                     <cssLayout stylename="preview-box" width="100%" responsive="true">
                         <vbox id="buttonsBox" margin="true" stylename="card buttons-box" height="300px">
                             <vbox spacing="true" align="MIDDLE_CENTER" width="AUTO">
-                                <hbox spacing="true">
+                                <flowBox spacing="true">
                                     <button caption="OK" icon="OK" stylename="primary" description="Primary"/>
                                     <button caption="Cancel" icon="CANCEL" description="Default"/>
-                                </hbox>
-                                <hbox spacing="true">
+                                </flowBox>
+                                <flowBox spacing="true">
                                     <button caption="Save" icon="SAVE" stylename="friendly" description="Friendly"/>
                                     <button caption="Remove" icon="REMOVE" stylename="danger" description="Danger"/>
                                     <button caption="Secondary" stylename="secondary" description="Secondary"/>
-                                </hbox>
+                                </flowBox>
                             </vbox>
                         </vbox>
                         <vbox id="textFieldsBox" margin="true" stylename="card textfields-box" height="300px">
