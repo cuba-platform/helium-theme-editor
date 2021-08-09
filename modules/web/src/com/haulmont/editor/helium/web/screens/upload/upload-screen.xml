@@ -11,7 +11,7 @@
         </hbox>
         <label id="secondStepLabel" value="msg://secondStep" align="MIDDLE_LEFT" htmlEnabled="true"/>
         <label id="thirdStepLabel" value="msg://thirdStep" align="MIDDLE_LEFT" htmlEnabled="true"/>
-        <textArea id="textArea" width="100%"/>
+        <textArea id="textArea" width="100%" textChangeEventMode="EAGER"/>
         <hbox id="buttonsBox" align="MIDDLE_RIGHT" spacing="true">
             <button id="applyBtn" caption="msg://applyBtn" icon="OK" stylename="primary" enable="false"/>
             <button id="cancelBtn" caption="msg://cancelBtn" icon="CANCEL"/>
