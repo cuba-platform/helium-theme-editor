@@ -43,7 +43,7 @@ cuba {
 
 dependencies {
     appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
-    appComponent('com.haulmont.addon.helium:helium-global:0.4.0.BETA.1')
+    appComponent('com.haulmont.addon.helium:helium-global:0.4.0')
 }
 
 def hsql = 'org.hsqldb:hsqldb:2.4.1'
